@@ -1,7 +1,4 @@
-const APIkey = "5SGtUBTq"
-//const oName = "Belgrade"
-//const dName = "Berlin"
-
+import { APIkey } from './APIKey'
 
 export const modes = {
    "fly": {

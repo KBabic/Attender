@@ -17,4 +17,3 @@ export const inputWidth = Dimensions.get('window').width - 40
 export const inputHeight = Dimensions.get('window').height - 40
 export const marginLeftRight = 20
 export const marginTopBottom = 20
-

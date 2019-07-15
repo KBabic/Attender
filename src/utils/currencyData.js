@@ -8,5 +8,3 @@ const conversionUrl = `https://free.currconv.com/api/v7/convert?apiKey=${APIKey}
 export const getAllCurrencies = async () => {
    // something here
 }
-
-

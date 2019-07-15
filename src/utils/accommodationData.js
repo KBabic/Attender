@@ -1,3 +1,4 @@
+import { headers } from './APIKey'
 const endpoints = {
    req1: "locations/auto-complete",
    req2: "properties/list",
@@ -6,10 +7,6 @@ const endpoints = {
    req5: "properties/get-facilities",
    //req6: "properties/get-static-map"
 }
-const headers = new Headers({
-   "X-RapidAPI-Hos": "apidojo-booking-v1.p.rapidapi.com",
-   "X-RapidAPI-Key": "cee7f0ea72mshb014bf16d190ee2p17ac77jsnb14f22c98902"
-})
 const getUrl = req => {
    let baseUrl = `https://apidojo-booking-v1.p.rapidapi.com/${endpoints[req]}?languagecode=en-us&`
    return baseUrl
