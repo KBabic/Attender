@@ -1,5 +1,5 @@
 # Attender
-## App yet in production
+## App yet in development
 
 The aim of Attender is to help users plan their costs when attending a certain event:
 - transportation costs
