@@ -13,11 +13,10 @@ const getUrl = req => {
 }
 
 //req1: locations/auto-complete?languagecode=en-us&text=berlin
-const text = "berlin"
-export async function getLocations() {
+export async function getLocations(destination) {
    try {
       let baseUrl = getUrl("req1")
-      let url = `${baseUrl}text=${text}`
+      let url = `${baseUrl}text=${destination}`
       let req1 = new Request(url, { headers })
       let resp1 = await fetch(req1)
       let resp1Json = await resp1.json()
@@ -44,11 +43,8 @@ export const getDestId = (resp) => {
 // req2: properties/list?languagecode=en-us&price_filter_currencycode=USD&search_type=city&offset=0&dest_ids=-1746443&guest_qty=1&arrival_date=2019-06-01&departure_date=2019-06-20&room_qty=1
 const currencyCode = "USD"
 const search_type = "city"
-const guest_qty = 2
-const arr_date = "2019-09-15"
-const dep_date = "2019-09-20"
 const room_qty = 1 
-export async function getPropertiesList(id, offset, search_id) {
+export async function getPropertiesList(id, offset, search_id, guest_qty, arr_date, dep_date) {
    if (id) {
       try {
          let baseUrl = getUrl("req2")

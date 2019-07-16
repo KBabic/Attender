@@ -1,9 +1,12 @@
 import {
    ADD_ORIGIN_CITY,
    NO_NEED_TRANSPORT,
+   SEARCHING_TRANSPORT,
    SEARCH_TRANSPORT_SUCCESS,
    SEARCH_TRANSPORT_FAIL,
-   TRANSPORT_CHOSEN
+   TRANSPORT_CHOSEN,
+   TRANSPORT_UNCHOSEN,
+   //TRANSPORT_COSTS_UPDATED
 } from './types'
 
 export const addOriginCity = text => {
@@ -15,5 +18,33 @@ export const addOriginCity = text => {
 export const noNeedTransport = () => {
    return {
       type: NO_NEED_TRANSPORT
+   }
+}
+export const searchingTransport = () => {
+   return {
+      type: SEARCHING_TRANSPORT
+   }
+}
+export const searchTransportSuccess = (listOfTransportOptions) => {
+   return {
+      type: SEARCH_TRANSPORT_SUCCESS,
+      payload: listOfTransportOptions
+   }
+}
+export const searchTransportFail = () => {
+   return {
+      type: SEARCH_TRANSPORT_FAIL
+   }
+   // add error handling
+}
+export const transportChosen = (id, costs) => {
+   return {
+      type: TRANSPORT_CHOSEN,
+      payload: { id, costs }
+   }
+}
+export const transportUnchosen = () => {
+   return {
+      type: TRANSPORT_UNCHOSEN
    }
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Dimensions, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import { addOriginCity, noNeedTransport } from '../actions/TransportActions'
+import { addOriginCity, noNeedTransport, searchingTransport, searchTransportSuccess, searchTransportFail} from '../actions/TransportActions'
 import CheckOption from '../components/CheckOption'
 import InputOption from '../components/InputOption'
 import Button from '../components/Button'
@@ -15,8 +15,6 @@ class Transport extends React.Component {
    constructor(props) {
       super(props)
       this.state = {
-         showList: false,
-         transpList: [],
          buttonDisabled: false,
          originDisabled: false
       }
@@ -24,11 +22,12 @@ class Transport extends React.Component {
       this.vehicles = []
    }
    searchTransport = async () => {
+      this.props.searchingTransport()
       let transpData = await getTransportData(modes, this.props.originCity, this.props.destinationCity)
       this.places = transpData[0]
       this.vehicles = transpData[1]
       let transpList = transpData[2]
-      await this.setState({ showList: true, transpList: transpList })
+      await this.props.searchTransportSuccess(transpList)
    }
    renderTransportOption = ({ item: { id, icons, currency, totalTime, minPrice, maxPrice, price, segments } }) => {
       let priceRange
@@ -37,20 +36,29 @@ class Transport extends React.Component {
       } else {
          priceRange = ""
       }
+      let selected
+      if (id === this.props.chosenTransportOptionId) {
+         selected = true
+      } else {
+         selected = false
+      }
       return (
-      <ListItem 
-         key={id}
-         text1={totalTime} 
-         text2={priceRange}
-         icons={icons}
-         navigation={this.props.navigation}
-         places={this.places}
-         vehicles={this.vehicles}
-         segments={segments}
-         totalTime={totalTime}
-         totalPrice={price}
-         currency={currency}
-      />)
+         <ListItem 
+            key={id}
+            id={id}
+            selected={selected}
+            text1={totalTime} 
+            text2={priceRange}
+            icons={icons}
+            navigation={this.props.navigation}
+            places={this.places}
+            vehicles={this.vehicles}
+            segments={segments}
+            totalTime={totalTime}
+            totalPrice={price}
+            currency={currency}
+         />
+      )
    }
    handleCheck = () => {
       this.props.noNeedTransport()
@@ -88,9 +96,9 @@ class Transport extends React.Component {
                radius={15}
                fontSize={20}
             />
-            {this.state.showList && (
+            {!this.props.transportLoading && (
                <FlatList
-                  data={this.state.transpList}
+                  data={this.props.transportOptions}
                   renderItem={this.renderTransportOption}
                   keyExtractor={keyExtractor}
                   style={{ marginTop: marginTopBottom }}
@@ -111,7 +119,11 @@ const transportStyles = StyleSheet.create({
 const mapStateToProps = state => ({
    destinationCity: state.event.city,
    originCity: state.transport.originCity,
-   noTransport: state.transport.noTransport
+   noTransport: state.transport.noTransport,
+   transportLoading: state.transport.transportLoading,
+   transportOptions: state.transport.transportOptions,
+   chosenTransportOptionId: state.transport.chosenTransportOptionId,
+   transportCosts: state.transport.transportCosts
 })
 const mapDispatchToProps = dispatch => {
    return {
@@ -120,6 +132,15 @@ const mapDispatchToProps = dispatch => {
       },
       noNeedTransport: () => {
          dispatch(noNeedTransport())
+      },
+      searchingTransport: () => {
+         dispatch(searchingTransport())
+      },
+      searchTransportSuccess: (listOfOptions) => {
+         dispatch(searchTransportSuccess(listOfOptions))
+      },
+      searchTransportFail: () => {
+         dispatch(searchTransportFail())
       }
    }
 }

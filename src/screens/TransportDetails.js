@@ -1,15 +1,30 @@
 import React from 'react'
 import { ScrollView, View, Text, StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
+import { transportChosen, transportUnchosen } from '../actions/TransportActions'
 import { primaryColor } from '../utils/colorsAndMargins'
 import RouteSegment from '../components/RouteSegment'
 import CheckOption from '../components/CheckOption'
 import { inputWidth, marginTopBottom } from '../utils/colorsAndMargins'
 
-export default class TransportDetails extends React.Component {
+class TransportDetails extends React.Component {
    constructor(props) {
       super(props)
+      const { navigation } = this.props
+      const id = navigation.getParam('id')
       this.renderConnector = true
-      this.state = { checked: false }
+      this.state = { checked: this.props.chosenTransportOptionId === id ? true : false }
+   }
+   componentDidUpdate(prevProps, prevState) {
+      const { navigation } = this.props
+      const id = navigation.getParam('id')
+      const totalPrice = navigation.getParam('totalPrice')
+      if (prevState.checked && !this.state.checked) {
+         this.props.transportUnchosen()
+      }
+      if (!prevState.checked && this.state.checked) {
+         this.props.transportChosen(id, totalPrice)
+      }
    }
    renderItem = (item,index) => {
       const { navigation } = this.props
@@ -36,7 +51,6 @@ export default class TransportDetails extends React.Component {
    render() {
       const { checked } = this.state
       const { navigation } = this.props
-      const id = navigation.getParam('id')
       const routeSegments = navigation.getParam('routeSegments')
       const totalTime = navigation.getParam('totalTime')
       const totalPrice = navigation.getParam('totalPrice')
@@ -64,7 +78,6 @@ export default class TransportDetails extends React.Component {
       )
    }
 }
-
 const transportDetailsStyles = StyleSheet.create({
    container: {
       alignItems: 'center',
@@ -83,3 +96,21 @@ const transportDetailsStyles = StyleSheet.create({
       fontSize: 20
    }
 })
+const mapStateToProps = state => ({
+   chosenTransportOptionId: state.transport.chosenTransportOptionId,
+   transportCosts: state.transport.transportCosts
+})
+const mapDispatchToProps = dispatch => {
+   return {
+      transportChosen: (id, cost) => {
+         dispatch(transportChosen(id, cost))
+      },
+      transportUnchosen: () => {
+         dispatch(transportUnchosen())
+      }
+      //transportCostsUpdated: (cost) => {
+         //dispatch(transportCostsUpdated(cost))
+      //}
+   }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TransportDetails)

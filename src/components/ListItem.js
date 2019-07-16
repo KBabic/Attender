@@ -11,10 +11,10 @@ export default class ListItem extends React.Component {
       this.hotel = {}
    }
    navigateToTransport() {
-      const { places, vehicles, segments, navigation, totalTime, totalPrice, currency, key } = this.props
+      const { places, vehicles, segments, navigation, totalTime, totalPrice, currency, id } = this.props
       this.routeSegments = getRouteSegments(segments, places, vehicles, modes)
-      console.log(this.routeSegments)
-      navigation.navigate('TransportDetails', { routeSegments: this.routeSegments, totalTime, totalPrice, currency, id: key })
+      //console.log(this.routeSegments)
+      navigation.navigate('TransportDetails', { routeSegments: this.routeSegments, totalTime, totalPrice, currency, id })
    }
    navigateToAccommodation () {
       const { navigation, properties, item } = this.props
@@ -28,12 +28,18 @@ export default class ListItem extends React.Component {
       }
    }
    render() {
-      const { id, text1, text2, icons, navigation } = this.props
+      const { id, text1, text2, icons, navigation, selected } = this.props
       const { container, iconContainer, text, textContainer1, textContainer2 } = listItemStyles
       if (icons) {
          // return transport option
+         let backgroundColor
+         if (selected) {
+            backgroundColor = secondaryColor
+         } else {
+            backgroundColor = "#ffffff"
+         }
          return (
-            <View style={container}>
+            <View style={[container, {backgroundColor}]}>
                <View style={iconContainer}>
                   {icons.map((icon, index) => (
                      <TouchableOpacity

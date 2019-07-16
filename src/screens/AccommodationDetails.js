@@ -1,5 +1,7 @@
 import React from 'react'
 import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { connect } from 'react-redux'
+import { accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
 import CheckOption from '../components/CheckOption'
 import ImageGrid from '../components/ImageGrid'
 import { primaryColor, marginTopBottom, inputWidth, marginLeftRight, secondaryColor } from '../utils/colorsAndMargins'
@@ -22,20 +24,13 @@ export default class AccommodationDetails extends React.Component {
       const properties = navigation.getParam('properties')
       const hotelInit = getHotelDetails(hotel, properties.result)
       this.hotel = await getHotelDescription(hotelInit)
-      //console.log(this.hotel.id)
       const [prefix, data] = await getPhotoData({ id: this.hotel.id })
       const photosList = getPhotosList(prefix, data)
-      //console.log(photosList)
       this.photos = photosList
       const facilities = await getFacilities({ id: this.hotel.id })
       this.facilities = facilities
       this.setState({loading: false})
    }
-   /*static navigationOptions = ({ navigation }) => {
-      return {
-         header: () => null
-      }
-   }*/
    handleCheck = () => {
       this.setState(prevState => (
          {checked: !prevState.checked}

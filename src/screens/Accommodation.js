@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, Text, Dimensions, StyleSheet, ScrollView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
-import { noNeedAccommodation, increaseNumOfPersons, decreaseNumOfPersons, addCheckinDate, addCheckoutDate } from '../actions/AccommodationActions'
+import { noNeedAccommodation, increaseNumOfPersons, decreaseNumOfPersons, addCheckinDate, addCheckoutDate, searchingAccommodation,
+searchAccommodationSuccess, searchAccommodationFail, accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
 import InputOption from '../components/InputOption'
 import CheckOption from '../components/CheckOption'
 import UnfoldOption from '../components/UnfoldOption'
@@ -22,8 +23,8 @@ class Accommodation extends React.Component {
          renderCalendar: false,
          showModal: false,
          showList: false,
-         hotelsList: [],
-         loading: false,
+         //hotelsList: [],
+         //loading: false,
          buttonDisabled: false,
          paramsDisabled: false
       }
@@ -51,19 +52,21 @@ class Accommodation extends React.Component {
       }
    }
    searchAccommodation = async () => {
-      this.setState({loading: true})
+      //this.setState({loading: true})
+      this.props.searchingAccommodation()
+      const { destinationCity, numOfPersons, checkInDate, checkOutDate } = this.props
       let locations
       let dest_id
       let hotelsList
       let search_id
       try {
-         locations = await getLocations()
+         locations = await getLocations(destinationCity)
          dest_id = getDestId(locations)
       } catch(e) {
          console.log('Error fetching locations', e)
       }
       try {
-         this.properties = await getPropertiesList(dest_id, this.offset, this.search_id)
+         this.properties = await getPropertiesList(dest_id, this.offset, this.search_id, numOfPersons, checkInDate, checkOutDate)
       } catch(e) {
          console.log('Error fetching properties', e)
       }
@@ -80,9 +83,10 @@ class Accommodation extends React.Component {
       }
       this.setState(prevState => ({
          showList: true, 
-         hotelsList: [...prevState.hotelsList, ...hotelsList],
-         loading: false
+         //hotelsList: [...prevState.hotelsList, ...hotelsList],
+         //loading: false
       }))
+      this.props.searchAccommodationSuccess(hotelsList)
       this.offset = this.offset + 30
       this.search_id = search_id
    }
@@ -165,15 +169,14 @@ class Accommodation extends React.Component {
                      showModal: false
                   })}
             />
-            {this.state.loading && (
+            {this.props.accommodationLoading && (
                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <ActivityIndicator size="large" color={secondaryColor}/>
                </View>
             )}
-            {this.state.showList && !this.state.loading && (
+            {this.state.showList && !this.props.accommodationLoading && (
                   <FlatList 
-                     data={this.state.hotelsList}
-                     extraData={this.state}
+                     data={this.props.accommodationOptions}
                      keyExtractor={keyExtractor}
                      renderItem={this.renderAccommodationOption}
                      style={{
@@ -207,10 +210,15 @@ const accommodationStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
+   destinationCity: state.event.city,
    noAccommodation: state.accommodation.noAccommodation,
    numOfPersons: state.accommodation.numOfPersons,
    checkInDate: state.accommodation.checkInDate,
-   checkOutDate: state.accommodation.checkOutDate
+   checkOutDate: state.accommodation.checkOutDate,
+   accommodationLoading: state.accommodation.accommodationLoading,
+   accommodationOptions: state.accommodation.accommodationOptions,
+   chosenAccommOptionId: state.accommodation.chosenAccommOptionId,
+   accommodationCosts: state.accommodation.accommodationCosts
 })
 const mapDispatchToProps = dispatch => {
    return {
@@ -228,6 +236,21 @@ const mapDispatchToProps = dispatch => {
       },
       addCheckoutDate: (date) => {
          dispatch(addCheckoutDate(date))
+      },
+      searchingAccommodation: () => {
+         dispatch(searchingAccommodation())
+      },
+      searchAccommodationSuccess: (listOfOptions) => {
+         dispatch(searchAccommodationSuccess(listOfOptions))
+      },
+      searchAccommodationFail: () => {
+         dispatch(searchAccommodationFail())
+      },
+      accommodationChosen: (id, cost) => {
+         dispatch(accommodationChosen(id, cost))
+      },
+      accommodationUnchosen: () => {
+         dispatch(accommodationUnchosen())
       }
    }
 }
