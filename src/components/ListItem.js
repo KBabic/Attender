@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { primaryColor, secondaryColor, inputWidth, marginLeftRight } from '../utils/colorsAndMargins'
+import { primaryColor, secondaryColor, tabColor, inputWidth, marginLeftRight } from '../utils/colorsAndMargins'
 import { modes, getRouteSegments } from '../utils/transportData'
 
 export default class ListItem extends React.Component {
@@ -13,7 +13,6 @@ export default class ListItem extends React.Component {
    navigateToTransport() {
       const { places, vehicles, segments, navigation, totalTime, totalPrice, currency, id } = this.props
       this.routeSegments = getRouteSegments(segments, places, vehicles, modes)
-      //console.log(this.routeSegments)
       navigation.navigate('TransportDetails', { routeSegments: this.routeSegments, totalTime, totalPrice, currency, id })
    }
    navigateToAccommodation () {
@@ -30,14 +29,14 @@ export default class ListItem extends React.Component {
    render() {
       const { id, text1, text2, icons, navigation, selected } = this.props
       const { container, iconContainer, text, textContainer1, textContainer2 } = listItemStyles
+      let backgroundColor
+      if (selected) {
+         backgroundColor = tabColor
+      } else {
+         backgroundColor = "#ffffff"
+      }
       if (icons) {
          // return transport option
-         let backgroundColor
-         if (selected) {
-            backgroundColor = secondaryColor
-         } else {
-            backgroundColor = "#ffffff"
-         }
          return (
             <View style={[container, {backgroundColor}]}>
                <View style={iconContainer}>
@@ -65,7 +64,7 @@ export default class ListItem extends React.Component {
       } else {
          // return accommodation option
          return (
-            <View style={container}>
+            <View style={[container, {backgroundColor}]}>
                <Text style={[text, { marginLeft: 15}]}>{this.formatAccommodationText(text1)}</Text>
                <TouchableOpacity
                   onPress={() => this.navigateToAccommodation()}

@@ -7,12 +7,16 @@ import {
    SEARCHING_ACCOMMODATION,
    SEARCH_ACCOMMODATION_SUCCESS,
    SEARCH_ACCOMMODATION_FAIL,
+   FETCHING_ACCOMMODATION_DETAILS,
+   FETCH_ACCOMMODATION_DETAILS_SUCCESS,
+   FETCH_ACCOMMODATION_DETAILS_FAIL,
    ACCOMMODATION_CHOSEN,
    ACCOMMODATION_UNCHOSEN
 } from '../actions/types'
 
 const INITIAL_STATE = {
    accommodationLoading: false,
+   accommDetailsLoading: false,
    noAccommodation: false,
    numOfPersons: 1,
    checkInDate: "",
@@ -36,16 +40,23 @@ export default (state=INITIAL_STATE, action) => {
       case SEARCHING_ACCOMMODATION:
          return {...state, accommodationLoading: true}
       case SEARCH_ACCOMMODATION_SUCCESS:
-         return {...state, accommodationLoading: false, accommodationOptions: [...state.accommodationOptions, action.payload]}
+         return {...state, accommodationLoading: false, accommodationOptions: [...state.accommodationOptions, ...action.payload]}
+      case SEARCH_ACCOMMODATION_FAIL:
+         return {...state, accommodationLoading: false}
+         // add error handling
+      case FETCHING_ACCOMMODATION_DETAILS:
+         return {...state, accommDetailsLoading: true}
+      case FETCH_ACCOMMODATION_DETAILS_SUCCESS:
+         return {...state, accommDetailsLoading: false}
+      case FETCH_ACCOMMODATION_DETAILS_FAIL:
+         return {...state, accommDetailsLoading: false}
+         // add errror handling
       case ACCOMMODATION_CHOSEN:
          console.log('chosen accomm option id is ', action.payload.id)
          console.log('accomm costs are now ', action.payload.costs)
          return {...state, chosenAccommOptionId: action.payload.id, accommodationCosts: action.payload.costs}
       case ACCOMMODATION_UNCHOSEN:
          return {...state, chosenAccommOptionId: "", accommodationCosts: 0}
-      case SEARCH_ACCOMMODATION_FAIL:
-         return {...state, accommodationLoading: false}
-         // add error handling
       default:
          return state
    }

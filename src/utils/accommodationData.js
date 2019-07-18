@@ -138,8 +138,6 @@ export async function getPhotoData(hotel) {
          let resp4Json = await resp4.json()
          let url_prefix = resp4Json.url_prefix
          let photoData = resp4Json.data[hotel.id]
-         console.log(url_prefix)
-         console.log(photoData)
          return [url_prefix, photoData]
       } catch(e) {
          console.log(`Req4 error: ${e}`)
@@ -191,7 +189,6 @@ export async function getFacilities(hotel) {
          let req5 = new Request(url, { headers })
          let resp5 = await fetch(req5)
          let resp5Json = await resp5.json()
-         console.log(resp5Json)
          let facilities = resp5Json.map(item => {
             return item.facility_name
          })

@@ -108,9 +108,6 @@ const mapDispatchToProps = dispatch => {
       transportUnchosen: () => {
          dispatch(transportUnchosen())
       }
-      //transportCostsUpdated: (cost) => {
-         //dispatch(transportCostsUpdated(cost))
-      //}
    }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TransportDetails)

@@ -81,19 +81,30 @@ class Accommodation extends React.Component {
       } catch(e) {
          console.log('Error getting search id', e)
       }
-      this.setState(prevState => ({
-         showList: true, 
-         //hotelsList: [...prevState.hotelsList, ...hotelsList],
-         //loading: false
-      }))
-      this.props.searchAccommodationSuccess(hotelsList)
-      this.offset = this.offset + 30
-      this.search_id = search_id
+      try {
+         this.setState(prevState => ({
+            showList: true, 
+            //hotelsList: [...prevState.hotelsList, ...hotelsList],
+            //loading: false
+         }))
+         this.props.searchAccommodationSuccess(hotelsList)
+         this.offset = this.offset + 30
+         this.search_id = search_id
+      } catch (e) {
+         console.log(e)
+      }
    }
    renderAccommodationOption = ({ item }) => {
       const { id, name, minPrice, currency } = item
+      let selected
+      if (id === this.props.chosenAccommOptionId) {
+         selected = true
+      } else {
+         selected = false
+      }
       return (
          <ListItem
+            selected={selected}
             item={item} 
             text1={name} 
             text2={`${currency} ${minPrice}`} 

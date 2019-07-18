@@ -7,13 +7,15 @@ import ImageGrid from '../components/ImageGrid'
 import { primaryColor, marginTopBottom, inputWidth, marginLeftRight, secondaryColor } from '../utils/colorsAndMargins'
 import { getHotelDetails, getHotelDescription, getPhotoData, getPhotosList, getFacilities} from '../utils/accommodationData'
 
-export default class AccommodationDetails extends React.Component {
+class AccommodationDetails extends React.Component {
    constructor(props) {
       super(props)
+      const { navigation } = this.props
+      const id = navigation.getParam('item').id
       this.hotel = {}
       this.state = {
          loading: true,
-         checked: false
+         checked: this.props.chosenAccommOptionId === id ? true : false
       }
       this.photos = []
       this.facilities = []
@@ -30,6 +32,17 @@ export default class AccommodationDetails extends React.Component {
       const facilities = await getFacilities({ id: this.hotel.id })
       this.facilities = facilities
       this.setState({loading: false})
+   }
+   componentDidUpdate(prevProps, prevState) {
+      const { navigation } = this.props
+      const id = navigation.getParam('item').id
+      const minPrice = navigation.getParam('item').minPrice
+      if (prevState.checked && !this.state.checked) {
+         this.props.accommodationUnchosen()
+      }
+      if (!prevState.checked && this.state.checked) {
+         this.props.accommodationChosen(id, minPrice)
+      }
    }
    handleCheck = () => {
       this.setState(prevState => (
@@ -100,3 +113,18 @@ const accommodationDetailsStyles = StyleSheet.create({
       color: primaryColor,
    }
 })
+const mapStateToProps = state => ({
+   chosenAccommOptionId: state.accommodation.chosenAccommOptionId,
+   accommodationCosts: state.accommodation.accommodationCosts
+})
+const mapDispatchToProps = dispatch => {
+   return {
+      accommodationChosen: (id, cost) => {
+         dispatch(accommodationChosen(id, cost))
+      },
+      accommodationUnchosen: () => {
+         dispatch(accommodationUnchosen())
+      }
+   }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(AccommodationDetails)

@@ -6,7 +6,6 @@ import {
    SEARCH_TRANSPORT_FAIL,
    TRANSPORT_CHOSEN,
    TRANSPORT_UNCHOSEN,
-   //TRANSPORT_COSTS_UPDATED
 } from './types'
 
 export const addOriginCity = text => {

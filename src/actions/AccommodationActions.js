@@ -55,6 +55,21 @@ export const searchAccommodationFail = () => {
    }
    // add error handling
 }
+export const fetchingAccommodationDetails = () => {
+   return {
+      type: FETCHING_ACCOMMODATION_DETAILS
+   }
+}
+export const fetchAccommDetailsSuccess = () => {
+   return {
+      type: FETCH_ACCOMMODATION_DETAILS_SUCCESS
+   }
+}
+export const fetchAccommDetailsFail = () => {
+   return {
+      type: FETCH_ACCOMMODATION_DETAILS_FAIL
+   }
+}
 export const accommodationChosen = (id, costs) => {
    return {
       type: ACCOMMODATION_CHOSEN,

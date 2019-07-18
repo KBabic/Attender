@@ -25,7 +25,7 @@ export default (state = INITIAL_STATE, action) => {
       case SEARCHING_TRANSPORT:
          return {...state, transportLoading: true}
       case SEARCH_TRANSPORT_SUCCESS:
-         return {...state, transportLoading: false, transportOptions: [...state.transportOptions, action.payload]}
+         return {...state, transportLoading: false, transportOptions: [...state.transportOptions, ...action.payload]}
       case TRANSPORT_CHOSEN:
          console.log('chosen option id is ', action.payload.id)
          console.log('transp costs are now ', action.payload.costs)
