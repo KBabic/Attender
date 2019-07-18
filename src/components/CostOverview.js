@@ -1,26 +1,59 @@
 import React from 'react'
 import { Text, View, StyleSheet, Dimensions } from 'react-native'
+import { connect } from 'react-redux'
+import { chooseMonth, chooseOverviewCurrency } from '../actions/EventActions'
 import InputOption from './InputOption'
-import Currencies from './Currencies'
+import CurrenciesAndMonths from './CurrenciesAndMonths'
 import { primaryColor, secondaryColor, placeholderColor, inputHeight, marginLeftRight, marginTopBottom } from '../utils/colorsAndMargins'
 
-export default class CostOverview extends React.Component {
+class CostOverview extends React.Component {
    state = {
       showMonths: false,
       showCurrencies: false,
-      currency: ""
+      //currency: ""
+   }
+   handleChooseCurrency = (cur) => {
+      this.props.chooseOverviewCurrency(cur)
+   }
+   handleChooseMonth = (month) => {
+      this.props.chooseMonth(month)
+   }
+   handleOK = () => {
+      this.setState({ showCurrencies: false, showMonths: false })
    }
    render() {
       const { container, innerContainer, label, eurAmount, bottomLine, middleLine } = costOverviewStyles
       return (
          <View style={container}>
             {this.state.showCurrencies && 
-               <Currencies 
-                  showModal={true} 
-                  handleOK={() => this.setState({ showCurrencies: false})}
+               <CurrenciesAndMonths
+                  showCurrencies={true}
+                  showMonths={false} 
+                  handleOK={this.handleOK}
+                  chooseMonthOrCurrency={this.handleChooseCurrency}
                />}
-            <InputOption icon="keyboard-arrow-down" text="" placeholder="Choose month" />
-            <InputOption icon="keyboard-arrow-down" text="" placeholder="Choose currency" onPress={() => this.setState({ showCurrencies: true })}/>
+            {this.state.showMonths &&
+               <CurrenciesAndMonths 
+                  showCurrencies={false}
+                  showMonths={true}
+                  handleOK={this.handleOK}
+                  chooseMonthOrCurrency={this.handleChooseMonth}
+               />
+            }   
+            <InputOption 
+               icon="keyboard-arrow-down" 
+               text="" 
+               placeholder="Choose month" 
+               onPress={() => this.setState({ showMonths: true})}
+               value={this.props.overviewMonth.toString()}
+            />
+            <InputOption 
+               icon="keyboard-arrow-down" 
+               text="" 
+               placeholder="Choose currency" 
+               onPress={() => this.setState({ showCurrencies: true })}
+               value={this.props.overviewCurrency.toString()}
+            />
             <View style={innerContainer}>
                <Text style={label}>Total costs for a chosen month</Text>
                <Text style={eurAmount}>0 EUR</Text>
@@ -35,7 +68,6 @@ export default class CostOverview extends React.Component {
       )
    }
 }
-
 const costOverviewStyles = StyleSheet.create({
    container: {
       flex: 1,
@@ -75,3 +107,18 @@ const costOverviewStyles = StyleSheet.create({
       color: placeholderColor
    }
 })
+const mapStateToProps = state => ({
+   overviewMonth: state.overview.overviewMonth,
+   overviewCurrency: state.overview.overviewCurrency
+})
+const mapDispatchToProps = dispatch => {
+   return {
+      chooseMonth: (month) => {
+         dispatch(chooseMonth(month))
+      },
+      chooseOverviewCurrency: (cur) => {
+         dispatch(chooseOverviewCurrency(cur))
+      }
+   }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(CostOverview)

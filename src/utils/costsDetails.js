@@ -5,7 +5,7 @@ export const costsDetails = [
       placeholder: "EUR",
       icon: "keyboard-arrow-down",
       editable: true,
-      value: ""
+      value: "chosenCurrency"
    },
    {
       id: 2,

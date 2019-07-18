@@ -7,6 +7,7 @@ import InputOption from '../components/InputOption'
 import Calendar from '../components/Calendar'
 import { eventDetails } from '../utils/eventDetails'
 import { marginTopBottom } from '../utils/colorsAndMargins'
+import CurrenciesAndMonths from '../components/CurrenciesAndMonths';
 
 class EventPage extends React.Component {
    constructor(props) {
@@ -14,6 +15,7 @@ class EventPage extends React.Component {
       this.state = {
          renderCalendar: false,
          showModal: false,
+         showCurrencies: false
       }
       this.calendarModal = ""
    }
@@ -33,11 +35,16 @@ class EventPage extends React.Component {
       }))
    }
    pickCurrency = () => {
-      console.log('Pick currency called')
+      this.setState({ showCurrencies: true })
+   }
+   handleOK = () => {
+      this.setState({ showCurrencies: false })
+   }
+   handleChooseCurrency = (cur) => {
+      this.props.addEventCurrency(cur)
    }
    onDateChange = (date) => {
       const plainDate = date.format().slice(0,10)
-      console.log(plainDate)
       switch (this.calendarModal) {
          case "startDate":
             this.props.addStartDate(plainDate)
@@ -54,6 +61,13 @@ class EventPage extends React.Component {
       const { container } = eventPageStyles
       return (
          <ScrollView style={container}>
+            {this.state.showCurrencies && 
+               <CurrenciesAndMonths 
+                  showCurrencies={true}
+                  showMonths={false} 
+                  handleOK={this.handleOK}
+                  chooseMonthOrCurrency={this.handleChooseCurrency}
+               />}
             {eventDetails.map((item, index) => {
                return (
                   <InputOption 
