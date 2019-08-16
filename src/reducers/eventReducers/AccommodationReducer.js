@@ -1,4 +1,9 @@
 import {
+   NEW_EVENT_BUTTON_PRESSED,
+   EXISTING_EVENT_EDITED,
+   accommodationActions
+} from '../../actions/types'
+const {
    NO_NEED_ACCOMMODATION,
    INCREASE_NUM_OF_PERSONS,
    DECREASE_NUM_OF_PERSONS,
@@ -12,7 +17,7 @@ import {
    FETCH_ACCOMMODATION_DETAILS_FAIL,
    ACCOMMODATION_CHOSEN,
    ACCOMMODATION_UNCHOSEN
-} from '../actions/types'
+} = accommodationActions
 
 const INITIAL_STATE = {
    accommodationLoading: false,
@@ -27,6 +32,14 @@ const INITIAL_STATE = {
 }
 export default (state=INITIAL_STATE, action) => {
    switch (action.type) {
+      case NEW_EVENT_BUTTON_PRESSED:
+         return state
+      case EXISTING_EVENT_EDITED:
+         // return accommodation details for the appropriate event from state.events
+         return {...state, accommodationLoading: action.payload.accommodation.accommodationLoading, accommDetailsLoading: action.payload.accommodation.accommDetailsLoading,
+         noAccommodation: action.payload.accommodation.noAccommodation, numOfPersons: action.payload.accommodation.numOfPersons, checkInDate: action.payload.accommodation.checkInDate,
+         checkOutDate: action.payload.accommodation.checkOutDate, accommodationOptions: action.payload.accommodation.accommodationOptions,
+         chosenAccommOptionId: action.payload.accommodation.chosenAccommOptionId, accommodationCosts: action.payload.accommodation.accommodationCosts}
       case NO_NEED_ACCOMMODATION:
          return {...state, noAccommodation: !state.noAccommodation}
       case INCREASE_NUM_OF_PERSONS:
@@ -52,8 +65,6 @@ export default (state=INITIAL_STATE, action) => {
          return {...state, accommDetailsLoading: false}
          // add errror handling
       case ACCOMMODATION_CHOSEN:
-         console.log('chosen accomm option id is ', action.payload.id)
-         console.log('accomm costs are now ', action.payload.costs)
          return {...state, chosenAccommOptionId: action.payload.id, accommodationCosts: action.payload.costs}
       case ACCOMMODATION_UNCHOSEN:
          return {...state, chosenAccommOptionId: "", accommodationCosts: 0}

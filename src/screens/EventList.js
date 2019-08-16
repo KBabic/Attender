@@ -1,89 +1,122 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView, StatusBar, Dimensions, FlatList } from 'react-native'
+import { connect } from 'react-redux'
+import { newEventButtonPressed, existingEventEdited } from '../actions/EventActions'
 import CostOverview from '../components/CostOverview'
 import Button from '../components/Button'
 import EventListItem from '../components/EventListItem'
-import { sampleEventList } from '../utils/sampleEventList'
 import { primaryColor } from '../utils/colorsAndMargins'
+import getDotValues from '../utils/getDotValues'
 
-const keyExtractor = ({ id }) => id.toString()
+const keyExtractor = ({ general: {id }}) => id.toString()
 
-export default class EventList extends React.Component {
+class EventList extends React.Component {
    static navigationOptions = ({ navigation }) => {
       return {
          header: () => null
       }
    }
-   // when empty list:
-   /*render() {
-      const { container, messageContainer, costsContainer, messageText, buttonContainer } = eventListStyles
+   componentDidMount() {
+      console.log(Object.values(this.props.events))
+   }
+   renderEvent = ({item}) => {
+      // item = {general: {eventName, startDate,...}, ..., costs: {chosenCurrency, calculatedTotalCosts},...}
+      const { general: {eventName, startDate, endDate, eventCountry, eventCity, eventCurrency, eventFee }} = item
+      const {transport: {noTransport, transportCosts}} = item
+      const {accommodation: {noAccommodation, accommodationCosts}} = item
+      const {costs: {chosenCurrency, avgTransportCost, avgAccommCost, calculatedFee, additionalCosts, calculatedTotalCosts}} = item
+      //const { general, transport, accommodation, costs } = item
+      //const { eventName, startDate, endDate, eventCountry, eventCity, eventCurrency, eventFee } = general
+      //const { noTransport, transportCosts } = transport
+      //const { noAccommodation, accommodationCosts } = accommodation
+      //const { chosenCurrency, avgTransportCost, avgAccommCost, calculatedFee, additionalCosts, calculatedTotalCosts } = costs
+      const firstDot = getDotValues([eventName, startDate, endDate, eventCountry, eventCity, eventCurrency, eventFee])
+      const secondDot = getDotValues([transportCosts], noTransport)
+      const thirdDot = getDotValues([accommodationCosts], noAccommodation)
+      const fourthDot = getDotValues([chosenCurrency, avgTransportCost, avgAccommCost, calculatedFee, additionalCosts, calculatedTotalCosts])
       return (
-         <View style={container}>
-            <StatusBar backgroundColor={primaryColor}/>
-            <View style={messageContainer}>
-               <Text style={messageText}>
-                  You currently have no events planned
-               </Text>
-            </View>
-            <View style={costsContainer}>
-               <CostOverview />
-            </View>
-            <View style={buttonContainer}>
-               <Button />
-            </View>
-         </View>
+         <EventListItem 
+            name={eventName} 
+            date={startDate}
+            price={`${calculatedTotalCosts.toString()} ${chosenCurrency}`} 
+            checked={false}
+            handlePress={() => this.updateExistingEvent(item)}
+            first={firstDot}
+            second={secondDot}
+            third={thirdDot}
+            fourth={fourthDot}  
+         />
       )
-   } */
-   // when not empty list:
-   renderEvent = ({ item: { name, startDate, totalCosts, currency, firstDot, secondDot, thirdDot, fourthDot } }) => (
-      <EventListItem 
-         name={name} 
-         date={startDate}
-         price={`${totalCosts.toString()} ${currency}`} 
-         checked={false}
-         handlePress={this.handlePress.bind(this)}
-         first={firstDot}
-         second={secondDot}
-         third={thirdDot}
-         fourth={fourthDot}  
-      />
-   )
-   handlePress() {
+   }
+   updateExistingEvent = (event) => {
+      this.props.existingEventEdited(event)
       this.props.navigation.navigate('EventPage')
    }
-   
+   newEventButtonPressed = () => {
+      this.props.newEventButtonPressed()
+      this.props.navigation.navigate('EventPage')
+   }
    render() {
       const { container, messageContainer, costsContainer, messageText, buttonContainer } = eventListStyles
-      return (
-         <View style={container}>
-            <StatusBar backgroundColor={primaryColor}/>
-            <View style={buttonContainer}>
-               <Button 
-                  onPress={this.handlePress.bind(this)}
-                  disabled={false}
-                  label="+"
-                  width={60}
-                  height={60}
-                  radius={30}
-                  fontSize={30}
-               />
+      // when event list is empty
+      /*if (this.props.events === {}) {
+         return (
+            <View style={container}>
+               <StatusBar backgroundColor={primaryColor}/>
+               <View style={messageContainer}>
+                  <Text style={messageText}>
+                     You currently have no events planned
+                  </Text>
+               </View>
+               <View style={costsContainer}>
+                  <CostOverview />
+               </View>
+               <View style={buttonContainer}>
+                  <Button />
+               </View>
             </View>
-            <View style={{flex: 1}}>
-               <CostOverview />
+         )
+      }*/
+      // when event list is not empty 
+      //if (this.props.events !== {}) {
+         return (
+            <View style={container}>
+               <StatusBar backgroundColor={primaryColor}/>
+               <View style={buttonContainer}>
+                  <Button 
+                     onPress={this.newEventButtonPressed.bind(this)}
+                     disabled={false}
+                     label="+"
+                     width={60}
+                     height={60}
+                     radius={30}
+                     fontSize={30}
+                  />
+               </View>
+               <View style={{flex: 1}}>
+                  <CostOverview />
+               </View>
+               <ScrollView style={{flex: 1, marginTop:20}}>
+                  {Object.values(this.props.events) !== [] && (
+                     <FlatList
+                        data={Object.values(this.props.events)}
+                        renderItem={this.renderEvent}
+                        keyExtractor={keyExtractor}
+                        style={{margin: 10}}
+                     />
+                  )}
+                  {Object.values(this.props.events) === [] && (
+                  <Text style={messageText}>
+                     You currently have no events planned
+                  </Text>
+                  )}
+                  <View style={{height: 75,backgroundColor: "#FFFFFF"}}></View>
+               </ScrollView>
             </View>
-            <ScrollView style={{flex: 1, marginTop:20}}>
-               <FlatList
-                  data={sampleEventList}
-                  renderItem={this.renderEvent}
-                  keyExtractor={keyExtractor}
-                  style={{margin: 10}}
-               />
-            </ScrollView>
-         </View>
-      )
+         )
+      //}
    }
 }
-
 const eventListStyles = StyleSheet.create({
    container: {
       flex: 1,
@@ -92,8 +125,9 @@ const eventListStyles = StyleSheet.create({
       zIndex: 1,
    },
    messageContainer: {
-      flex: 4,
-      justifyContent: 'center'
+      flex: 1,
+      justifyContent: 'center',
+      zIndex: 1
    },
    messageText: {
       color: primaryColor, 
@@ -101,7 +135,7 @@ const eventListStyles = StyleSheet.create({
       textAlign: 'center'
    },
    costsContainer: {
-      flex: 5
+      //flex: 1
    },
    buttonContainer: {
       position: 'absolute', 
@@ -112,3 +146,17 @@ const eventListStyles = StyleSheet.create({
       right: 20,
    }
 })
+const mapStateToProps = state => ({
+   events: state.events
+})
+const mapDispatchToProps = dispatch => {
+   return {
+      newEventButtonPressed: () => {
+         dispatch(newEventButtonPressed())
+      },
+      existingEventEdited: (event) => {
+         dispatch(existingEventEdited(event))
+      }
+   }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(EventList)

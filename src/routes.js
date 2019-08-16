@@ -3,7 +3,7 @@ import { TouchableOpacity, Text } from 'react-native'
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { primaryColor, secondaryColor, currentTabColor, tabColor } from './utils/colorsAndMargins'
-
+import SaveEvent from './components/SaveEvent'
 import Start from './screens/Start'
 import EventList from './screens/EventList'
 import EventPage from './screens/EventPage'
@@ -53,12 +53,8 @@ const EventStackNavigator = createStackNavigator(
     defaultNavigationOptions: {
       ...commonHeader,
       headerRight: (
-        <TouchableOpacity onPress={() => alert('This is a button!')}>
-          <Text
-            style={{ paddingRight: 20, color: primaryColor, fontSize: 18, fontWeight: 'bold'}}
-          >SAVE EVENT</Text>
-        </TouchableOpacity> 
-       ) 
+        <SaveEvent />
+      ) 
     }
   }
 )

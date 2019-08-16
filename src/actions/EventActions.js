@@ -2,34 +2,33 @@ import uuid from 'uuid/v4'
 import {
    SAVE_EVENT,
    DELETE_EVENT,
-   CHOOSE_MONTH,
-   CHOOSE_OVERVIEW_CURRENCY
+   NEW_EVENT_BUTTON_PRESSED,
+   EXISTING_EVENT_EDITED
 } from './types'
 
-// event: { id, name, startDate, endDate, country, city, currency, fee, transportCosts, accommodationCosts, totalCosts }
+// event: { id, name, startDate, endDate, country, city, ... }
 export const saveEvent = event => {
    // create ID for the event:
-   event.id = uuid()
+   event.general.id = uuid()
    return {
       type: SAVE_EVENT,
       payload: event
    }
 }
-// not sure if deleteEvent will have payload
 export const deleteEvent = event => {
    return {
       type: DELETE_EVENT,
+      payload: event
    }
 }
-export const chooseMonth = month => {
+export const newEventButtonPressed = () => {
    return {
-      type: CHOOSE_MONTH,
-      payload: month
+      type: NEW_EVENT_BUTTON_PRESSED
    }
 }
-export const chooseOverviewCurrency = cur => {
+export const existingEventEdited = event => {
    return {
-      type: CHOOSE_OVERVIEW_CURRENCY,
-      payload: cur
+      type: EXISTING_EVENT_EDITED,
+      payload: event
    }
 }

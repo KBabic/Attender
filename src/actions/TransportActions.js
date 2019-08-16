@@ -1,4 +1,5 @@
-import {
+import { transportActions } from './types'
+const {
    ADD_ORIGIN_CITY,
    NO_NEED_TRANSPORT,
    SEARCHING_TRANSPORT,
@@ -6,7 +7,7 @@ import {
    SEARCH_TRANSPORT_FAIL,
    TRANSPORT_CHOSEN,
    TRANSPORT_UNCHOSEN,
-} from './types'
+} = transportActions
 
 export const addOriginCity = text => {
    return {

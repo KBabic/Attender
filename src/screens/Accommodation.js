@@ -221,15 +221,15 @@ const accommodationStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
-   destinationCity: state.event.city,
-   noAccommodation: state.accommodation.noAccommodation,
-   numOfPersons: state.accommodation.numOfPersons,
-   checkInDate: state.accommodation.checkInDate,
-   checkOutDate: state.accommodation.checkOutDate,
-   accommodationLoading: state.accommodation.accommodationLoading,
-   accommodationOptions: state.accommodation.accommodationOptions,
-   chosenAccommOptionId: state.accommodation.chosenAccommOptionId,
-   accommodationCosts: state.accommodation.accommodationCosts
+   destinationCity: state.currentEvent.general.eventCity,
+   noAccommodation: state.currentEvent.accommodation.noAccommodation,
+   numOfPersons: state.currentEvent.accommodation.numOfPersons,
+   checkInDate: state.currentEvent.accommodation.checkInDate,
+   checkOutDate: state.currentEvent.accommodation.checkOutDate,
+   accommodationLoading: state.currentEvent.accommodation.accommodationLoading,
+   accommodationOptions: state.currentEvent.accommodation.accommodationOptions,
+   chosenAccommOptionId: state.currentEvent.accommodation.chosenAccommOptionId,
+   accommodationCosts: state.currentEvent.accommodation.accommodationCosts
 })
 const mapDispatchToProps = dispatch => {
    return {

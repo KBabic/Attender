@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import { addEventName, addStartDate, addEndDate, addEventCountry, addEventCity, addEventCurrency, addEventFee } from '../actions/EventPageActions'
+import { addEventName, addStartDate, addEndDate, addEventCountry, addEventCity, addEventCurrency, addEventFee } from '../actions/GeneralActions'
 
 import InputOption from '../components/InputOption'
 import Calendar from '../components/Calendar'
@@ -19,7 +19,9 @@ class EventPage extends React.Component {
       }
       this.calendarModal = ""
    }
-   
+   componentDidMount() {
+      console.log(this.props.currentEvent)
+   }
    handleIconPress = (item) => {
       if (item.name === "startDate" || item.name === "endDate") {
          this.pickDate(item.name)
@@ -74,7 +76,7 @@ class EventPage extends React.Component {
                      placeholder={item.placeholder}
                      icon={item.icon}
                      text={item.text}
-                     value={this.props[item.name]}
+                     value={this.props.currentEvent.general[item.name].toString()}
                      onChangeText={(txt) => this.handleChangeInput(txt, item)}
                      key={index}
                      onPress={() => this.handleIconPress(item)}
@@ -96,22 +98,14 @@ class EventPage extends React.Component {
       )
    }
 }
-
 const eventPageStyles = StyleSheet.create({
    container: {
       flex: 1,
       marginBottom: marginTopBottom
    }
 })
-
 const mapStateToProps = state => ({
-   name: state.event.name,
-   startDate: state.event.startDate,
-   endDate: state.event.endDate,
-   country: state.event.country,
-   city: state.event.city,
-   eventCurrency: state.event.eventCurrency,
-   eventFee: state.event.eventFee
+   currentEvent: state.currentEvent
 })
 const mapDispatchToProps = dispatch => {
    return {

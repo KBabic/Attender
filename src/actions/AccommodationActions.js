@@ -1,4 +1,5 @@
-import {
+import { accommodationActions } from './types'
+const {
    NO_NEED_ACCOMMODATION,
    INCREASE_NUM_OF_PERSONS,
    DECREASE_NUM_OF_PERSONS,
@@ -9,7 +10,7 @@ import {
    SEARCH_ACCOMMODATION_FAIL,
    ACCOMMODATION_CHOSEN,
    ACCOMMODATION_UNCHOSEN
-} from './types'
+} = accommodationActions
 
 export const noNeedAccommodation = () => {
    return {

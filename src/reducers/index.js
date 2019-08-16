@@ -1,14 +1,12 @@
 import { combineReducers } from 'redux'
-import EventReducer from './EventReducer'
-import TransportReducer from './TransportReducer'
-import AccommodationReducer from './AccommodationReducer'
-import CostsReducer from './CostsReducer'
-import EventListReducer from './EventListReducer'
+import eventReducers from './eventReducers'
+import AvgMonthlyReducer from './AvgMonthlyReducer'
+import OverviewReducer from './OverviewReducer'
+import EventsReducer from './EventsReducer'
 
 export default combineReducers({
-   event: EventReducer,
-   transport: TransportReducer,
-   accommodation: AccommodationReducer,
-   costs: CostsReducer,
-   overview: EventListReducer
+   overview: OverviewReducer,
+   avgMonthlyCosts: AvgMonthlyReducer,
+   events: EventsReducer,
+   currentEvent: eventReducers
 })

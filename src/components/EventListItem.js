@@ -5,9 +5,20 @@ import Dots from './Dots'
 import { primaryColor, secondaryColor } from '../utils/colorsAndMargins'
 
 export default class EventListItem extends React.Component {
+   constructor(props) {
+      super(props)
+      this.state = {
+         eventChecked: this.props.checked
+      }
+   }
+   handleCheck = () => {
+      this.setState(prevState => ({
+         eventChecked: !prevState.eventChecked
+      }))
+   }
    render() {
       const { eventContainer, label, dotsContainer } = eventItemStyles
-      const { name, date, price, checked, handlePress, first, second, third, fourth } = this.props
+      const { name, date, price, checked, onCheck, handlePress, first, second, third, fourth } = this.props
       return (
          <View style={{flexDirection: 'column'}}>
             <View style={eventContainer}>
@@ -23,7 +34,7 @@ export default class EventListItem extends React.Component {
                   third={third}
                   fourth={fourth}
                />
-               <CheckOption checkTitle={price} checked={checked}/>
+               <CheckOption checkTitle={price} checked={this.state.eventChecked} onPress={() => this.handleCheck()}/>
             </View>
          </View>
       )

@@ -1,4 +1,5 @@
-import {
+import { generalActions } from './types'
+const {
    ADD_EVENT_NAME,
    ADD_EVENT_COUNTRY,
    ADD_EVENT_CITY,
@@ -6,7 +7,7 @@ import {
    ADD_EVENT_FEE,
    ADD_START_DATE,
    ADD_END_DATE
-} from './types'
+} = generalActions
 
 export const addEventName = text => {
    return {

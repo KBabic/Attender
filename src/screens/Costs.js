@@ -58,10 +58,10 @@ const costsStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
-   chosenCurrency: state.costs.chosenCurrency,
-   transportCosts: state.transport.transportCosts,
-   accommodationCosts: state.accommodation.accommodationCosts,
-   eventFee: state.event.eventFee
+   chosenCurrency: state.currentEvent.costs.chosenCurrency,
+   transportCosts: state.currentEvent.costs.avgTransportCost,
+   accommodationCosts: state.currentEvent.costs.avgAccommCost,
+   eventFee: state.currentEvent.costs.calculatedFee
 })
 const mapDispatchToProps = dispatch => {
    return {

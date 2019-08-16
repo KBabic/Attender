@@ -1,10 +1,11 @@
-import {
+import { costsActions } from './types'
+const {
    CHOOSE_CURRENCY,
    TRANSPORT_COSTS_CALCULATED,
    ACCOMMODATION_COSTS_CALCULATED,
    EVENT_FEE_CALCULATED,
    ADD_ADDITIONAL_COSTS
-} from './types'
+} = costsActions
 
 export const chooseCurrency = cur => {
    return {
@@ -12,19 +13,22 @@ export const chooseCurrency = cur => {
       payload: cur
    }
 }
-export const transportCostsCalculated = () => {
+export const transportCostsCalculated = (cost) => {
    return {
-      type: TRANSPORT_COSTS_CALCULATED
+      type: TRANSPORT_COSTS_CALCULATED,
+      payload: cost
    }
 }
-export const accommodationCostsCalculated = () => {
+export const accommodationCostsCalculated = (cost) => {
    return {
-      type: ACCOMMODATION_COSTS_CALCULATED
+      type: ACCOMMODATION_COSTS_CALCULATED,
+      payload: cost
    }
 }
-export const eventFeeCalculated = () => {
+export const eventFeeCalculated = (cost) => {
    return {
-      type: EVENT_FEE_CALCULATED
+      type: EVENT_FEE_CALCULATED,
+      payload: cost
    }
 }
 export const addAdditionalCosts = cost => {

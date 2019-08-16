@@ -117,13 +117,13 @@ const transportStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
-   destinationCity: state.event.city,
-   originCity: state.transport.originCity,
-   noTransport: state.transport.noTransport,
-   transportLoading: state.transport.transportLoading,
-   transportOptions: state.transport.transportOptions,
-   chosenTransportOptionId: state.transport.chosenTransportOptionId,
-   transportCosts: state.transport.transportCosts
+   destinationCity: state.currentEvent.general.eventCity,
+   originCity: state.currentEvent.transport.originCity,
+   noTransport: state.currentEvent.transport.noTransport,
+   transportLoading: state.currentEvent.transport.transportLoading,
+   transportOptions: state.currentEvent.transport.transportOptions,
+   chosenTransportOptionId: state.currentEvent.transport.chosenTransportOptionId,
+   transportCosts: state.currentEvent.transport.transportCosts
 })
 const mapDispatchToProps = dispatch => {
    return {

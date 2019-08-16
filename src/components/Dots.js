@@ -8,13 +8,13 @@ export default class Dot extends React.Component {
       const dots = [first, second, third, fourth ]
       return (
          <View style={dotStyles.container}>
-            {dots.map(dot => {
+            {dots.map((dot, i) => {
                const dotStyle = { backgroundColor: "#ffffff"}
                if (dot) {
                   dotStyle.backgroundColor = secondaryColor
                }
                return (
-                  <View style={[dotStyles.dot, dotStyle]}></View>
+                  <View key={i} style={[dotStyles.dot, dotStyle]}></View>
                )
             })}
          </View>
