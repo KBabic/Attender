@@ -97,8 +97,8 @@ const transportDetailsStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
-   chosenTransportOptionId: state.transport.chosenTransportOptionId,
-   transportCosts: state.transport.transportCosts
+   chosenTransportOptionId: state.currentEvent.transport.chosenTransportOptionId,
+   transportCosts: state.currentEvent.transport.transportCosts
 })
 const mapDispatchToProps = dispatch => {
    return {

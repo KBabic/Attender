@@ -20,16 +20,10 @@ class EventList extends React.Component {
       console.log(Object.values(this.props.events))
    }
    renderEvent = ({item}) => {
-      // item = {general: {eventName, startDate,...}, ..., costs: {chosenCurrency, calculatedTotalCosts},...}
       const { general: {eventName, startDate, endDate, eventCountry, eventCity, eventCurrency, eventFee }} = item
       const {transport: {noTransport, transportCosts}} = item
       const {accommodation: {noAccommodation, accommodationCosts}} = item
       const {costs: {chosenCurrency, avgTransportCost, avgAccommCost, calculatedFee, additionalCosts, calculatedTotalCosts}} = item
-      //const { general, transport, accommodation, costs } = item
-      //const { eventName, startDate, endDate, eventCountry, eventCity, eventCurrency, eventFee } = general
-      //const { noTransport, transportCosts } = transport
-      //const { noAccommodation, accommodationCosts } = accommodation
-      //const { chosenCurrency, avgTransportCost, avgAccommCost, calculatedFee, additionalCosts, calculatedTotalCosts } = costs
       const firstDot = getDotValues([eventName, startDate, endDate, eventCountry, eventCity, eventCurrency, eventFee])
       const secondDot = getDotValues([transportCosts], noTransport)
       const thirdDot = getDotValues([accommodationCosts], noAccommodation)
@@ -58,27 +52,6 @@ class EventList extends React.Component {
    }
    render() {
       const { container, messageContainer, costsContainer, messageText, buttonContainer } = eventListStyles
-      // when event list is empty
-      /*if (this.props.events === {}) {
-         return (
-            <View style={container}>
-               <StatusBar backgroundColor={primaryColor}/>
-               <View style={messageContainer}>
-                  <Text style={messageText}>
-                     You currently have no events planned
-                  </Text>
-               </View>
-               <View style={costsContainer}>
-                  <CostOverview />
-               </View>
-               <View style={buttonContainer}>
-                  <Button />
-               </View>
-            </View>
-         )
-      }*/
-      // when event list is not empty 
-      //if (this.props.events !== {}) {
          return (
             <View style={container}>
                <StatusBar backgroundColor={primaryColor}/>
@@ -114,7 +87,6 @@ class EventList extends React.Component {
                </ScrollView>
             </View>
          )
-      //}
    }
 }
 const eventListStyles = StyleSheet.create({

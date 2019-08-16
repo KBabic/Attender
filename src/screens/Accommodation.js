@@ -23,8 +23,6 @@ class Accommodation extends React.Component {
          renderCalendar: false,
          showModal: false,
          showList: false,
-         //hotelsList: [],
-         //loading: false,
          buttonDisabled: false,
          paramsDisabled: false
       }

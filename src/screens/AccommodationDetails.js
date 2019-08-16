@@ -114,8 +114,8 @@ const accommodationDetailsStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
-   chosenAccommOptionId: state.accommodation.chosenAccommOptionId,
-   accommodationCosts: state.accommodation.accommodationCosts
+   chosenAccommOptionId: state.currentEvent.accommodation.chosenAccommOptionId,
+   accommodationCosts: state.currentEvent.accommodation.accommodationCosts
 })
 const mapDispatchToProps = dispatch => {
    return {
