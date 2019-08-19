@@ -1,7 +1,7 @@
 import {
    NEW_EVENT_BUTTON_PRESSED,
-   EXISTING_EVENT_EDITED,
-   generalActions
+   EXISTING_EVENT_OPENED,
+   generalActions,
 } from '../../actions/types'
 const { 
    ADD_EVENT_NAME,
@@ -26,8 +26,8 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
    switch (action.type) {
       case NEW_EVENT_BUTTON_PRESSED:
-         return state
-      case EXISTING_EVENT_EDITED:
+         return INITIAL_STATE
+      case EXISTING_EVENT_OPENED:
          // return general details for the appropriate event from state.events
          return {...state, id: action.payload.general.id, eventName: action.payload.general.eventName, startDate: action.payload.general.startDate,
          endDate: action.payload.general.endDate, eventCountry: action.payload.general.eventCountry, eventCity: action.payload.general.eventCity,

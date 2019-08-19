@@ -2,8 +2,9 @@ import uuid from 'uuid/v4'
 import {
    SAVE_EVENT,
    DELETE_EVENT,
+   UPDATE_EVENT,
    NEW_EVENT_BUTTON_PRESSED,
-   EXISTING_EVENT_EDITED
+   EXISTING_EVENT_OPENED
 } from './types'
 
 // event: { id, name, startDate, endDate, country, city, ... }
@@ -26,9 +27,15 @@ export const newEventButtonPressed = () => {
       type: NEW_EVENT_BUTTON_PRESSED
    }
 }
-export const existingEventEdited = event => {
+export const existingEventOpened = event => {
    return {
-      type: EXISTING_EVENT_EDITED,
+      type: EXISTING_EVENT_OPENED,
+      payload: event
+   }
+}
+export const updateEvent = event => {
+   return {
+      type: UPDATE_EVENT,
       payload: event
    }
 }

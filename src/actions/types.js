@@ -43,9 +43,10 @@ export const costsActions = {
 export const ADD_NOTES = 'add_notes'
 // Event actions:
 export const NEW_EVENT_BUTTON_PRESSED = 'new_event_button_pressed'
-export const EXISTING_EVENT_EDITED = 'existing_event_edited'
+export const EXISTING_EVENT_OPENED = 'existing_event_edited'
 export const SAVE_EVENT = 'save_event'
 export const DELETE_EVENT = 'delete_event'
+export const UPDATE_EVENT = 'update_event'
 // Overview actions:
 export const CHOOSE_MONTH = 'choose_month'
 export const CHOOSE_OVERVIEW_CURRENCY = 'choose_overview_currency'

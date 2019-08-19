@@ -7,7 +7,7 @@ export default class InputOption extends React.Component {
    
    render() {
       const { inputContainerStyle, inputLabelStyle, inputViewStyle, inputTextStyle} = inputStyles
-      const { icon, text, value, placeholder, onPress, editable, onChangeText, defaultValue, iconDisabled } = this.props
+      const { icon, text, value, placeholder, onPress, editable, onChangeText, onSubmitEditing, defaultValue, iconDisabled } = this.props
       const opacity = iconDisabled ? 0.7 : 1
       return (
       <View 
@@ -24,6 +24,7 @@ export default class InputOption extends React.Component {
                   defaultValue={defaultValue}
                   editable={editable}
                   onChangeText={onChangeText}
+                  onSubmitEditing={onSubmitEditing}
             />
             <TouchableOpacity onPress={onPress} disabled={iconDisabled}>
                {icon !="" && (

@@ -1,11 +1,8 @@
 import {
-   generalActions,
-   transportActions,
-   accommodationActions,
-   costsActions,
    ADD_NOTES, 
    SAVE_EVENT, 
-   DELETE_EVENT 
+   DELETE_EVENT,
+   UPDATE_EVENT 
 } from '../actions/types'
 const INITIAL_STATE = {
    1: {
@@ -98,15 +95,8 @@ export default (state = INITIAL_STATE, action) => {
       return {...state, [action.payload.general.id]: action.payload}
    } else if (action.type === DELETE_EVENT) {
       // delete event
-   } else if (action.type === ADD_NOTES) {
-      // update current event
-   } else if (
-      Object.values(generalActions).includes(action.type) ||
-      Object.values(transportActions).includes(action.type) ||
-      Object.values(accommodationActions).includes(action.type) ||
-      Object.values(costsActions).includes(action.type)
-   ) {
-      // update current event
+   } else if (action.type === UPDATE_EVENT) {
+      return {...state, [action.payload.general.id]: action.payload}
    } else {
       return state
    }

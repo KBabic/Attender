@@ -2,12 +2,12 @@ import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { addEventName, addStartDate, addEndDate, addEventCountry, addEventCity, addEventCurrency, addEventFee } from '../actions/GeneralActions'
-
+import { updateEvent } from '../actions/EventActions'
 import InputOption from '../components/InputOption'
 import Calendar from '../components/Calendar'
 import { eventDetails } from '../utils/eventDetails'
 import { marginTopBottom } from '../utils/colorsAndMargins'
-import CurrenciesAndMonths from '../components/CurrenciesAndMonths';
+import CurrenciesAndMonths from '../components/CurrenciesAndMonths'
 
 class EventPage extends React.Component {
    constructor(props) {
@@ -20,6 +20,9 @@ class EventPage extends React.Component {
       this.calendarModal = ""
    }
    componentDidMount() {
+      console.log(this.props.currentEvent)
+   }
+   componentDidUpdate() {
       console.log(this.props.currentEvent)
    }
    handleIconPress = (item) => {
@@ -41,6 +44,14 @@ class EventPage extends React.Component {
    }
    handleOK = () => {
       this.setState({ showCurrencies: false })
+      this.props.updateEvent(this.props.currentEvent)
+   }
+   handleCloseCalendar = () => {
+      this.setState({
+         renderCalendar: false,
+         showModal: false
+      })
+      this.props.updateEvent(this.props.currentEvent)
    }
    handleChooseCurrency = (cur) => {
       this.props.addEventCurrency(cur)
@@ -58,6 +69,9 @@ class EventPage extends React.Component {
    }
    handleChangeInput = (text, item) => {
       this.props[item.action](text)
+   }
+   onSubmitEdit = () => {
+      this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { container } = eventPageStyles
@@ -78,6 +92,7 @@ class EventPage extends React.Component {
                      text={item.text}
                      value={this.props.currentEvent.general[item.name].toString()}
                      onChangeText={(txt) => this.handleChangeInput(txt, item)}
+                     onSubmitEditing={this.onSubmitEdit.bind(this)}
                      key={index}
                      onPress={() => this.handleIconPress(item)}
                      editable={item.editable}
@@ -88,11 +103,7 @@ class EventPage extends React.Component {
                renderCalendar={this.state.renderCalendar}
                showModal={this.state.showModal}
                onDateChange={this.onDateChange.bind(this)}
-               handleOK={() => 
-                  this.setState({
-                     renderCalendar: false,
-                     showModal: false
-                  })}
+               handleOK={this.handleCloseCalendar.bind(this)}
             />
          </ScrollView>
       )
@@ -129,6 +140,9 @@ const mapDispatchToProps = dispatch => {
       },
       addEventFee: (amount) => {
          dispatch(addEventFee(amount))
+      },
+      updateEvent: (event) => {
+         dispatch(updateEvent(event))
       }
    }
 }

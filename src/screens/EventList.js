@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, ScrollView, StatusBar, Dimensions, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import { newEventButtonPressed, existingEventEdited } from '../actions/EventActions'
+import { newEventButtonPressed, existingEventOpened } from '../actions/EventActions'
 import CostOverview from '../components/CostOverview'
 import Button from '../components/Button'
 import EventListItem from '../components/EventListItem'
@@ -43,7 +43,7 @@ class EventList extends React.Component {
       )
    }
    updateExistingEvent = (event) => {
-      this.props.existingEventEdited(event)
+      this.props.existingEventOpened(event)
       this.props.navigation.navigate('EventPage')
    }
    newEventButtonPressed = () => {
@@ -126,8 +126,8 @@ const mapDispatchToProps = dispatch => {
       newEventButtonPressed: () => {
          dispatch(newEventButtonPressed())
       },
-      existingEventEdited: (event) => {
-         dispatch(existingEventEdited(event))
+      existingEventOpened: (event) => {
+         dispatch(existingEventOpened(event))
       }
    }
 }
