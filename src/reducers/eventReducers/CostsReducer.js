@@ -1,6 +1,6 @@
 import {
    NEW_EVENT_BUTTON_PRESSED,
-   EXISTING_EVENT_EDITED,
+   EXISTING_EVENT_OPENED,
    costsActions
 } from '../../actions/types'
 const {
@@ -24,7 +24,7 @@ export default (state=INITIAL_STATE, action) => {
    switch(action.type) {
       case NEW_EVENT_BUTTON_PRESSED:
          return state
-      case EXISTING_EVENT_EDITED:
+      case EXISTING_EVENT_OPENED:
          // return costs details for the appropriate event from state.events
          return {...state, chosenCurrency: action.payload.costs.chosenCurrency, avgTransportCost: action.payload.costs.avgTransportCost,
          avgAccommCost: action.payload.costs.avgAccommCost, calculatedFee: action.payload.costs.calculatedFee, additionalCosts: action.payload.costs.additionalCosts,

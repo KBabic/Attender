@@ -3,6 +3,7 @@ import { View, Text, Dimensions, StyleSheet, ScrollView, FlatList, TouchableOpac
 import { connect } from 'react-redux'
 import { noNeedAccommodation, increaseNumOfPersons, decreaseNumOfPersons, addCheckinDate, addCheckoutDate, searchingAccommodation,
 searchAccommodationSuccess, searchAccommodationFail, accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
+import { updateEvent } from '../actions/EventActions'
 import InputOption from '../components/InputOption'
 import CheckOption from '../components/CheckOption'
 import UnfoldOption from '../components/UnfoldOption'
@@ -23,8 +24,8 @@ class Accommodation extends React.Component {
          renderCalendar: false,
          showModal: false,
          showList: false,
-         buttonDisabled: false,
-         paramsDisabled: false
+         buttonDisabled: this.props.noAccommodation,
+         paramsDisabled: this.props.noAccommodation
       }
       this.offset = 0
       this.properties = []
@@ -49,9 +50,16 @@ class Accommodation extends React.Component {
             break
       }
    }
+   handleCloseCalendar = () => {
+      this.setState({
+         renderCalendar: false,
+         showModal: false
+      })
+      this.props.updateEvent(this.props.currentEvent)
+   }
    searchAccommodation = async () => {
-      //this.setState({loading: true})
       this.props.searchingAccommodation()
+      this.props.updateEvent(this.props.currentEvent)
       const { destinationCity, numOfPersons, checkInDate, checkOutDate } = this.props
       let locations
       let dest_id
@@ -86,6 +94,7 @@ class Accommodation extends React.Component {
             //loading: false
          }))
          this.props.searchAccommodationSuccess(hotelsList)
+         this.props.updateEvent(this.props.currentEvent)
          this.offset = this.offset + 30
          this.search_id = search_id
       } catch (e) {
@@ -114,6 +123,7 @@ class Accommodation extends React.Component {
    }
    handleCheck = () => {
       this.props.noNeedAccommodation()
+      this.props.updateEvent(this.props.currentEvent)
       this.setState((prevState) => ({
          buttonDisabled: !prevState.buttonDisabled,
          paramsDisabled: !prevState.paramsDisabled
@@ -121,9 +131,11 @@ class Accommodation extends React.Component {
    }
    handleIncrease = () => {
       this.props.increaseNumOfPersons()
+      this.props.updateEvent(this.props.currentEvent)
    }
    handleDecrease = () => {
       this.props.decreaseNumOfPersons()
+      this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { container } = accommodationStyles
@@ -143,7 +155,8 @@ class Accommodation extends React.Component {
             />
             <InputOption
                iconDisabled={this.state.paramsDisabled}
-               value={this.props.checkInDate}
+               defaultValue={this.props.startDate}
+               value={this.props.checkInDate==="" ? undefined : this.props.checkInDate}
                editable={false}
                icon="date-range"
                text="Check-in Date"
@@ -152,7 +165,8 @@ class Accommodation extends React.Component {
             />
             <InputOption 
                iconDisabled={this.state.paramsDisabled}
-               value={this.props.checkOutDate}
+               defaultValue={this.props.endDate}
+               value={this.props.checkOutDate==="" ? undefined : this.props.checkOutDate}
                editable={false}
                icon="date-range"
                text="Check-out Date"
@@ -172,11 +186,7 @@ class Accommodation extends React.Component {
                renderCalendar={this.state.renderCalendar}
                showModal={this.state.showModal}
                onDateChange={this.onDateChange.bind(this)}
-               handleOK={() => 
-                  this.setState({
-                     renderCalendar: false,
-                     showModal: false
-                  })}
+               handleOK={this.handleCloseCalendar.bind(this)}
             />
             {this.props.accommodationLoading && (
                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -219,6 +229,9 @@ const accommodationStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
+   currentEvent: state.currentEvent,
+   startDate: state.currentEvent.general.startDate,
+   endDate: state.currentEvent.general.endDate,
    destinationCity: state.currentEvent.general.eventCity,
    noAccommodation: state.currentEvent.accommodation.noAccommodation,
    numOfPersons: state.currentEvent.accommodation.numOfPersons,
@@ -260,6 +273,9 @@ const mapDispatchToProps = dispatch => {
       },
       accommodationUnchosen: () => {
          dispatch(accommodationUnchosen())
+      },
+      updateEvent: (event) => {
+         dispatch(updateEvent(event))
       }
    }
 }

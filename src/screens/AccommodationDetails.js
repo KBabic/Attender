@@ -2,6 +2,7 @@ import React from 'react'
 import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import { accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
+import { updateEvent } from '../actions/EventActions'
 import CheckOption from '../components/CheckOption'
 import ImageGrid from '../components/ImageGrid'
 import { primaryColor, marginTopBottom, inputWidth, marginLeftRight, secondaryColor } from '../utils/colorsAndMargins'
@@ -39,9 +40,11 @@ class AccommodationDetails extends React.Component {
       const minPrice = navigation.getParam('item').minPrice
       if (prevState.checked && !this.state.checked) {
          this.props.accommodationUnchosen()
+         this.props.updateEvent(this.props.currentEvent)
       }
       if (!prevState.checked && this.state.checked) {
          this.props.accommodationChosen(id, minPrice)
+         this.props.updateEvent(this.props.currentEvent)
       }
    }
    handleCheck = () => {
@@ -114,6 +117,7 @@ const accommodationDetailsStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
+   currentEvent: state.currentEvent,
    chosenAccommOptionId: state.currentEvent.accommodation.chosenAccommOptionId,
    accommodationCosts: state.currentEvent.accommodation.accommodationCosts
 })
@@ -124,6 +128,9 @@ const mapDispatchToProps = dispatch => {
       },
       accommodationUnchosen: () => {
          dispatch(accommodationUnchosen())
+      },
+      updateEvent: (event) => {
+         dispatch(updateEvent(event))
       }
    }
 }

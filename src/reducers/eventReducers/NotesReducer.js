@@ -1,6 +1,6 @@
 import {
    NEW_EVENT_BUTTON_PRESSED,
-   EXISTING_EVENT_EDITED,
+   EXISTING_EVENT_OPENED,
    ADD_NOTES
 } from '../../actions/types'
 
@@ -11,7 +11,7 @@ export default (state=INITIAL_STATE, action) => {
    switch(action.type) {
       case NEW_EVENT_BUTTON_PRESSED:
          return state
-      case EXISTING_EVENT_EDITED:
+      case EXISTING_EVENT_OPENED:
          return {...state, notes: action.payload.notes.notes}
       case ADD_NOTES:
          return {...state, notes: action.payload}

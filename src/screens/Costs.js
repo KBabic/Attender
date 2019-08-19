@@ -2,6 +2,7 @@ import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { chooseCurrency } from '../actions/CostsActions'
+import { updateEvent } from '../actions/EventActions'
 import InputOption from '../components/InputOption'
 import CurrenciesAndMonths from '../components/CurrenciesAndMonths'
 import { costsDetails } from '../utils/costsDetails'
@@ -13,9 +14,11 @@ class Costs extends React.Component {
    }
    handleOK = () => {
       this.setState({ showCurrencies: false })
+      this.props.updateEvent(this.props.currentEvent)
    }
    handleChooseCurrency = (cur) => {
       this.props.chooseCurrency(cur)
+      this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { container } = costsStyles
@@ -29,12 +32,6 @@ class Costs extends React.Component {
                   chooseMonthOrCurrency={this.handleChooseCurrency}
                />}
             {costsDetails.map((item) => {
-               let value
-               if (item.value !== "") {
-                  value = this.props[item.value].toString()
-               } else {
-                  value = item.value
-               }
                return (
                   <InputOption 
                      placeholder={item.placeholder}
@@ -43,7 +40,7 @@ class Costs extends React.Component {
                      key={item.id}
                      onPress={() => this.setState({ showCurrencies: true })}
                      editable={item.editable}
-                     value={value}
+                     value={this.props[item.value].toString()}
                   />
                )
             })}
@@ -58,15 +55,21 @@ const costsStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
+   currentEvent: state.currentEvent,
    chosenCurrency: state.currentEvent.costs.chosenCurrency,
    transportCosts: state.currentEvent.costs.avgTransportCost,
    accommodationCosts: state.currentEvent.costs.avgAccommCost,
-   eventFee: state.currentEvent.costs.calculatedFee
+   eventFee: state.currentEvent.costs.calculatedFee,
+   addCosts: state.currentEvent.costs.additionalCosts,
+   estTotalCosts: state.currentEvent.costs.calculatedTotalCosts
 })
 const mapDispatchToProps = dispatch => {
    return {
       chooseCurrency: (cur) => {
          dispatch(chooseCurrency(cur))
+      },
+      updateEvent: (event) => {
+         dispatch(updateEvent(event))
       }
    }
 }

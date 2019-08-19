@@ -1,5 +1,4 @@
 import {
-   ADD_NOTES, 
    SAVE_EVENT, 
    DELETE_EVENT,
    UPDATE_EVENT 
@@ -8,9 +7,9 @@ const INITIAL_STATE = {
    1: {
       general: {
          id: 1,
-         eventName: 'event1',
-         startDate: '16-08-2019',
-         endDate: '18-08-2019',
+         eventName: "event1",
+         startDate: "2019-08-16",
+         endDate: "2019-08-18",
          eventCountry: "Serbia",
          eventCity: "Belgrade",
          eventCurrency: "RSD",
@@ -28,9 +27,9 @@ const INITIAL_STATE = {
          accommodationLoading: false,
          accommDetailsLoading: false,
          noAccommodation: false,
-         numOfPersons: 1,
-         checkInDate: "",
-         checkOutDate: "",
+         numOfPersons: 3,
+         checkInDate: "2019-08-16",
+         checkOutDate: "2019-08-18",
          accommodationOptions: [],
          chosenAccommOptionId: "",
          accommodationCosts: 0
@@ -44,15 +43,15 @@ const INITIAL_STATE = {
          calculatedTotalCosts: 280
       },
       notes: {
-         notes: ""
+         notes: "Notes for the first event"
       }
    },
    2: {
       general: {
          id: 2,
-         eventName: 'event2',
-         startDate: '26-08-2019',
-         endDate: '28-08-2019',
+         eventName: "event2",
+         startDate: "2019-08-26",
+         endDate: "2019-08-28",
          eventCountry: "",
          eventCity: "",
          eventCurrency: "",

@@ -1,7 +1,7 @@
 import { 
    transportActions,
    NEW_EVENT_BUTTON_PRESSED,
-   EXISTING_EVENT_EDITED, 
+   EXISTING_EVENT_OPENED, 
 } from '../../actions/types'
 const {
    ADD_ORIGIN_CITY,
@@ -25,7 +25,7 @@ export default (state = INITIAL_STATE, action) => {
    switch (action.type) {
       case NEW_EVENT_BUTTON_PRESSED:
          return state
-      case EXISTING_EVENT_EDITED:
+      case EXISTING_EVENT_OPENED:
          // return transport details for the appropriate event from state.events
          return {...state, transportLoading: action.payload.transport.transportLoading, noTransport: action.payload.transport.noTransport,
          originCity: action.payload.transport.originCity, transportOptions: action.payload.transport.transportOptions,

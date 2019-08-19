@@ -1,6 +1,6 @@
 import {
    NEW_EVENT_BUTTON_PRESSED,
-   EXISTING_EVENT_EDITED,
+   EXISTING_EVENT_OPENED,
    accommodationActions
 } from '../../actions/types'
 const {
@@ -34,7 +34,7 @@ export default (state=INITIAL_STATE, action) => {
    switch (action.type) {
       case NEW_EVENT_BUTTON_PRESSED:
          return state
-      case EXISTING_EVENT_EDITED:
+      case EXISTING_EVENT_OPENED:
          // return accommodation details for the appropriate event from state.events
          return {...state, accommodationLoading: action.payload.accommodation.accommodationLoading, accommDetailsLoading: action.payload.accommodation.accommDetailsLoading,
          noAccommodation: action.payload.accommodation.noAccommodation, numOfPersons: action.payload.accommodation.numOfPersons, checkInDate: action.payload.accommodation.checkInDate,

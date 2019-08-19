@@ -37,7 +37,7 @@ export const costsDetails = [
       placeholder: "100",
       icon: "",
       editable: true,
-      value: ""
+      value: "addCosts"
    },
    {
       id: 6,
@@ -45,6 +45,6 @@ export const costsDetails = [
       placeholder: "to be calculated",
       icon: "",
       editable: false,
-      value: ""
+      value: "estTotalCosts"
    }
 ]

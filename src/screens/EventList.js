@@ -20,29 +20,24 @@ class EventList extends React.Component {
       console.log(Object.values(this.props.events))
    }
    renderEvent = ({item}) => {
-      const { general: {eventName, startDate, endDate, eventCountry, eventCity, eventCurrency, eventFee }} = item
-      const {transport: {noTransport, transportCosts}} = item
-      const {accommodation: {noAccommodation, accommodationCosts}} = item
-      const {costs: {chosenCurrency, avgTransportCost, avgAccommCost, calculatedFee, additionalCosts, calculatedTotalCosts}} = item
-      const firstDot = getDotValues([eventName, startDate, endDate, eventCountry, eventCity, eventCurrency, eventFee])
-      const secondDot = getDotValues([transportCosts], noTransport)
-      const thirdDot = getDotValues([accommodationCosts], noAccommodation)
-      const fourthDot = getDotValues([chosenCurrency, avgTransportCost, avgAccommCost, calculatedFee, additionalCosts, calculatedTotalCosts])
+      const { general: {eventName, startDate }} = item
+      const {costs: {chosenCurrency, calculatedTotalCosts}} = item
+      const dots = getDotValues(item)
       return (
          <EventListItem 
             name={eventName} 
             date={startDate}
             price={`${calculatedTotalCosts.toString()} ${chosenCurrency}`} 
             checked={false}
-            handlePress={() => this.updateExistingEvent(item)}
-            first={firstDot}
-            second={secondDot}
-            third={thirdDot}
-            fourth={fourthDot}  
+            handlePress={() => this.updateEvent(item)}
+            first={dots[0]}
+            second={dots[1]}
+            third={dots[2]}
+            fourth={dots[3]}  
          />
       )
    }
-   updateExistingEvent = (event) => {
+   updateEvent = (event) => {
       this.props.existingEventOpened(event)
       this.props.navigation.navigate('EventPage')
    }

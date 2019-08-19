@@ -2,6 +2,7 @@ import React from 'react'
 import { ScrollView, View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { transportChosen, transportUnchosen } from '../actions/TransportActions'
+import { updateEvent } from '../actions/EventActions'
 import { primaryColor } from '../utils/colorsAndMargins'
 import RouteSegment from '../components/RouteSegment'
 import CheckOption from '../components/CheckOption'
@@ -21,9 +22,18 @@ class TransportDetails extends React.Component {
       const totalPrice = navigation.getParam('totalPrice')
       if (prevState.checked && !this.state.checked) {
          this.props.transportUnchosen()
+         this.props.updateEvent(this.props.currentEvent)
       }
       if (!prevState.checked && this.state.checked) {
          this.props.transportChosen(id, totalPrice)
+         this.props.updateEvent(this.props.currentEvent)
+         console.log(this.props.currentEvent)
+      }
+      if (prevState.checked && this.state.checked) {
+         this.props.updateEvent(this.props.currentEvent)
+      }
+      if (!prevState.checked && !this.state.checked) {
+         this.props.updateEvent(this.props.currentEvent)
       }
    }
    renderItem = (item,index) => {
@@ -47,6 +57,7 @@ class TransportDetails extends React.Component {
       this.setState(prevState => (
          {checked: !prevState.checked}
       ))
+      this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { checked } = this.state
@@ -97,6 +108,7 @@ const transportDetailsStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
+   currentEvent: state.currentEvent,
    chosenTransportOptionId: state.currentEvent.transport.chosenTransportOptionId,
    transportCosts: state.currentEvent.transport.transportCosts
 })
@@ -107,6 +119,9 @@ const mapDispatchToProps = dispatch => {
       },
       transportUnchosen: () => {
          dispatch(transportUnchosen())
+      },
+      updateEvent: (event) => {
+         dispatch(updateEvent(event))
       }
    }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet, Dimensions, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import { addOriginCity, noNeedTransport, searchingTransport, searchTransportSuccess, searchTransportFail} from '../actions/TransportActions'
+import { updateEvent } from '../actions/EventActions'
 import CheckOption from '../components/CheckOption'
 import InputOption from '../components/InputOption'
 import Button from '../components/Button'
@@ -15,8 +16,8 @@ class Transport extends React.Component {
    constructor(props) {
       super(props)
       this.state = {
-         buttonDisabled: false,
-         originDisabled: false
+         buttonDisabled: this.props.noTransport,
+         originDisabled: this.props.noTransport
       }
       this.places = []
       this.vehicles = []
@@ -28,6 +29,7 @@ class Transport extends React.Component {
       this.vehicles = transpData[1]
       let transpList = transpData[2]
       await this.props.searchTransportSuccess(transpList)
+      this.props.updateEvent(this.props.currentEvent)
    }
    renderTransportOption = ({ item: { id, icons, currency, totalTime, minPrice, maxPrice, price, segments } }) => {
       let priceRange
@@ -62,6 +64,7 @@ class Transport extends React.Component {
    }
    handleCheck = () => {
       this.props.noNeedTransport()
+      this.props.updateEvent(this.props.currentEvent)
       this.setState((prevState) => ({
          buttonDisabled: !prevState.buttonDisabled,
          originDisabled: !prevState.originDisabled
@@ -69,6 +72,7 @@ class Transport extends React.Component {
    }
    handleChangeOrigin = (city) => {
       this.props.addOriginCity(city)
+      this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { container } = transportStyles
@@ -117,6 +121,7 @@ const transportStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
+   currentEvent: state.currentEvent,
    destinationCity: state.currentEvent.general.eventCity,
    originCity: state.currentEvent.transport.originCity,
    noTransport: state.currentEvent.transport.noTransport,
@@ -141,6 +146,9 @@ const mapDispatchToProps = dispatch => {
       },
       searchTransportFail: () => {
          dispatch(searchTransportFail())
+      },
+      updateEvent: (event) => {
+         dispatch(updateEvent(event))
       }
    }
 }
