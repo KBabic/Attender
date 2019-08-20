@@ -25,10 +25,11 @@ export const searchingTransport = () => {
       type: SEARCHING_TRANSPORT
    }
 }
-export const searchTransportSuccess = (listOfTransportOptions) => {
+export const searchTransportSuccess = (arr) => {
+   // arr = [transpList, places, vehicles]
    return {
       type: SEARCH_TRANSPORT_SUCCESS,
-      payload: listOfTransportOptions
+      payload: arr
    }
 }
 export const searchTransportFail = () => {

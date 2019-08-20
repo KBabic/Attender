@@ -1,7 +1,7 @@
 import React from 'react'
-import { Text, View, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { primaryColor, secondaryColor, placeholderColor, marginLeftRight, marginTopBottom, inputWidth } from '../utils/colorsAndMargins'
+import { primaryColor, secondaryColor, marginLeftRight, marginTopBottom, inputWidth } from '../utils/colorsAndMargins'
 
 export default class UnfoldOption extends React.Component {
   
@@ -18,12 +18,7 @@ export default class UnfoldOption extends React.Component {
       <View style={[unfoldContainerStyle, {opacity}]}>
          <Text style={unfoldLabelStyle}>{unfoldTitle}</Text>
          <View style={unfoldViewStyle}>
-            <TextInput
-                  style={unfoldTextStyle}
-                  editable={false}
-                  placeholderTextColor={placeholderColor}
-                  value={value}
-            />
+            <Text style={unfoldTextStyle}>{value}</Text>
             <View>
                <TouchableOpacity style={{flexDirection:'column'}} onPress={onIncrease} disabled={disabled}>
                   <Icon 

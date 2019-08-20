@@ -6,9 +6,12 @@ import { View, TextInput, StyleSheet, ScrollView } from 'react-native'
 import { primaryColor, secondaryColor } from '../utils/colorsAndMargins'
 
 class Notes extends React.Component {
+   componentWillReceiveProps(nextProps) {
+      nextProps.updateEvent(nextProps.currentEvent)
+   }
    handleChangeText = txt => {
       this.props.addNotes(txt)
-      this.props.updateEvent(this.props.currentEvent)
+      //this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { container, text } = notesStyles

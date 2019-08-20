@@ -19,16 +19,19 @@ class Transport extends React.Component {
          buttonDisabled: this.props.noTransport,
          originDisabled: this.props.noTransport
       }
-      this.places = []
-      this.vehicles = []
+   }
+   componentWillReceiveProps(nextProps) {
+      nextProps.updateEvent(nextProps.currentEvent)
    }
    searchTransport = async () => {
       this.props.searchingTransport()
       let transpData = await getTransportData(modes, this.props.originCity, this.props.destinationCity)
-      this.places = transpData[0]
-      this.vehicles = transpData[1]
+      //this.places = transpData[0]
+      //this.vehicles = transpData[1]
+      let places = transpData[0]
+      let vehicles = transpData[1]
       let transpList = transpData[2]
-      await this.props.searchTransportSuccess(transpList)
+      await this.props.searchTransportSuccess([transpList, places, vehicles])
       this.props.updateEvent(this.props.currentEvent)
    }
    renderTransportOption = ({ item: { id, icons, currency, totalTime, minPrice, maxPrice, price, segments } }) => {
@@ -53,8 +56,8 @@ class Transport extends React.Component {
             text2={priceRange}
             icons={icons}
             navigation={this.props.navigation}
-            places={this.places}
-            vehicles={this.vehicles}
+            places={this.props.transportOptions[1]}
+            vehicles={this.props.transportOptions[2]}
             segments={segments}
             totalTime={totalTime}
             totalPrice={price}
@@ -64,7 +67,7 @@ class Transport extends React.Component {
    }
    handleCheck = () => {
       this.props.noNeedTransport()
-      this.props.updateEvent(this.props.currentEvent)
+      //this.props.updateEvent(this.props.currentEvent)
       this.setState((prevState) => ({
          buttonDisabled: !prevState.buttonDisabled,
          originDisabled: !prevState.originDisabled
@@ -72,7 +75,7 @@ class Transport extends React.Component {
    }
    handleChangeOrigin = (city) => {
       this.props.addOriginCity(city)
-      this.props.updateEvent(this.props.currentEvent)
+      //this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { container } = transportStyles
@@ -102,7 +105,7 @@ class Transport extends React.Component {
             />
             {!this.props.transportLoading && (
                <FlatList
-                  data={this.props.transportOptions}
+                  data={this.props.transportOptions[0]}
                   renderItem={this.renderTransportOption}
                   keyExtractor={keyExtractor}
                   style={{ marginTop: marginTopBottom }}

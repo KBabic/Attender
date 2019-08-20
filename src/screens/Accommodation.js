@@ -32,6 +32,9 @@ class Accommodation extends React.Component {
       this.search_id = ""
       this.calendarModal = ""
    }
+   componentWillReceiveProps(nextProps) {
+      nextProps.updateEvent(nextProps.currentEvent)
+   }
    pickDate = (name) => {
       this.calendarModal = name
       this.setState((prevState) => ({ 

@@ -16,6 +16,9 @@ class TransportDetails extends React.Component {
       this.renderConnector = true
       this.state = { checked: this.props.chosenTransportOptionId === id ? true : false }
    }
+   componentWillReceiveProps(nextProps) {
+      nextProps.updateEvent(nextProps.currentEvent)
+   }
    componentDidUpdate(prevProps, prevState) {
       const { navigation } = this.props
       const id = navigation.getParam('id')
