@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, Dimensions, StyleSheet, ScrollView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
-import { noNeedAccommodation, increaseNumOfPersons, decreaseNumOfPersons, addCheckinDate, addCheckoutDate, searchingAccommodation,
+import { noNeedAccommodation, increaseNumOfPersons, decreaseNumOfPersons, addCheckinDate, addCheckoutDate, searchingAccommodation, searchingMoreResults,
 searchAccommodationSuccess, searchAccommodationFail, accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
 import { updateEvent } from '../actions/EventActions'
 import InputOption from '../components/InputOption'
@@ -60,7 +60,6 @@ class Accommodation extends React.Component {
       this.props.updateEvent(this.props.currentEvent)
    }
    searchAccommodation = async () => {
-      this.props.searchingAccommodation()
       this.props.updateEvent(this.props.currentEvent)
       const { destinationCity, numOfPersons, checkInDate, checkOutDate } = this.props
       let locations
@@ -86,6 +85,14 @@ class Accommodation extends React.Component {
       } catch(e) {
          console.log('Error fetching properties', e)
       }
+   }
+   handleFindAccommodation = () => {
+      this.props.searchingAccommodation()
+      this.searchAccommodation()
+   }
+   handleSeeMoreResults = () => {
+      this.props.searchingMoreResults()
+      this.searchAccommodation()
    }
    renderAccommodationOption = ({ item }) => {
       const { id, name, minPrice, currency } = item
@@ -163,7 +170,7 @@ class Accommodation extends React.Component {
                height={60}
                radius={15}
                fontSize={20}
-               onPress={this.searchAccommodation.bind(this)} 
+               onPress={this.handleFindAccommodation.bind(this)} 
             />
             <Calendar 
                renderCalendar={this.state.renderCalendar}
@@ -193,7 +200,7 @@ class Accommodation extends React.Component {
                      marginTop: marginTopBottom,
                      marginBottom: marginTopBottom + 10
                   }}
-                  onPress={this.searchAccommodation}
+                  onPress={this.handleSeeMoreResults.bind(this)}
                >
                   <Text style={{color: primaryColor, fontSize: 18}}>See more results</Text>
                </TouchableOpacity> 
@@ -245,6 +252,9 @@ const mapDispatchToProps = dispatch => {
       },
       searchingAccommodation: () => {
          dispatch(searchingAccommodation())
+      },
+      searchingMoreResults: () => {
+         dispatch(searchingMoreResults())
       },
       searchAccommodationSuccess: (arr) => {
          dispatch(searchAccommodationSuccess(arr))

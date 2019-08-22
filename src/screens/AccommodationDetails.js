@@ -87,9 +87,9 @@ class AccommodationDetails extends React.Component {
                <View style={descriptionContainer}>
                   <ScrollView>
                      <Text style={[descriptionStyle, {paddingBottom: 20}]}>{description}</Text>
-                     <ImageGrid images={photos} />
+                     {photos && <ImageGrid images={photos} />}
                      <Text style={[text, { fontWeight: 'bold', paddingTop: 20, paddingBottom: 20 }]}>Facilities:</Text>
-                     {facilities.sort().map((facility, i) => {
+                     {facilities && facilities.sort().map((facility, i) => {
                         return (
                            <Text key={i} style={descriptionStyle}>{facility}</Text>
                      )})}

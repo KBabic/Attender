@@ -6,6 +6,7 @@ const {
    ADD_CHECKIN_DATE,
    ADD_CHECKOUT_DATE,
    SEARCHING_ACCOMMODATION,
+   SEARCHING_MORE_RESULTS,
    SEARCH_ACCOMMODATION_SUCCESS,
    SEARCH_ACCOMMODATION_FAIL,
    ACCOMMODATION_CHOSEN,
@@ -42,6 +43,11 @@ export const addCheckoutDate = date => {
 export const searchingAccommodation = () => {
    return {
       type: SEARCHING_ACCOMMODATION
+   }
+}
+export const searchingMoreResults = () => {
+   return {
+      type: SEARCHING_MORE_RESULTS
    }
 }
 export const searchAccommodationSuccess = ([properties, hotelsList]) => {

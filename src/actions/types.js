@@ -23,6 +23,7 @@ export const accommodationActions = {
    ADD_CHECKIN_DATE: 'add_checkin_date',
    ADD_CHECKOUT_DATE: 'add_checkout_date',
    SEARCHING_ACCOMMODATION: 'searching_accommodation',
+   SEARCHING_MORE_RESULTS : 'searching_more_results',
    SEARCH_ACCOMMODATION_SUCCESS: 'search_accommodation_success',
    SEARCH_ACCOMMODATION_FAIL: 'search_accommodation_fail',
    FETCHING_ACCOMMODATION_DETAILS: 'fetching_accommodation_details',

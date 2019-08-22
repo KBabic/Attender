@@ -95,7 +95,11 @@ export default (state = INITIAL_STATE, action) => {
    } else if (action.type === DELETE_EVENT) {
       // delete event
    } else if (action.type === UPDATE_EVENT) {
-      return {...state, [action.payload.general.id]: action.payload}
+      if (state[action.payload.general.id]) {
+         return {...state, [action.payload.general.id]: action.payload}
+      } else {
+         return state
+      }
    } else {
       return state
    }

@@ -10,6 +10,7 @@ const {
    ADD_CHECKIN_DATE,
    ADD_CHECKOUT_DATE,
    SEARCHING_ACCOMMODATION,
+   SEARCHING_MORE_RESULTS,
    SEARCH_ACCOMMODATION_SUCCESS,
    SEARCH_ACCOMMODATION_FAIL,
    FETCHING_ACCOMMODATION_DETAILS,
@@ -61,6 +62,15 @@ export default (state=INITIAL_STATE, action) => {
       case ADD_CHECKOUT_DATE:
          return {...state, checkOutDate: action.payload}
       case SEARCHING_ACCOMMODATION:
+         return {
+            ...state, 
+            accommodationLoading: true, 
+            accommProperties: INITIAL_STATE.accommProperties, 
+            accommodationOptions: INITIAL_STATE.accommodationOptions,
+            chosenAccommOption: INITIAL_STATE.chosenAccommOption,
+            chosenAccommOptionId: INITIAL_STATE.chosenAccommOptionId
+         }
+      case SEARCHING_MORE_RESULTS:
          return {...state, accommodationLoading: true}
       case SEARCH_ACCOMMODATION_SUCCESS:
          return {
