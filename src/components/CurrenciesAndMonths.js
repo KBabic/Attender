@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Text, Modal, ScrollView, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
-import { primaryColor, secondaryColor, inputWidth } from '../utils/colorsAndMargins'
+import { View, Text, Modal, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { primaryColor, inputWidth, inputHeight, marginTopBottom } from '../utils/colorsAndMargins'
 import currencies from '../utils/currencies'
 import monthsList from '../utils/months'
 
@@ -20,7 +20,7 @@ export default class CurrenciesAndMonths extends React.Component {
    }
    render() {
       const { showCurrencies, showMonths, handleOK } = this.props
-      const { modal, modalOkButtonText } = currenciesMonthsStyles
+      const { modal, modalOkButton, modalOkButtonText } = currenciesMonthsStyles
       return (
          <View style={{ flex: 1 }}>
          {(showCurrencies || showMonths) && (
@@ -32,7 +32,7 @@ export default class CurrenciesAndMonths extends React.Component {
                   </ScrollView>
                   <TouchableOpacity 
                         onPress={handleOK}
-                        style={{ marginBottom: 20 }}
+                        style={modalOkButton}
                   >
                      <Text style={modalOkButtonText}>OK</Text>
                   </TouchableOpacity>
@@ -47,11 +47,11 @@ const currenciesMonthsStyles = StyleSheet.create({
    modal: {
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(157,225,235,0.75)',
-      width: inputWidth - 70,
-      height: inputWidth - 20,
+      backgroundColor: 'rgba(217,217,217,0.65)',
+      width: inputWidth,
+      height: inputHeight - 100,
       alignSelf: 'center',
-      marginTop: (Dimensions.get('window').height - inputWidth + 100) / 2
+      marginTop: marginTopBottom + 40,
    },
    currencyMonthStyle: {
       paddingTop: 5,
@@ -64,9 +64,14 @@ const currenciesMonthsStyles = StyleSheet.create({
       fontWeight: 'bold',
       color: primaryColor
    },
+   modalOkButton: {
+      height: 50,
+      justifyContent: 'center',
+      marginBottom: 20 
+   },
    modalOkButtonText: {
-      color: secondaryColor,
-      fontSize: 18,
+      color: primaryColor,
+      fontSize: 26,
       alignSelf: 'center',
       fontWeight: 'bold'
    }

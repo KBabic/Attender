@@ -90,17 +90,19 @@ const INITIAL_STATE = {
    }
 }
 export default (state = INITIAL_STATE, action) => {
-   if (action.type === SAVE_EVENT) {
-      return {...state, [action.payload.general.id]: action.payload}
-   } else if (action.type === DELETE_EVENT) {
-      // delete event
-   } else if (action.type === UPDATE_EVENT) {
-      if (state[action.payload.general.id]) {
+   switch(action.type) {
+      case SAVE_EVENT:
          return {...state, [action.payload.general.id]: action.payload}
-      } else {
+      case DELETE_EVENT:
+         // delete event
          return state
-      }
-   } else {
-      return state
+      case UPDATE_EVENT:
+         if (state[action.payload.general.id]) {
+            return {...state, [action.payload.general.id]: action.payload}
+         } else {
+            return state
+         }
+      default:
+         return state
    }
 }

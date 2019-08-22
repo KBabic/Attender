@@ -24,7 +24,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
    switch (action.type) {
       case NEW_EVENT_BUTTON_PRESSED:
-         return state
+         return INITIAL_STATE
       case EXISTING_EVENT_OPENED:
          // return transport details for the appropriate event from state.events
          return {...state, transportLoading: action.payload.transport.transportLoading, noTransport: action.payload.transport.noTransport,
@@ -33,9 +33,25 @@ export default (state = INITIAL_STATE, action) => {
       case ADD_ORIGIN_CITY:
          return {...state, originCity: action.payload}
       case NO_NEED_TRANSPORT:
-         return {...state, noTransport: !state.noTransport}
+         if (state.noTransport) {
+            return {...state, noTransport: !state.noTransport}
+         } else {
+            return {
+               ...state, 
+               noTransport: !state.noTransport,
+               originCity: INITIAL_STATE.originCity, 
+               transportOptions: INITIAL_STATE.transportOptions, 
+               chosenTransportOptionId: INITIAL_STATE.chosenTransportOptionId,
+               transportCosts: INITIAL_STATE.transportCosts
+            }
+         }
       case SEARCHING_TRANSPORT:
-         return {...state, transportLoading: true}
+         return {
+            ...state, 
+            transportLoading: true, 
+            transportOptions: INITIAL_STATE.transportOptions, 
+            chosenTransportOptionId: INITIAL_STATE.chosenTransportOptionId
+         }
       case SEARCH_TRANSPORT_SUCCESS:
          return {...state, transportLoading: false, transportOptions: [...state.transportOptions, ...action.payload]}
       case TRANSPORT_CHOSEN:

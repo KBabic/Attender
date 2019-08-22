@@ -44,7 +44,7 @@ const INITIAL_STATE = {
 export default (state=INITIAL_STATE, action) => {
    switch (action.type) {
       case NEW_EVENT_BUTTON_PRESSED:
-         return state
+         return INITIAL_STATE
       case EXISTING_EVENT_OPENED:
          // return accommodation props for the appropriate event from state.events
          return {...state, accommodationLoading: action.payload.accommodation.accommodationLoading, accommDetailsLoading: action.payload.accommodation.accommDetailsLoading,
@@ -52,7 +52,19 @@ export default (state=INITIAL_STATE, action) => {
          checkOutDate: action.payload.accommodation.checkOutDate, accommodationOptions: action.payload.accommodation.accommodationOptions,
          chosenAccommOptionId: action.payload.accommodation.chosenAccommOptionId, accommodationCosts: action.payload.accommodation.accommodationCosts}
       case NO_NEED_ACCOMMODATION:
-         return {...state, noAccommodation: !state.noAccommodation}
+         if (state.noAccommodation) {
+            return {...state, noAccommodation: !state.noAccommodation}
+         } else {
+            return {
+               ...state,
+               noAccommodation: !state.noAccommodation,
+               accommProperties: INITIAL_STATE.accommProperties,
+               accommodationOptions: INITIAL_STATE.accommodationOptions,
+               chosenAccommOption: INITIAL_STATE.chosenAccommOption,
+               chosenAccommOptionId: INITIAL_STATE.chosenAccommOptionId,
+               accommodationCosts: 0
+            }
+         }
       case INCREASE_NUM_OF_PERSONS:
          return {...state, numOfPersons: state.numOfPersons + 1}
       case DECREASE_NUM_OF_PERSONS:
