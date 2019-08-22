@@ -28,8 +28,8 @@ const INITIAL_STATE = {
          accommDetailsLoading: false,
          noAccommodation: false,
          numOfPersons: 3,
-         checkInDate: "2019-08-16",
-         checkOutDate: "2019-08-18",
+         checkInDate: "",
+         checkOutDate: "",
          accommodationOptions: [],
          chosenAccommOptionId: "",
          accommodationCosts: 0

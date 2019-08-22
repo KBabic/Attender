@@ -11,39 +11,52 @@ import { getHotelDetails, getHotelDescription, getPhotoData, getPhotosList, getF
 class AccommodationDetails extends React.Component {
    constructor(props) {
       super(props)
-      const { navigation } = this.props
-      const id = navigation.getParam('item').id
-      this.hotel = {}
+      this.id = this.props.navigation.getParam('item').id
       this.state = {
-         loading: true,
-         checked: this.props.chosenAccommOptionId === id ? true : false
+         loading: this.props.chosenAccommOptionId === this.id ? false : true,
+         checked: this.props.chosenAccommOptionId === this.id ? true : false
       }
-      this.photos = []
-      this.facilities = []
+      this.hotel =   this.props.chosenAccommOptionId === this.id ?
+                     this.props.chosenAccommOption :
+                     {}
    }
    async componentDidMount() {
       const { navigation } = this.props
       const hotel = navigation.getParam('item')
       const properties = navigation.getParam('properties')
-      const hotelInit = getHotelDetails(hotel, properties.result)
-      this.hotel = await getHotelDescription(hotelInit)
-      const [prefix, data] = await getPhotoData({ id: this.hotel.id })
-      const photosList = getPhotosList(prefix, data)
-      this.photos = photosList
-      const facilities = await getFacilities({ id: this.hotel.id })
-      this.facilities = facilities
-      this.setState({loading: false})
+      console.log(this.hotel)
+      
+      if (Object.entries(this.hotel).length === 0 && this.hotel.constructor === Object) {
+         const hotelInit = getHotelDetails(hotel, properties.result)
+         this.hotel = await getHotelDescription(hotelInit)
+         console.log(this.hotel)
+         try {
+            const [prefix, data] = await getPhotoData({ id: this.hotel.id })
+            const photosList = getPhotosList(prefix, data)
+            this.hotel.photos = photosList
+         } catch(e) {
+            console.log(e.message)
+         }
+         try {
+            const facilities = await getFacilities({ id: this.hotel.id })
+            this.hotel.facilities = facilities
+         } catch(e) {
+            console.log(e.message)
+         }
+         this.setState({loading: false})
+      } else {
+         this.setState({loading: false})
+      }
    }
    componentDidUpdate(prevProps, prevState) {
       const { navigation } = this.props
-      const id = navigation.getParam('item').id
-      const minPrice = navigation.getParam('item').minPrice
+      const item = navigation.getParam('item')
       if (prevState.checked && !this.state.checked) {
          this.props.accommodationUnchosen()
          this.props.updateEvent(this.props.currentEvent)
       }
       if (!prevState.checked && this.state.checked) {
-         this.props.accommodationChosen(id, minPrice)
+         this.props.accommodationChosen(item)
          this.props.updateEvent(this.props.currentEvent)
       }
    }
@@ -54,7 +67,7 @@ class AccommodationDetails extends React.Component {
    }
    render() {
       const { checked } = this.state
-      const { name, minPrice, currency, description } = this.hotel
+      const { name, minPrice, currency, description, photos, facilities } = this.hotel
       const { container, text, detailsContainer, descriptionContainer, descriptionStyle } = accommodationDetailsStyles
       if (this.state.loading) {
          return(
@@ -74,9 +87,9 @@ class AccommodationDetails extends React.Component {
                <View style={descriptionContainer}>
                   <ScrollView>
                      <Text style={[descriptionStyle, {paddingBottom: 20}]}>{description}</Text>
-                     <ImageGrid images={this.photos} />
+                     <ImageGrid images={photos} />
                      <Text style={[text, { fontWeight: 'bold', paddingTop: 20, paddingBottom: 20 }]}>Facilities:</Text>
-                     {this.facilities.sort().map((facility, i) => {
+                     {facilities.sort().map((facility, i) => {
                         return (
                            <Text key={i} style={descriptionStyle}>{facility}</Text>
                      )})}
@@ -118,13 +131,14 @@ const accommodationDetailsStyles = StyleSheet.create({
 })
 const mapStateToProps = state => ({
    currentEvent: state.currentEvent,
+   chosenAccommOption: state.currentEvent.accommodation.chosenAccommOption,
    chosenAccommOptionId: state.currentEvent.accommodation.chosenAccommOptionId,
    accommodationCosts: state.currentEvent.accommodation.accommodationCosts
 })
 const mapDispatchToProps = dispatch => {
    return {
-      accommodationChosen: (id, cost) => {
-         dispatch(accommodationChosen(id, cost))
+      accommodationChosen: (accommOption) => {
+         dispatch(accommodationChosen(accommOption))
       },
       accommodationUnchosen: () => {
          dispatch(accommodationUnchosen())

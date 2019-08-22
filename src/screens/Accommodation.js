@@ -23,12 +23,11 @@ class Accommodation extends React.Component {
       this.state = {
          renderCalendar: false,
          showModal: false,
-         showList: false,
+         showList: (this.props.accommodationOptions.length === 0 ? false : true),
          buttonDisabled: this.props.noAccommodation,
          paramsDisabled: this.props.noAccommodation
       }
       this.offset = 0
-      this.properties = []
       this.search_id = ""
       this.calendarModal = ""
    }
@@ -66,6 +65,7 @@ class Accommodation extends React.Component {
       const { destinationCity, numOfPersons, checkInDate, checkOutDate } = this.props
       let locations
       let dest_id
+      let properties
       let hotelsList
       let search_id
       try {
@@ -75,33 +75,16 @@ class Accommodation extends React.Component {
          console.log('Error fetching locations', e)
       }
       try {
-         this.properties = await getPropertiesList(dest_id, this.offset, this.search_id, numOfPersons, checkInDate, checkOutDate)
-      } catch(e) {
-         console.log('Error fetching properties', e)
-      }
-      try {
-         hotelsList = getHotelsList(this.properties)
-      } catch(e) {
-         console.log('Error getting hotelsList', e)
-      }
-      try {
-         search_id = getSearchId(this.properties)
-         console.log(search_id)
-      } catch(e) {
-         console.log('Error getting search id', e)
-      }
-      try {
-         this.setState(prevState => ({
-            showList: true, 
-            //hotelsList: [...prevState.hotelsList, ...hotelsList],
-            //loading: false
-         }))
-         this.props.searchAccommodationSuccess(hotelsList)
+         properties = await getPropertiesList(dest_id, this.offset, this.search_id, numOfPersons, checkInDate, checkOutDate)
+         hotelsList = getHotelsList(properties)
+         search_id = getSearchId(properties)
+         this.setState({ showList: true })
+         this.props.searchAccommodationSuccess([properties, hotelsList])
          this.props.updateEvent(this.props.currentEvent)
          this.offset = this.offset + 30
          this.search_id = search_id
-      } catch (e) {
-         console.log(e)
+      } catch(e) {
+         console.log('Error fetching properties', e)
       }
    }
    renderAccommodationOption = ({ item }) => {
@@ -120,13 +103,12 @@ class Accommodation extends React.Component {
             text2={`${currency} ${minPrice}`} 
             navigation={this.props.navigation}
             id={id}
-            properties={this.properties}
+            properties={this.props.accommProperties}
       />
       )   
    }
    handleCheck = () => {
       this.props.noNeedAccommodation()
-      this.props.updateEvent(this.props.currentEvent)
       this.setState((prevState) => ({
          buttonDisabled: !prevState.buttonDisabled,
          paramsDisabled: !prevState.paramsDisabled
@@ -134,11 +116,9 @@ class Accommodation extends React.Component {
    }
    handleIncrease = () => {
       this.props.increaseNumOfPersons()
-      this.props.updateEvent(this.props.currentEvent)
    }
    handleDecrease = () => {
       this.props.decreaseNumOfPersons()
-      this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { container } = accommodationStyles
@@ -159,7 +139,7 @@ class Accommodation extends React.Component {
             <InputOption
                iconDisabled={this.state.paramsDisabled}
                defaultValue={this.props.startDate}
-               value={this.props.checkInDate==="" ? undefined : this.props.checkInDate}
+               value={this.props.checkInDate}
                editable={false}
                icon="date-range"
                text="Check-in Date"
@@ -169,7 +149,7 @@ class Accommodation extends React.Component {
             <InputOption 
                iconDisabled={this.state.paramsDisabled}
                defaultValue={this.props.endDate}
-               value={this.props.checkOutDate==="" ? undefined : this.props.checkOutDate}
+               value={this.props.checkOutDate}
                editable={false}
                icon="date-range"
                text="Check-out Date"
@@ -241,6 +221,7 @@ const mapStateToProps = state => ({
    checkInDate: state.currentEvent.accommodation.checkInDate,
    checkOutDate: state.currentEvent.accommodation.checkOutDate,
    accommodationLoading: state.currentEvent.accommodation.accommodationLoading,
+   accommProperties: state.currentEvent.accommodation.accommProperties,
    accommodationOptions: state.currentEvent.accommodation.accommodationOptions,
    chosenAccommOptionId: state.currentEvent.accommodation.chosenAccommOptionId,
    accommodationCosts: state.currentEvent.accommodation.accommodationCosts
@@ -265,8 +246,8 @@ const mapDispatchToProps = dispatch => {
       searchingAccommodation: () => {
          dispatch(searchingAccommodation())
       },
-      searchAccommodationSuccess: (listOfOptions) => {
-         dispatch(searchAccommodationSuccess(listOfOptions))
+      searchAccommodationSuccess: (arr) => {
+         dispatch(searchAccommodationSuccess(arr))
       },
       searchAccommodationFail: () => {
          dispatch(searchAccommodationFail())

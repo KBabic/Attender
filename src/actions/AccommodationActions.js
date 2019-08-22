@@ -44,10 +44,10 @@ export const searchingAccommodation = () => {
       type: SEARCHING_ACCOMMODATION
    }
 }
-export const searchAccommodationSuccess = (listOfAccommOptions) => {
+export const searchAccommodationSuccess = ([properties, hotelsList]) => {
    return {
       type: SEARCH_ACCOMMODATION_SUCCESS,
-      payload: listOfAccommOptions
+      payload: [properties, hotelsList]
    }
 }
 export const searchAccommodationFail = () => {
@@ -71,10 +71,10 @@ export const fetchAccommDetailsFail = () => {
       type: FETCH_ACCOMMODATION_DETAILS_FAIL
    }
 }
-export const accommodationChosen = (id, costs) => {
+export const accommodationChosen = (accommOption) => {
    return {
       type: ACCOMMODATION_CHOSEN,
-      payload: { id, costs }
+      payload: accommOption
    }
 }
 export const accommodationUnchosen = () => {

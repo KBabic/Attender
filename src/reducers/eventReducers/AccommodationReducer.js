@@ -26,7 +26,17 @@ const INITIAL_STATE = {
    numOfPersons: 1,
    checkInDate: "",
    checkOutDate: "",
+   accommProperties: [],
    accommodationOptions: [],
+   chosenAccommOption: {
+      id: "",
+      name: "",
+      currency: "",
+      minPrice: 0,
+      description: "",
+      photos: [],
+      facilities: []
+   },
    chosenAccommOptionId: "",
    accommodationCosts: 0
 }
@@ -35,7 +45,7 @@ export default (state=INITIAL_STATE, action) => {
       case NEW_EVENT_BUTTON_PRESSED:
          return state
       case EXISTING_EVENT_OPENED:
-         // return accommodation details for the appropriate event from state.events
+         // return accommodation props for the appropriate event from state.events
          return {...state, accommodationLoading: action.payload.accommodation.accommodationLoading, accommDetailsLoading: action.payload.accommodation.accommDetailsLoading,
          noAccommodation: action.payload.accommodation.noAccommodation, numOfPersons: action.payload.accommodation.numOfPersons, checkInDate: action.payload.accommodation.checkInDate,
          checkOutDate: action.payload.accommodation.checkOutDate, accommodationOptions: action.payload.accommodation.accommodationOptions,
@@ -53,7 +63,12 @@ export default (state=INITIAL_STATE, action) => {
       case SEARCHING_ACCOMMODATION:
          return {...state, accommodationLoading: true}
       case SEARCH_ACCOMMODATION_SUCCESS:
-         return {...state, accommodationLoading: false, accommodationOptions: [...state.accommodationOptions, ...action.payload]}
+         return {
+            ...state, 
+            accommodationLoading: false,
+            accommProperties: action.payload[0], 
+            accommodationOptions: [...state.accommodationOptions, ...action.payload[1]]
+         }
       case SEARCH_ACCOMMODATION_FAIL:
          return {...state, accommodationLoading: false}
          // add error handling
@@ -65,7 +80,19 @@ export default (state=INITIAL_STATE, action) => {
          return {...state, accommDetailsLoading: false}
          // add errror handling
       case ACCOMMODATION_CHOSEN:
-         return {...state, chosenAccommOptionId: action.payload.id, accommodationCosts: action.payload.costs}
+         return {...state, 
+                  chosenAccommOptionId: action.payload.id, 
+                  accommodationCosts: action.payload.minPrice,
+                  chosenAccommOption: {
+                     id: action.payload.id,
+                     name: action.payload.name,
+                     currency: action.payload.currency,
+                     minPrice: action.payload.minPrice,
+                     description: action.payload.description,
+                     photos: action.payload.photos,
+                     facilities: action.payload.facilities
+                  }
+               }
       case ACCOMMODATION_UNCHOSEN:
          return {...state, chosenAccommOptionId: "", accommodationCosts: 0}
       default:
