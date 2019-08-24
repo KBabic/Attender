@@ -2,8 +2,10 @@ import React from 'react'
 import { ScrollView, View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { transportChosen, transportUnchosen } from '../actions/TransportActions'
+import { transportCostsCalculated } from '../actions/CostsActions'
 import { updateEvent } from '../actions/EventActions'
 import { primaryColor } from '../utils/colorsAndMargins'
+import { convertCurrency } from '../utils/currencyData'
 import RouteSegment from '../components/RouteSegment'
 import CheckOption from '../components/CheckOption'
 import { inputWidth, marginTopBottom } from '../utils/colorsAndMargins'
@@ -19,20 +21,38 @@ class TransportDetails extends React.Component {
    componentWillReceiveProps(nextProps) {
       nextProps.updateEvent(nextProps.currentEvent)
    }
+   /*async handleChangeCurrency() {
+      let transpCurFactor
+      if (this.props.chosenCurrency !== "") {
+         try {
+            transpCurFactor = await convertCurrency(this.props.transpCurrency, cur)
+         } catch(e) {
+            console.log(e.message)
+         }
+         this.props.transportCostsCalculated(transpCurFactor * this.props.transportCosts)
+      }
+   }*/
    componentDidUpdate(prevProps, prevState) {
       const { navigation } = this.props
       const id = navigation.getParam('id')
       const totalPrice = navigation.getParam('totalPrice')
+      const currency = navigation.getParam('currency')
       if (prevState.checked && !this.state.checked) {
          this.props.transportUnchosen()
+         // if final currency is already chosen, update final transport costs to 0
+         /*if (this.props.chosenCurrency !== "") {
+            this.props.transportCostsCalculated(0)
+         }*/
          this.props.updateEvent(this.props.currentEvent)
       }
       if (!prevState.checked && this.state.checked) {
-         this.props.transportChosen(id, totalPrice)
+         this.props.transportChosen(id, totalPrice, currency)
+         // if final currency is already chosen, update final transport costs according to it
+         //await this.handleChangeCurrency()
          this.props.updateEvent(this.props.currentEvent)
-         console.log(this.props.currentEvent)
       }
       if (prevState.checked && this.state.checked) {
+         //await this.handleChangeCurrency()
          this.props.updateEvent(this.props.currentEvent)
       }
       if (!prevState.checked && !this.state.checked) {
@@ -113,18 +133,22 @@ const transportDetailsStyles = StyleSheet.create({
 const mapStateToProps = state => ({
    currentEvent: state.currentEvent,
    chosenTransportOptionId: state.currentEvent.transport.chosenTransportOptionId,
-   transportCosts: state.currentEvent.transport.transportCosts
+   transportCosts: state.currentEvent.transport.transportCosts,
+   chosenCurrency: state.currentEvent.costs.chosenCurrency
 })
 const mapDispatchToProps = dispatch => {
    return {
-      transportChosen: (id, cost) => {
-         dispatch(transportChosen(id, cost))
+      transportChosen: (id, cost, cur) => {
+         dispatch(transportChosen(id, cost, cur))
       },
       transportUnchosen: () => {
          dispatch(transportUnchosen())
       },
       updateEvent: (event) => {
          dispatch(updateEvent(event))
+      },
+      transportCostsCalculated: (cost) => {
+         dispatch(transportCostsCalculated(cost))
       }
    }
 }

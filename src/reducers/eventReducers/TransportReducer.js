@@ -20,6 +20,7 @@ const INITIAL_STATE = {
    transportOptions: [],
    chosenTransportOptionId: "",
    transportCosts: 0,
+   transpCurrency: ""
 }
 export default (state = INITIAL_STATE, action) => {
    switch (action.type) {
@@ -29,7 +30,8 @@ export default (state = INITIAL_STATE, action) => {
          // return transport details for the appropriate event from state.events
          return {...state, transportLoading: action.payload.transport.transportLoading, noTransport: action.payload.transport.noTransport,
          originCity: action.payload.transport.originCity, transportOptions: action.payload.transport.transportOptions,
-         chosenTransportOptionId: action.payload.transport.chosenTransportOptionId, transportCosts: action.payload.transport.transportCosts}
+         chosenTransportOptionId: action.payload.transport.chosenTransportOptionId, transportCosts: action.payload.transport.transportCosts,
+         transpCurrency: action.payload.transport.transpCurrency}
       case ADD_ORIGIN_CITY:
          return {...state, originCity: action.payload}
       case NO_NEED_TRANSPORT:
@@ -42,7 +44,8 @@ export default (state = INITIAL_STATE, action) => {
                originCity: INITIAL_STATE.originCity, 
                transportOptions: INITIAL_STATE.transportOptions, 
                chosenTransportOptionId: INITIAL_STATE.chosenTransportOptionId,
-               transportCosts: INITIAL_STATE.transportCosts
+               transportCosts: INITIAL_STATE.transportCosts,
+               transpCurrency: INITIAL_STATE.transpCurrency
             }
          }
       case SEARCHING_TRANSPORT:
@@ -50,14 +53,21 @@ export default (state = INITIAL_STATE, action) => {
             ...state, 
             transportLoading: true, 
             transportOptions: INITIAL_STATE.transportOptions, 
-            chosenTransportOptionId: INITIAL_STATE.chosenTransportOptionId
+            chosenTransportOptionId: INITIAL_STATE.chosenTransportOptionId,
+            transportCosts: INITIAL_STATE.transportCosts,
+            transpCurrency: INITIAL_STATE.transpCurrency
          }
       case SEARCH_TRANSPORT_SUCCESS:
          return {...state, transportLoading: false, transportOptions: [...state.transportOptions, ...action.payload]}
       case TRANSPORT_CHOSEN:
-         return {...state, chosenTransportOptionId: action.payload.id, transportCosts: action.payload.costs}
+         return {
+            ...state, 
+            chosenTransportOptionId: action.payload.id, 
+            transportCosts: action.payload.costs, 
+            transpCurrency: action.payload.currency
+         }
       case TRANSPORT_UNCHOSEN:
-         return {...state, chosenTransportOptionId: "", transportCosts: 0}
+         return {...state, chosenTransportOptionId: "", transportCosts: 0, transpCurrency: ""}
       case SEARCH_TRANSPORT_FAIL:
          return {...state, transportLoading: false}
          // add error handling

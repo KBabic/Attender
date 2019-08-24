@@ -16,9 +16,6 @@ class EventList extends React.Component {
          header: () => null
       }
    }
-   componentDidMount() {
-      console.log(Object.values(this.props.events))
-   }
    renderEvent = ({item}) => {
       const { general: {eventName, startDate }} = item
       const {costs: {chosenCurrency, calculatedTotalCosts}} = item

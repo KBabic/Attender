@@ -9,7 +9,7 @@ export const costsDetails = [
    },
    {
       id: 2,
-      name: "Average Travel Cost per person for a chosen option",
+      name: "Average Transport Cost per person for a chosen option",
       placeholder: "to be calculated",
       icon: "",
       editable: false,

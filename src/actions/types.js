@@ -37,8 +37,7 @@ export const costsActions = {
    TRANSPORT_COSTS_CALCULATED: 'transport_costs_calculated',
    ACCOMMODATION_COSTS_CALCULATED: 'accommodation_costs_calculated',
    EVENT_FEE_CALCULATED: 'event_fee_calculated',
-   ADD_ADDITIONAL_COSTS: 'add_additional_costs',
-   TOTAL_EVENT_COSTS_CALCULATED: 'total_event_costs_calculated'
+   ADD_ADDITIONAL_COSTS: 'add_additional_costs'
 }
 // Notes actions:
 export const ADD_NOTES = 'add_notes'

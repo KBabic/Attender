@@ -39,7 +39,8 @@ const INITIAL_STATE = {
       facilities: []
    },
    chosenAccommOptionId: "",
-   accommodationCosts: 0
+   accommodationCosts: 0,
+   accommodationCurrency: ""
 }
 export default (state=INITIAL_STATE, action) => {
    switch (action.type) {
@@ -105,6 +106,7 @@ export default (state=INITIAL_STATE, action) => {
          return {...state, 
                   chosenAccommOptionId: action.payload.id, 
                   accommodationCosts: action.payload.minPrice,
+                  accommodationCurrency: action.payload.currency,
                   chosenAccommOption: {
                      id: action.payload.id,
                      name: action.payload.name,
@@ -116,7 +118,7 @@ export default (state=INITIAL_STATE, action) => {
                   }
                }
       case ACCOMMODATION_UNCHOSEN:
-         return {...state, chosenAccommOptionId: "", accommodationCosts: 0}
+         return {...state, chosenAccommOptionId: "", accommodationCosts: 0, accommodationCurrency: ""}
       default:
          return state
    }

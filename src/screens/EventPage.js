@@ -19,12 +19,6 @@ class EventPage extends React.Component {
       }
       this.calendarModal = ""
    }
-   componentDidMount() {
-      console.log(this.props.currentEvent)
-   }
-   componentDidUpdate() {
-      console.log(this.props.currentEvent)
-   }
    handleIconPress = (item) => {
       if (item.name === "startDate" || item.name === "endDate") {
          this.pickDate(item.name)

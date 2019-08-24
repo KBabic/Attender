@@ -1,10 +1,10 @@
 import currencies from './currencies'
-const APIKey = ""
+const APIKey = "a482ceb692166ce98a72"
 const allCurrenciesUrl = `https://free.currconv.com/api/v7/currencies?apiKey=${APIKey}`
-const currency1 = "EUR"
-const currency2 = "USD"
-const conversionUrl = `https://free.currconv.com/api/v7/convert?apiKey=${APIKey}&q=${currency1}_${currency2}&compact=ultra`
 
-export const getAllCurrencies = async () => {
-   // something here
+export async function convertCurrency(cur1, cur2) {
+   const url = `https://free.currconv.com/api/v7/convert?apiKey=${APIKey}&q=${cur1}_${cur2}&compact=ultra`
+   let response = await fetch(url)
+   let responseJson = await response.json()
+   return responseJson[`${cur1}_${cur2}`]
 }

@@ -38,10 +38,10 @@ export const searchTransportFail = () => {
    }
    // add error handling
 }
-export const transportChosen = (id, costs) => {
+export const transportChosen = (id, costs, currency) => {
    return {
       type: TRANSPORT_CHOSEN,
-      payload: { id, costs }
+      payload: { id, costs, currency }
    }
 }
 export const transportUnchosen = () => {

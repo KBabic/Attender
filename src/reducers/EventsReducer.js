@@ -8,12 +8,12 @@ const INITIAL_STATE = {
       general: {
          id: 1,
          eventName: "event1",
-         startDate: "2019-08-16",
-         endDate: "2019-08-18",
+         startDate: "",
+         endDate: "",
          eventCountry: "Serbia",
          eventCity: "Belgrade",
-         eventCurrency: "RSD",
-         eventFee: 6000,
+         eventCurrency: "",
+         eventFee: 0,
       },
       transport: {
          transportLoading: false,
@@ -22,6 +22,7 @@ const INITIAL_STATE = {
          transportOptions: [],
          chosenTransportOptionId: "",
          transportCosts: 0,
+         transpCurrency : ""
       },
       accommodation: {
          accommodationLoading: false,
@@ -32,15 +33,16 @@ const INITIAL_STATE = {
          checkOutDate: "",
          accommodationOptions: [],
          chosenAccommOptionId: "",
-         accommodationCosts: 0
+         accommodationCosts: 0,
+         accommodationCurrency: ""
       },
       costs: {
-         chosenCurrency: "EUR",
-         avgTransportCost: 80,
-         avgAccommCost: 70,
-         calculatedFee: 80,
-         additionalCosts: 50,
-         calculatedTotalCosts: 280
+         chosenCurrency: "",
+         avgTransportCost: 0,
+         avgAccommCost: 0,
+         calculatedFee: 0,
+         additionalCosts: 0,
+         calculatedTotalCosts: 0
       },
       notes: {
          notes: "Notes for the first event"
@@ -64,6 +66,7 @@ const INITIAL_STATE = {
          transportOptions: [],
          chosenTransportOptionId: "",
          transportCosts: 0,
+         transpCurrency: ""
       },
       accommodation: {
          accommodationLoading: false,
@@ -74,15 +77,16 @@ const INITIAL_STATE = {
          checkOutDate: "",
          accommodationOptions: [],
          chosenAccommOptionId: "",
-         accommodationCosts: 0
+         accommodationCosts: 0,
+         accommodationCurrency: ""
       },
       costs: {
-         chosenCurrency: "USD",
-         avgTransportCost: 90,
-         avgAccommCost: 70,
-         calculatedFee: 80,
-         additionalCosts: 50,
-         calculatedTotalCosts: 290
+         chosenCurrency: "",
+         avgTransportCost: 0,
+         avgAccommCost: 0,
+         calculatedFee: 0,
+         additionalCosts: 0,
+         calculatedTotalCosts: 0
       },
       notes: {
          notes: ""
