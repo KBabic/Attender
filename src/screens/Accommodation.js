@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Dimensions, StyleSheet, ScrollView, FlatList, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { noNeedAccommodation, increaseNumOfPersons, decreaseNumOfPersons, addCheckinDate, addCheckoutDate, searchingAccommodation, searchingMoreResults,
-searchAccommodationSuccess, searchAccommodationFail, accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
+searchAccommodationSuccess, searchAccommodationFail, accommodationChosen, accommodationUnchosen, changeAccommDestination } from '../actions/AccommodationActions'
 import { updateEvent } from '../actions/EventActions'
 import InputOption from '../components/InputOption'
 import CheckOption from '../components/CheckOption'
@@ -149,6 +149,14 @@ class Accommodation extends React.Component {
                checked={this.props.noAccommodation}
                onPress={this.handleCheck}
             />
+            <InputOption 
+               iconDisabled={this.state.paramsDisabled}
+               editable={!this.state.paramsDisabled}
+               text={"Destination City"} 
+               placeholder={"e.g.Berlin"} 
+               value={this.props.destinationCity} 
+               onChangeText={(txt) => this.props.changeAccommDestination(txt)} 
+            />
             <UnfoldOption 
                disabled={this.state.paramsDisabled}
                unfoldTitle="Number of persons" 
@@ -180,9 +188,9 @@ class Accommodation extends React.Component {
                disabled={this.state.buttonDisabled}
                label="Find Accommodation"
                width={Dimensions.get('window').width - 100}
-               height={60}
+               height={50}
                radius={15}
-               fontSize={20}
+               fontSize={18}
                onPress={this.handleFindAccommodation.bind(this)} 
             />
             <Calendar 
@@ -233,9 +241,10 @@ const accommodationStyles = StyleSheet.create({
 })
 const mapStateToProps = state => ({
    currentEvent: state.currentEvent,
+   eventCity: state.currentEvent.general.eventCity,
    startDate: state.currentEvent.general.startDate,
    endDate: state.currentEvent.general.endDate,
-   destinationCity: state.currentEvent.general.eventCity,
+   destinationCity: state.currentEvent.accommodation.accommDestination,
    noAccommodation: state.currentEvent.accommodation.noAccommodation,
    numOfPersons: state.currentEvent.accommodation.numOfPersons,
    checkInDate: state.currentEvent.accommodation.checkInDate,
@@ -250,6 +259,9 @@ const mapDispatchToProps = dispatch => {
    return {
       noNeedAccommodation: () => {
          dispatch(noNeedAccommodation())
+      },
+      changeAccommDestination: (txt) => {
+         dispatch(changeAccommDestination(txt))
       },
       increaseNumOfPersons: () => {
          dispatch(increaseNumOfPersons())

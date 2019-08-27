@@ -110,9 +110,9 @@ class Transport extends React.Component {
                label="Find Transport Options"
                onPress={this.searchTransport.bind(this)}
                width={Dimensions.get('window').width - 100}
-               height={60}
+               height={50}
                radius={15}
-               fontSize={20}
+               fontSize={18}
             />
             {this.props.transportLoading && (
                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

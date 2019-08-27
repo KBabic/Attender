@@ -1,10 +1,12 @@
 import {
    NEW_EVENT_BUTTON_PRESSED,
    EXISTING_EVENT_OPENED,
-   accommodationActions
+   accommodationActions,
+   generalActions
 } from '../../actions/types'
 const {
    NO_NEED_ACCOMMODATION,
+   CHANGE_ACCOMM_DESTINATION,
    INCREASE_NUM_OF_PERSONS,
    DECREASE_NUM_OF_PERSONS,
    ADD_CHECKIN_DATE,
@@ -16,10 +18,11 @@ const {
    ACCOMMODATION_CHOSEN,
    ACCOMMODATION_UNCHOSEN
 } = accommodationActions
-
+const { ADD_EVENT_CITY } = generalActions
 const INITIAL_STATE = {
    accommodationLoading: false,
    noAccommodation: false,
+   accommDestination: "",
    numOfPersons: 1,
    checkInDate: "",
    checkOutDate: "",
@@ -62,6 +65,10 @@ export default (state=INITIAL_STATE, action) => {
                accommodationCosts: 0
             }
          }
+      case ADD_EVENT_CITY:
+         return {...state, accommDestination: action.payload}
+      case CHANGE_ACCOMM_DESTINATION:
+         return {...state, accommDestination: action.payload}
       case INCREASE_NUM_OF_PERSONS:
          return {...state, numOfPersons: state.numOfPersons + 1}
       case DECREASE_NUM_OF_PERSONS:

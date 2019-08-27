@@ -29,7 +29,7 @@ const checkStyles = StyleSheet.create({
       alignItems: 'center'
    },
    checkTextStyle: {
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: 'normal',
       color: primaryColor
    }

@@ -1,6 +1,7 @@
 import { accommodationActions } from './types'
 const {
    NO_NEED_ACCOMMODATION,
+   CHANGE_ACCOMM_DESTINATION,
    INCREASE_NUM_OF_PERSONS,
    DECREASE_NUM_OF_PERSONS,
    ADD_CHECKIN_DATE,
@@ -16,6 +17,12 @@ const {
 export const noNeedAccommodation = () => {
    return {
       type: NO_NEED_ACCOMMODATION
+   }
+}
+export const changeAccommDestination = text => {
+   return {
+      type: CHANGE_ACCOMM_DESTINATION,
+      payload: text
    }
 }
 export const increaseNumOfPersons = () => {

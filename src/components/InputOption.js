@@ -48,7 +48,7 @@ inputStyles = StyleSheet.create({
       marginTop: marginTopBottom,
    },
    inputLabelStyle: {
-      fontSize: 20,
+      fontSize: 18,
       color: primaryColor,
       textAlign: 'left',
       marginBottom: 5,
@@ -64,7 +64,7 @@ inputStyles = StyleSheet.create({
       borderRadius: 15,
    },
    inputTextStyle: {
-      fontSize: 20,
+      fontSize: 18,
       color: primaryColor,
       textAlign: 'left',
       marginLeft: 5

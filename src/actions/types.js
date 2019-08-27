@@ -19,6 +19,7 @@ export const transportActions = {
 }
 export const accommodationActions = {
    NO_NEED_ACCOMMODATION: 'no_need_accommodation',
+   CHANGE_ACCOMM_DESTINATION: 'change_accomm_destination',
    INCREASE_NUM_OF_PERSONS: 'increase_num_of_persons',
    DECREASE_NUM_OF_PERSONS: 'decrease_num_of_persons',
    ADD_CHECKIN_DATE: 'add_checkin_date',

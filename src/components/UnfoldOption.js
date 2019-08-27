@@ -48,7 +48,7 @@ unfoldStyles = StyleSheet.create({
       marginTop: marginTopBottom,
    },
    unfoldLabelStyle: {
-      fontSize: 20,
+      fontSize: 18,
       color: primaryColor,
       textAlign: 'left',
       marginBottom: 5,
@@ -64,7 +64,7 @@ unfoldStyles = StyleSheet.create({
       borderRadius: 15,
    },
    unfoldTextStyle: {
-      fontSize: 20,
+      fontSize: 18,
       color: primaryColor,
       textAlign: 'left',
       marginLeft: 5
