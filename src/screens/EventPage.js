@@ -1,12 +1,12 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { connect } from 'react-redux'
 import { addEventName, addStartDate, addEndDate, addEventCountry, addEventCity, addEventCurrency, addEventFee } from '../actions/GeneralActions'
 import { updateEvent } from '../actions/EventActions'
 import InputOption from '../components/InputOption'
 import Calendar from '../components/Calendar'
 import { eventDetails } from '../utils/eventDetails'
-import { marginTopBottom } from '../utils/colorsAndMargins'
+import { marginTopBottom, inputWidth } from '../utils/colorsAndMargins'
 import CurrenciesAndMonths from '../components/CurrenciesAndMonths'
 
 class EventPage extends React.Component {
@@ -68,7 +68,7 @@ class EventPage extends React.Component {
       this.props.updateEvent(this.props.currentEvent)
    }
    render() {
-      const { container } = eventPageStyles
+      const { container, datesContainer } = eventPageStyles
       return (
          <ScrollView style={container}>
             {this.state.showCurrencies && 
@@ -78,7 +78,44 @@ class EventPage extends React.Component {
                   handleOK={this.handleOK}
                   chooseMonthOrCurrency={this.handleChooseCurrency}
                />}
-            {eventDetails.map((item, index) => {
+            {eventDetails.slice(0,1).map((item, index) => {
+               return (
+                  <InputOption 
+                     placeholder={item.placeholder}
+                     icon={item.icon}
+                     text={item.text}
+                     value={this.props.currentEvent.general[item.name].toString()}
+                     onChangeText={(txt) => this.handleChangeInput(txt, item)}
+                     onSubmitEditing={this.onSubmitEdit.bind(this)}
+                     key={index}
+                     onPress={() => this.handleIconPress(item)}
+                     editable={item.editable}
+                  />
+               )
+            })}
+            <View style={datesContainer}>
+               <InputOption
+                  iconDisabled={false}
+                  width={inputWidth/2}
+                  value={this.props.startDate}
+                  editable={false}
+                  icon="date-range"
+                  text="Start Date"
+                  placeholder="YYYY-MM-DD"
+                  onPress={() => this.handleIconPress({name:"startDate"})}
+               />
+               <InputOption 
+                  iconDisabled={false}
+                  width={inputWidth/2}
+                  value={this.props.endDate}
+                  editable={false}
+                  icon="date-range"
+                  text="End Date"
+                  placeholder="YYYY-MM-DD"
+                  onPress={() => this.handleIconPress({name:"endDate"})}
+               />
+            </View>
+            {eventDetails.slice(3).map((item, index) => {
                return (
                   <InputOption 
                      placeholder={item.placeholder}
@@ -107,10 +144,16 @@ const eventPageStyles = StyleSheet.create({
    container: {
       flex: 1,
       marginBottom: marginTopBottom
+   },
+   datesContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around'
    }
 })
 const mapStateToProps = state => ({
-   currentEvent: state.currentEvent
+   currentEvent: state.currentEvent,
+   startDate: state.currentEvent.general.startDate,
+   endDate: state.currentEvent.general.endDate
 })
 const mapDispatchToProps = dispatch => {
    return {

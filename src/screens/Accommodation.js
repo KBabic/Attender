@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavigationEvents } from 'react-navigation'
 import { View, Text, Dimensions, StyleSheet, ScrollView, FlatList, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { noNeedAccommodation, increaseNumOfPersons, decreaseNumOfPersons, addCheckinDate, addCheckoutDate, searchingAccommodation, searchingMoreResults,
@@ -10,7 +11,7 @@ import UnfoldOption from '../components/UnfoldOption'
 import Button from '../components/Button'
 import Calendar from '../components/Calendar'
 import ListItem from '../components/ListItem'
-import { marginLeftRight, marginTopBottom, primaryColor, secondaryColor } from '../utils/colorsAndMargins'
+import { marginTopBottom, primaryColor, secondaryColor, inputWidth } from '../utils/colorsAndMargins'
 import { getLocations, getDestId, getPropertiesList, getHotelsList, getSearchId } from '../utils/accommodationData'
 
 const keyExtractor = ({ id }) => id.toString()
@@ -33,6 +34,14 @@ class Accommodation extends React.Component {
    }
    componentWillReceiveProps(nextProps) {
       nextProps.updateEvent(nextProps.currentEvent)
+   }
+   handleOnWillFocus() {
+      const { startDate, endDate, addCheckinDate, addCheckoutDate, updateEvent, currentEvent } = this.props
+      if (startDate !== "" && endDate !== "") {
+         addCheckinDate(startDate)
+         addCheckoutDate(endDate)
+         updateEvent(currentEvent)
+      }
    }
    pickDate = (name) => {
       this.calendarModal = name
@@ -141,9 +150,10 @@ class Accommodation extends React.Component {
       this.props.decreaseNumOfPersons()
    }
    render() {
-      const { container } = accommodationStyles
+      const { container, flatListStyle, spinnerStyle, datesContainer, bottomButton, bottomButtonText } = accommodationStyles
       return (
          <ScrollView contentContainerStyle={container}>
+            <NavigationEvents onWillFocus={() => this.handleOnWillFocus()} />
             <CheckOption 
                checkTitle="I don't need accommodation"
                checked={this.props.noAccommodation}
@@ -164,35 +174,39 @@ class Accommodation extends React.Component {
                onIncrease={this.handleIncrease}
                onDecrease={this.handleDecrease} 
             />
-            <InputOption
-               iconDisabled={this.state.paramsDisabled}
-               defaultValue={this.props.startDate}
-               value={this.props.checkInDate}
-               editable={false}
-               icon="date-range"
-               text="Check-in Date"
-               placeholder="YYYY-MM-DD"
-               onPress={() => this.pickDate(checkIn)}
-            />
-            <InputOption 
-               iconDisabled={this.state.paramsDisabled}
-               defaultValue={this.props.endDate}
-               value={this.props.checkOutDate}
-               editable={false}
-               icon="date-range"
-               text="Check-out Date"
-               placeholder="YYYY-MM-DD"
-               onPress={() => this.pickDate(checkOut)}
-            />
-            <Button
-               disabled={this.state.buttonDisabled}
-               label="Find Accommodation"
-               width={Dimensions.get('window').width - 100}
-               height={50}
-               radius={15}
-               fontSize={18}
-               onPress={this.handleFindAccommodation.bind(this)} 
-            />
+            <View style={datesContainer}>
+               <InputOption
+                  iconDisabled={false}
+                  width={inputWidth/2}
+                  value={this.props.checkInDate}
+                  editable={false}
+                  icon="date-range"
+                  text="Check-in Date"
+                  placeholder="YYYY-MM-DD"
+                  onPress={() => this.pickDate(checkIn)}
+               />
+               <InputOption 
+                  iconDisabled={false}
+                  width={inputWidth/2}
+                  value={this.props.checkOutDate}
+                  editable={false}
+                  icon="date-range"
+                  text="Check-out Date"
+                  placeholder="YYYY-MM-DD"
+                  onPress={() => this.pickDate(checkOut)}
+               />
+            </View>
+            <View style={{alignSelf: 'center'}}>
+               <Button
+                  disabled={this.state.buttonDisabled}
+                  label="Find Accommodation"
+                  width={Dimensions.get('window').width - 100}
+                  height={50}
+                  radius={15}
+                  fontSize={18}
+                  onPress={this.handleFindAccommodation.bind(this)} 
+               />
+            </View>
             <Calendar 
                renderCalendar={this.state.renderCalendar}
                showModal={this.state.showModal}
@@ -200,7 +214,7 @@ class Accommodation extends React.Component {
                handleOK={this.handleCloseCalendar.bind(this)}
             />
             {this.props.accommodationLoading && (
-               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+               <View style={spinnerStyle}>
                   <ActivityIndicator size="large" color={secondaryColor}/>
                </View>
             )}
@@ -209,21 +223,15 @@ class Accommodation extends React.Component {
                      data={this.props.accommodationOptions}
                      keyExtractor={keyExtractor}
                      renderItem={this.renderAccommodationOption}
-                     style={{
-                        marginTop: marginTopBottom,
-                        marginBottom: marginTopBottom //+ 10
-                     }}
+                     style={flatListStyle}
                   />              
             )}
             {this.state.showList && (
                <TouchableOpacity 
-                  style={{
-                     marginTop: marginTopBottom,
-                     marginBottom: marginTopBottom + 10
-                  }}
+                  style={bottomButton}
                   onPress={this.handleSeeMoreResults.bind(this)}
                >
-                  <Text style={{color: primaryColor, fontSize: 18}}>See more results</Text>
+                  <Text style={bottomButtonText}>See more results</Text>
                </TouchableOpacity> 
             )}
          </ScrollView>
@@ -232,11 +240,30 @@ class Accommodation extends React.Component {
 }
 const accommodationStyles = StyleSheet.create({
    container: {
-      alignItems: 'center',
-      marginLeft: marginLeftRight,
-      marginRight: marginLeftRight,
       marginTop: marginTopBottom,
       marginBottom: marginTopBottom
+   },
+   flatListStyle: {
+      marginTop: marginTopBottom,
+      marginBottom: marginTopBottom
+   },
+   spinnerStyle: {
+      flex: 1, 
+      justifyContent: 'center', 
+      alignItems: 'center'
+   },
+   datesContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around'
+   },
+   bottomButton: {
+      marginTop: marginTopBottom,
+      marginBottom: marginTopBottom + 10,
+      alignSelf: 'center'
+   },
+   bottomButtonText: {
+      color: primaryColor,
+      fontSize: 18
    }
 })
 const mapStateToProps = state => ({

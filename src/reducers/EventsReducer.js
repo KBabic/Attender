@@ -93,7 +93,7 @@ const INITIAL_STATE = {
       }
    }
 }
-export default (state = INITIAL_STATE, action) => {
+export default (state = {}, action) => {
    switch(action.type) {
       case SAVE_EVENT:
          return {...state, [action.payload.general.id]: action.payload}

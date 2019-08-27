@@ -7,15 +7,17 @@ export default class InputOption extends React.Component {
    
    render() {
       const { inputContainerStyle, inputLabelStyle, inputViewStyle, inputTextStyle} = inputStyles
-      const { icon, text, value, placeholder, onPress, editable, onChangeText, onSubmitEditing, defaultValue, iconDisabled } = this.props
+      const { icon, text, width, margin, value, placeholder, onPress, editable, onChangeText, onSubmitEditing, defaultValue, iconDisabled } = this.props
       const opacity = iconDisabled ? 0.7 : 1
+      const inputViewWidth = width ? width : inputWidth
+      const customMargin = margin ? margin : marginTopBottom
       return (
       <View 
-         style={[inputContainerStyle, {opacity}]}
+         style={[inputContainerStyle, {opacity, marginTop: customMargin}]}
       >
          {text != "" && (
          <Text style={inputLabelStyle}>{text}</Text> )}
-         <View style={inputViewStyle}>
+         <View style={[inputViewStyle, {width: inputViewWidth}]}>
             <TextInput
                   style={inputTextStyle}
                   placeholder={placeholder}
@@ -43,9 +45,9 @@ export default class InputOption extends React.Component {
 }
 inputStyles = StyleSheet.create({
    inputContainerStyle : {
-      marginLeft: marginLeftRight,
-      marginRight: marginLeftRight,
       marginTop: marginTopBottom,
+      marginLeft: marginLeftRight,
+      marginRight: marginLeftRight
    },
    inputLabelStyle: {
       fontSize: 18,
@@ -58,7 +60,6 @@ inputStyles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      width: inputWidth,
       borderColor: secondaryColor,
       borderWidth: 1,
       borderRadius: 15,

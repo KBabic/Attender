@@ -40,14 +40,16 @@ class CostOverview extends React.Component {
                   chooseMonthOrCurrency={this.handleChooseMonth}
                />
             }   
-            <InputOption 
+            <InputOption
+               margin={20} 
                icon="keyboard-arrow-down" 
                text="" 
                placeholder="Choose month" 
                onPress={() => this.setState({ showMonths: true})}
                value={this.props.overviewMonth ? this.props.overviewMonth.toString() : ""}
             />
-            <InputOption 
+            <InputOption
+               margin={20} 
                icon="keyboard-arrow-down" 
                text="" 
                placeholder="Choose currency" 
@@ -73,7 +75,7 @@ const costOverviewStyles = StyleSheet.create({
       flex: 1,
       borderTopColor: secondaryColor,
       borderTopWidth: 3,
-      marginTop: marginTopBottom,
+      marginTop: marginTopBottom + 10,
       marginBottom: (Dimensions.get('window').height - inputHeight + 60),
       backgroundColor: '#ffffff'
    },
@@ -83,18 +85,18 @@ const costOverviewStyles = StyleSheet.create({
       alignItems: 'center',
       marginLeft: marginLeftRight,
       marginRight: marginLeftRight,
-      marginTop: marginTopBottom,
+      marginTop: marginTopBottom + 10,
       backgroundColor: '#ffffff'
    },
    middleLine: {
       borderBottomColor: primaryColor,
       borderBottomWidth: 1,
-      marginTop: marginTopBottom
+      marginTop: marginTopBottom + 10
    },
    bottomLine: {
       borderBottomColor: secondaryColor,
       borderBottomWidth: 3,
-      marginTop: marginTopBottom
+      marginTop: marginTopBottom + 10
    },
    label: {
       color: primaryColor,

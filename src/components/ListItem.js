@@ -79,6 +79,7 @@ export default class ListItem extends React.Component {
 
 const listItemStyles = StyleSheet.create({
    container: {
+      alignSelf: 'center',
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',

@@ -1,11 +1,11 @@
 import React from 'react'
-import { View, StyleSheet, ScrollView, StatusBar, Dimensions, FlatList } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, StatusBar, Dimensions, FlatList } from 'react-native'
 import { connect } from 'react-redux'
 import { newEventButtonPressed, existingEventOpened } from '../actions/EventActions'
 import CostOverview from '../components/CostOverview'
 import Button from '../components/Button'
 import EventListItem from '../components/EventListItem'
-import { primaryColor } from '../utils/colorsAndMargins'
+import { primaryColor, marginTopBottom } from '../utils/colorsAndMargins'
 import getDotValues from '../utils/getDotValues'
 
 const keyExtractor = ({ general: {id }}) => id.toString()
@@ -43,7 +43,7 @@ class EventList extends React.Component {
       this.props.navigation.navigate('EventPage')
    }
    render() {
-      const { container, messageContainer, costsContainer, messageText, buttonContainer } = eventListStyles
+      const { container, messageContainer, messageText, buttonContainer } = eventListStyles
          return (
             <View style={container}>
                <StatusBar backgroundColor={primaryColor}/>
@@ -61,8 +61,8 @@ class EventList extends React.Component {
                <View style={{flex: 1}}>
                   <CostOverview />
                </View>
-               <ScrollView style={{flex: 1, marginTop:20}}>
-                  {Object.values(this.props.events) !== [] && (
+               <ScrollView style={{flex: 1}}>
+                  {Object.values(this.props.events).length !== 0 && (
                      <FlatList
                         data={Object.values(this.props.events)}
                         renderItem={this.renderEvent}
@@ -70,7 +70,7 @@ class EventList extends React.Component {
                         style={{margin: 10}}
                      />
                   )}
-                  {Object.values(this.props.events) === [] && (
+                  {Object.values(this.props.events).length === 0 && (
                   <Text style={messageText}>
                      You currently have no events planned
                   </Text>
@@ -97,9 +97,6 @@ const eventListStyles = StyleSheet.create({
       color: primaryColor, 
       fontSize: 20,
       textAlign: 'center'
-   },
-   costsContainer: {
-      //flex: 1
    },
    buttonContainer: {
       position: 'absolute', 
