@@ -9,6 +9,7 @@ export const generalActions = {
 }
 export const transportActions = {
    ADD_ORIGIN_CITY: 'add_origin_city',
+   CHANGE_DESTINATION_CITY: 'change_destination_city',
    NO_NEED_TRANSPORT: 'no_need_transport',
    SEARCHING_TRANSPORT: 'searching_transport',
    SEARCH_TRANSPORT_SUCCESS: 'search_transport_success',

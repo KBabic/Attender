@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet, Alert } from 'react-native'
 import { NavigationEvents } from 'react-navigation'
 import { connect } from 'react-redux'
 import { chooseCurrency, transportCostsCalculated, accommodationCostsCalculated, addAdditionalCosts, eventFeeCalculated } from '../actions/CostsActions'
@@ -37,7 +37,7 @@ class Costs extends React.Component {
                func(Math.round(a * factor))
             }
          } catch(e) {
-            console.log(e.message)
+            Alert.alert('Error','An error in coversion ocurred. Please try again later.',[{text: 'OK'}])
          }
       }
    }

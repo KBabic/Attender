@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Dimensions, FlatList, ActivityIndicator, Alert } from 'react-native'
 import { connect } from 'react-redux'
-import { addOriginCity, noNeedTransport, searchingTransport, searchTransportSuccess, searchTransportFail} from '../actions/TransportActions'
+import { addOriginCity, noNeedTransport, searchingTransport, searchTransportSuccess, searchTransportFail, changeDestinationCity} from '../actions/TransportActions'
 import { updateEvent } from '../actions/EventActions'
 import CheckOption from '../components/CheckOption'
 import InputOption from '../components/InputOption'
@@ -75,15 +75,10 @@ class Transport extends React.Component {
    }
    handleCheck = () => {
       this.props.noNeedTransport()
-      //this.props.updateEvent(this.props.currentEvent)
       this.setState((prevState) => ({
          buttonDisabled: !prevState.buttonDisabled,
          originDisabled: !prevState.originDisabled
       }))
-   }
-   handleChangeOrigin = (city) => {
-      this.props.addOriginCity(city)
-      //this.props.updateEvent(this.props.currentEvent)
    }
    render() {
       const { container } = transportStyles
@@ -98,9 +93,17 @@ class Transport extends React.Component {
                iconDisabled={this.state.originDisabled}
                editable={!this.state.originDisabled}
                text={"Origin City"} 
-               placeholder={"e.g.Berlin"} 
+               placeholder={"e.g.Paris"} 
                value={this.props.originCity} 
-               onChangeText={(txt) => this.handleChangeOrigin(txt)} 
+               onChangeText={(txt) => this.props.addOriginCity(txt)} 
+            />
+            <InputOption 
+               iconDisabled={this.state.originDisabled}
+               editable={!this.state.originDisabled}
+               text={"Destination City"} 
+               placeholder={"e.g.Berlin"} 
+               value={this.props.destinationCity} 
+               onChangeText={(txt) => this.props.changeDestinationCity(txt)} 
             />
             <Button
                disabled={this.state.buttonDisabled} 
@@ -138,7 +141,8 @@ const transportStyles = StyleSheet.create({
 })
 const mapStateToProps = state => ({
    currentEvent: state.currentEvent,
-   destinationCity: state.currentEvent.general.eventCity,
+   eventCity: state.currentEvent.general.eventCity,
+   destinationCity: state.currentEvent.transport.destinationCity,
    originCity: state.currentEvent.transport.originCity,
    noTransport: state.currentEvent.transport.noTransport,
    transportLoading: state.currentEvent.transport.transportLoading,
@@ -165,6 +169,9 @@ const mapDispatchToProps = dispatch => {
       },
       updateEvent: (event) => {
          dispatch(updateEvent(event))
+      },
+      changeDestinationCity: (city) => {
+         dispatch(changeDestinationCity(city))
       }
    }
 }

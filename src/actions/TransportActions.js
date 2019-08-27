@@ -1,6 +1,7 @@
 import { transportActions } from './types'
 const {
    ADD_ORIGIN_CITY,
+   CHANGE_DESTINATION_CITY,
    NO_NEED_TRANSPORT,
    SEARCHING_TRANSPORT,
    SEARCH_TRANSPORT_SUCCESS,
@@ -12,6 +13,12 @@ const {
 export const addOriginCity = text => {
    return {
       type: ADD_ORIGIN_CITY,
+      payload: text
+   }
+}
+export const changeDestinationCity = text => {
+   return {
+      type: CHANGE_DESTINATION_CITY,
       payload: text
    }
 }
