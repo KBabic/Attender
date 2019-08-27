@@ -36,7 +36,6 @@ export const searchTransportFail = () => {
    return {
       type: SEARCH_TRANSPORT_FAIL
    }
-   // add error handling
 }
 export const transportChosen = (id, costs, currency) => {
    return {

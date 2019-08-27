@@ -5,7 +5,6 @@ import { transportChosen, transportUnchosen } from '../actions/TransportActions'
 import { transportCostsCalculated } from '../actions/CostsActions'
 import { updateEvent } from '../actions/EventActions'
 import { primaryColor } from '../utils/colorsAndMargins'
-import { convertCurrency } from '../utils/currencyData'
 import RouteSegment from '../components/RouteSegment'
 import CheckOption from '../components/CheckOption'
 import { inputWidth, marginTopBottom } from '../utils/colorsAndMargins'
@@ -21,17 +20,6 @@ class TransportDetails extends React.Component {
    componentWillReceiveProps(nextProps) {
       nextProps.updateEvent(nextProps.currentEvent)
    }
-   /*async handleChangeCurrency() {
-      let transpCurFactor
-      if (this.props.chosenCurrency !== "") {
-         try {
-            transpCurFactor = await convertCurrency(this.props.transpCurrency, cur)
-         } catch(e) {
-            console.log(e.message)
-         }
-         this.props.transportCostsCalculated(transpCurFactor * this.props.transportCosts)
-      }
-   }*/
    componentDidUpdate(prevProps, prevState) {
       const { navigation } = this.props
       const id = navigation.getParam('id')
@@ -39,20 +27,13 @@ class TransportDetails extends React.Component {
       const currency = navigation.getParam('currency')
       if (prevState.checked && !this.state.checked) {
          this.props.transportUnchosen()
-         // if final currency is already chosen, update final transport costs to 0
-         /*if (this.props.chosenCurrency !== "") {
-            this.props.transportCostsCalculated(0)
-         }*/
          this.props.updateEvent(this.props.currentEvent)
       }
       if (!prevState.checked && this.state.checked) {
          this.props.transportChosen(id, totalPrice, currency)
-         // if final currency is already chosen, update final transport costs according to it
-         //await this.handleChangeCurrency()
          this.props.updateEvent(this.props.currentEvent)
       }
       if (prevState.checked && this.state.checked) {
-         //await this.handleChangeCurrency()
          this.props.updateEvent(this.props.currentEvent)
       }
       if (!prevState.checked && !this.state.checked) {

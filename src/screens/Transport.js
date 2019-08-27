@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Dimensions, FlatList } from 'react-native'
+import { View, StyleSheet, Dimensions, FlatList, ActivityIndicator, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { addOriginCity, noNeedTransport, searchingTransport, searchTransportSuccess, searchTransportFail} from '../actions/TransportActions'
 import { updateEvent } from '../actions/EventActions'
@@ -8,7 +8,7 @@ import InputOption from '../components/InputOption'
 import Button from '../components/Button'
 import ListItem from '../components/ListItem'
 import { modes, getTransportData } from '../utils/transportData'
-import { marginTopBottom } from '../utils/colorsAndMargins'
+import { marginTopBottom, secondaryColor } from '../utils/colorsAndMargins'
 
 const keyExtractor = ({ id }) => id.toString()
 
@@ -25,14 +25,22 @@ class Transport extends React.Component {
    }
    searchTransport = async () => {
       this.props.searchingTransport()
-      let transpData = await getTransportData(modes, this.props.originCity, this.props.destinationCity)
-      //this.places = transpData[0]
-      //this.vehicles = transpData[1]
-      let places = transpData[0]
-      let vehicles = transpData[1]
-      let transpList = transpData[2]
-      await this.props.searchTransportSuccess([transpList, places, vehicles])
-      this.props.updateEvent(this.props.currentEvent)
+      const re = /^[a-zA-Z]+/
+      if (!this.props.originCity.match(re) || !this.props.destinationCity.match(re)) {
+         this.props.searchTransportFail()
+         Alert.alert('Error','Please specify origin and destination cities correctly.',[{text: 'OK'}])
+      } else {
+         let transpData = await getTransportData(modes, this.props.originCity, this.props.destinationCity)
+         if (transpData) {
+            let places = transpData[0]
+            let vehicles = transpData[1]
+            let transpList = transpData[2]
+            await this.props.searchTransportSuccess([transpList, places, vehicles])
+            this.props.updateEvent(this.props.currentEvent)
+         } else {
+            this.props.searchTransportFail()
+         }
+      } 
    }
    renderTransportOption = ({ item: { id, icons, currency, totalTime, minPrice, maxPrice, price, segments } }) => {
       let priceRange
@@ -103,6 +111,11 @@ class Transport extends React.Component {
                radius={15}
                fontSize={20}
             />
+            {this.props.transportLoading && (
+               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                  <ActivityIndicator size="large" color={secondaryColor}/>
+               </View>
+            )}
             {!this.props.transportLoading && (
                <FlatList
                   data={this.props.transportOptions[0]}

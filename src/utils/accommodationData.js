@@ -14,16 +14,12 @@ const getUrl = req => {
 
 //req1: locations/auto-complete?languagecode=en-us&text=berlin
 export async function getLocations(destination) {
-   try {
-      let baseUrl = getUrl("req1")
+   let baseUrl = getUrl("req1")
       let url = `${baseUrl}text=${destination}`
       let req1 = new Request(url, { headers })
       let resp1 = await fetch(req1)
       let resp1Json = await resp1.json()
       return resp1Json
-   } catch(e) {
-      console.log(`Req1 error: ${e}`)
-   }
 }
 export const getDestId = (resp) => {
    // get dest_id for dest_type "city"
@@ -36,8 +32,6 @@ export const getDestId = (resp) => {
          }
       }
       return dest_id
-   } else {
-      console.log("Resp not returned from getLocations()")
    }
 }
 // req2: properties/list?languagecode=en-us&price_filter_currencycode=USD&search_type=city&offset=0&dest_ids=-1746443&guest_qty=1&arrival_date=2019-06-01&departure_date=2019-06-20&room_qty=1
@@ -46,8 +40,7 @@ const search_type = "city"
 const room_qty = 1 
 export async function getPropertiesList(id, offset, search_id, guest_qty, arr_date, dep_date) {
    if (id) {
-      try {
-         let baseUrl = getUrl("req2")
+      let baseUrl = getUrl("req2")
          let url
          if(search_id !== "") {
             url = `${baseUrl}order_by=price&price_filter_currencycode=${currencyCode}&search_type=${search_type}&offset=${offset}&dest_ids=${id}&guest_qty=${guest_qty}&arrival_date=${arr_date}&departure_date=${dep_date}&room_qty=${room_qty}&search_id=${search_id}`
@@ -58,11 +51,6 @@ export async function getPropertiesList(id, offset, search_id, guest_qty, arr_da
          let resp2 = await fetch(req2)
          let resp2Json = await resp2.json()
          return resp2Json
-      } catch(e) {
-         console.log(`Req2 error: ${e}`)
-      }
-   } else {
-      console.log("id not returned from getDestId()")
    }
 }
 export const getSearchId = (respJson) => {
@@ -81,8 +69,6 @@ export const getHotelsList = (respJson) => {
          return hotelItem
       })
       return hotelsList
-   } else {
-      console.log('respJson not returned from getPropertiesList().')
    }
 }
 export const getHotelDetails = (item, response) => {
@@ -107,41 +93,31 @@ export const getHotelDetails = (item, response) => {
 
 export async function getHotelDescription(hotel) {
    if (hotel) {
-      try {
-         //req3: "properties/get-description"
-         let baseUrl = getUrl("req3")
-         let url = `${baseUrl}hotel_ids=${hotel.id}`
-         let req3 = new Request(url, { headers })
-         let resp3 = await fetch(req3)
-         let resp3Json = await resp3.json()
-         const descriptions = await resp3Json.map(res => {
-            return res.description
-         })
-         hotel.description = descriptions.join(" ")
-         return hotel
-      } catch(e) {
-         console.log(`Req 3 error: ${e}`)
-      }
-   } else {
-      console.log('No hotel')
+      //req3: "properties/get-description"
+      let baseUrl = getUrl("req3")
+      let url = `${baseUrl}hotel_ids=${hotel.id}`
+      let req3 = new Request(url, { headers })
+      let resp3 = await fetch(req3)
+      let resp3Json = await resp3.json()
+      const descriptions = await resp3Json.map(res => {
+         return res.description
+      })
+      hotel.description = descriptions.join(" ")
+      return hotel
    }
 }
 export async function getPhotoData(hotel) {
    // response = { data: { id: [ [], [], ...]}, url_prefix: "http://r-ec.bstatic.com"}
    // most inner array: position 4 => url
    if (hotel) {
-      try {
-         let baseUrl = getUrl("req4")
-         let url = `${baseUrl}hotel_ids=${hotel.id}`
-         let req4 = new Request(url, { headers })
-         let resp4 = await fetch(req4)
-         let resp4Json = await resp4.json()
-         let url_prefix = resp4Json.url_prefix
-         let photoData = resp4Json.data[hotel.id]
-         return [url_prefix, photoData]
-      } catch(e) {
-         console.log(`Req4 error: ${e}`)
-      }
+      let baseUrl = getUrl("req4")
+      let url = `${baseUrl}hotel_ids=${hotel.id}`
+      let req4 = new Request(url, { headers })
+      let resp4 = await fetch(req4)
+      let resp4Json = await resp4.json()
+      let url_prefix = resp4Json.url_prefix
+      let photoData = resp4Json.data[hotel.id]
+      return [url_prefix, photoData]
    }
 }
 function extractNthElement(arr, n) {
@@ -183,19 +159,15 @@ export const getPhotosList = (prefix, data) => {
 export async function getFacilities(hotel) {
    // response: [ { "facilitytype_name", "facility_name", "kind", "value" }, {}, ...]
    if (hotel) {
-      try {
-         let baseUrl = getUrl("req5")
-         let url = `${baseUrl}hotel_ids=${hotel.id}`
-         let req5 = new Request(url, { headers })
-         let resp5 = await fetch(req5)
-         let resp5Json = await resp5.json()
-         let facilities = resp5Json.map(item => {
-            return item.facility_name
-         })
-         hotel.facilities = facilities
-         return hotel.facilities
-      } catch(e) {
-         console.log(`Req5 error: ${e}`)
-      }
+      let baseUrl = getUrl("req5")
+      let url = `${baseUrl}hotel_ids=${hotel.id}`
+      let req5 = new Request(url, { headers })
+      let resp5 = await fetch(req5)
+      let resp5Json = await resp5.json()
+      let facilities = resp5Json.map(item => {
+         return item.facility_name
+      })
+      hotel.facilities = facilities
+      return hotel.facilities
    }
 }

@@ -26,7 +26,6 @@ const INITIAL_STATE = {
       },
       accommodation: {
          accommodationLoading: false,
-         accommDetailsLoading: false,
          noAccommodation: false,
          numOfPersons: 3,
          checkInDate: "",
@@ -70,7 +69,6 @@ const INITIAL_STATE = {
       },
       accommodation: {
          accommodationLoading: false,
-         accommDetailsLoading: false,
          noAccommodation: false,
          numOfPersons: 1,
          checkInDate: "",

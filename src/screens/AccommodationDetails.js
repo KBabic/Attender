@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { ScrollView, View, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
 import { updateEvent } from '../actions/EventActions'
@@ -24,28 +24,34 @@ class AccommodationDetails extends React.Component {
       const { navigation } = this.props
       const hotel = navigation.getParam('item')
       const properties = navigation.getParam('properties')
-      console.log(this.hotel)
       
       if (Object.entries(this.hotel).length === 0 && this.hotel.constructor === Object) {
-         const hotelInit = getHotelDetails(hotel, properties.result)
-         this.hotel = await getHotelDescription(hotelInit)
-         console.log(this.hotel)
          try {
-            const [prefix, data] = await getPhotoData({ id: this.hotel.id })
-            const photosList = getPhotosList(prefix, data)
-            this.hotel.photos = photosList
+            const hotelInit = getHotelDetails(hotel, properties.result)
+            this.hotel = await getHotelDescription(hotelInit)
+            try {
+               const [prefix, data] = await getPhotoData({ id: this.hotel.id })
+               const photosList = getPhotosList(prefix, data)
+               this.hotel.photos = photosList
+               try {
+                  const facilities = await getFacilities({ id: this.hotel.id })
+                  this.hotel.facilities = facilities
+               } catch(e) {
+                  this.setState({loading: false})
+                  Alert.alert('Error','No facilities are available for this option.',[{text: 'OK'}])
+               }
+            } catch(e) {
+               this.setState({loading: false})
+               Alert.alert('Error','No photos are available for this option.',[{text: 'OK'}])
+            }
          } catch(e) {
-            console.log(e.message)
-         }
-         try {
-            const facilities = await getFacilities({ id: this.hotel.id })
-            this.hotel.facilities = facilities
-         } catch(e) {
-            console.log(e.message)
+            Alert.alert('Error','No description is available for this option.',[{text: 'OK'}])
+            this.setState({loading: false})
          }
          this.setState({loading: false})
       } else {
          this.setState({loading: false})
+         Alert.alert('Error', 'No description is available for this option.',[{text: 'OK'}])
       }
    }
    componentDidUpdate(prevProps, prevState) {
@@ -76,28 +82,34 @@ class AccommodationDetails extends React.Component {
             </View>
          )
       } else {
-         return (
-            <View style={[container, {flex:1}]}>
-               <CheckOption checkTitle="Choose this accommodation" checked={checked} onPress={this.handleCheck}/>
-               <Text style={[text, { fontWeight: 'bold', textAlign: 'center'}]}>{name}</Text>
-               <View style={detailsContainer}>
-                  <Text style={text}>Minimal total price</Text>
-                  <Text style={text}>{`${currency} ${minPrice}`}</Text>
+         if (Object.entries(this.hotel).length !== 0) {
+            return (
+               <View style={[container, {flex:1}]}>
+                  <CheckOption checkTitle="Choose this accommodation" checked={checked} onPress={this.handleCheck}/>
+                  <Text style={[text, { fontWeight: 'bold', textAlign: 'center'}]}>{name}</Text>
+                  <View style={detailsContainer}>
+                     <Text style={text}>Minimal total price</Text>
+                     <Text style={text}>{`${currency} ${minPrice}`}</Text>
+                  </View>
+                  <View style={descriptionContainer}>
+                     <ScrollView>
+                        <Text style={[descriptionStyle, {paddingBottom: 20}]}>{description}</Text>
+                        {photos && <ImageGrid images={photos} />}
+                        <Text style={[text, { fontWeight: 'bold', paddingTop: 20, paddingBottom: 20 }]}>Facilities:</Text>
+                        {facilities && facilities.sort().map((facility, i) => {
+                           return (
+                              <Text key={i} style={descriptionStyle}>{facility}</Text>
+                        )})}
+                     </ScrollView>
+                  </View>
                </View>
-               <View style={descriptionContainer}>
-                  <ScrollView>
-                     <Text style={[descriptionStyle, {paddingBottom: 20}]}>{description}</Text>
-                     {photos && <ImageGrid images={photos} />}
-                     <Text style={[text, { fontWeight: 'bold', paddingTop: 20, paddingBottom: 20 }]}>Facilities:</Text>
-                     {facilities && facilities.sort().map((facility, i) => {
-                        return (
-                           <Text key={i} style={descriptionStyle}>{facility}</Text>
-                     )})}
-                  </ScrollView>
-               </View>
-            </View>
-         )
-      }
+            )
+         } else {
+            return (
+               <View style={[container, {flex:1}]}/>
+            )
+         }
+      } 
    }
 }
 const accommodationDetailsStyles = StyleSheet.create({

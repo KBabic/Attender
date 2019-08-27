@@ -13,16 +13,12 @@ const {
    SEARCHING_MORE_RESULTS,
    SEARCH_ACCOMMODATION_SUCCESS,
    SEARCH_ACCOMMODATION_FAIL,
-   FETCHING_ACCOMMODATION_DETAILS,
-   FETCH_ACCOMMODATION_DETAILS_SUCCESS,
-   FETCH_ACCOMMODATION_DETAILS_FAIL,
    ACCOMMODATION_CHOSEN,
    ACCOMMODATION_UNCHOSEN
 } = accommodationActions
 
 const INITIAL_STATE = {
    accommodationLoading: false,
-   accommDetailsLoading: false,
    noAccommodation: false,
    numOfPersons: 1,
    checkInDate: "",
@@ -89,19 +85,11 @@ export default (state=INITIAL_STATE, action) => {
          return {
             ...state, 
             accommodationLoading: false,
-            accommProperties: action.payload[0], 
+            accommProperties: action.payload[0],
             accommodationOptions: [...state.accommodationOptions, ...action.payload[1]]
          }
       case SEARCH_ACCOMMODATION_FAIL:
          return {...state, accommodationLoading: false}
-         // add error handling
-      case FETCHING_ACCOMMODATION_DETAILS:
-         return {...state, accommDetailsLoading: true}
-      case FETCH_ACCOMMODATION_DETAILS_SUCCESS:
-         return {...state, accommDetailsLoading: false}
-      case FETCH_ACCOMMODATION_DETAILS_FAIL:
-         return {...state, accommDetailsLoading: false}
-         // add errror handling
       case ACCOMMODATION_CHOSEN:
          return {...state, 
                   chosenAccommOptionId: action.payload.id, 

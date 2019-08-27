@@ -26,9 +26,6 @@ export const accommodationActions = {
    SEARCHING_MORE_RESULTS : 'searching_more_results',
    SEARCH_ACCOMMODATION_SUCCESS: 'search_accommodation_success',
    SEARCH_ACCOMMODATION_FAIL: 'search_accommodation_fail',
-   FETCHING_ACCOMMODATION_DETAILS: 'fetching_accommodation_details',
-   FETCH_ACCOMMODATION_DETAILS_SUCCESS: 'fetch_accommodation_details_success',
-   FETCH_ACCOMMODATION_DETAILS_FAIL: 'fetch_accommodation_details_fail',
    ACCOMMODATION_CHOSEN: 'accommodation_chosen',
    ACCOMMODATION_UNCHOSEN: 'accommodation_unchosen',
 }

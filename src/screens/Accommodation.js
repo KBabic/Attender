@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Dimensions, StyleSheet, ScrollView, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, ScrollView, FlatList, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { noNeedAccommodation, increaseNumOfPersons, decreaseNumOfPersons, addCheckinDate, addCheckoutDate, searchingAccommodation, searchingMoreResults,
 searchAccommodationSuccess, searchAccommodationFail, accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
@@ -67,23 +67,36 @@ class Accommodation extends React.Component {
       let properties
       let hotelsList
       let search_id
-      try {
+      if (destinationCity === "") {
+         this.props.searchAccommodationFail()
+         Alert.alert('Error','Please specify destination city.',[{text: 'OK'}])
+      } else {
          locations = await getLocations(destinationCity)
-         dest_id = getDestId(locations)
-      } catch(e) {
-         console.log('Error fetching locations', e)
-      }
-      try {
-         properties = await getPropertiesList(dest_id, this.offset, this.search_id, numOfPersons, checkInDate, checkOutDate)
-         hotelsList = getHotelsList(properties)
-         search_id = getSearchId(properties)
-         this.setState({ showList: true })
-         this.props.searchAccommodationSuccess([properties, hotelsList])
-         this.props.updateEvent(this.props.currentEvent)
-         this.offset = this.offset + 30
-         this.search_id = search_id
-      } catch(e) {
-         console.log('Error fetching properties', e)
+         if (locations.length === 0) {
+            // destination is not resolved
+            this.props.searchAccommodationFail()
+            Alert.alert('Error','Please check if you correctly spelled destination city.',[{text: 'OK'}])
+         } else {
+            dest_id = getDestId(locations)
+            if (checkInDate === "" || checkOutDate === "") {
+               this.props.searchAccommodationFail()
+               Alert.alert('Error','Please specify check-in and check-out dates.',[{text: 'OK'}])
+            } else {
+               try {
+                  properties = await getPropertiesList(dest_id, this.offset, this.search_id, numOfPersons, checkInDate, checkOutDate)
+                  hotelsList = getHotelsList(properties)
+                  search_id = getSearchId(properties)
+                  this.setState({ showList: true })
+                  this.props.searchAccommodationSuccess([properties, hotelsList])
+                  this.props.updateEvent(this.props.currentEvent)
+                  this.offset = this.offset + 30
+                  this.search_id = search_id
+               } catch(e) {
+                  this.props.searchAccommodationFail()
+                  Alert.alert('Error','An unknown error happened. Please check your check-in and check-out dates and/or try again later.',[{text: 'OK'}]) 
+               }
+            }
+         }
       }
    }
    handleFindAccommodation = () => {

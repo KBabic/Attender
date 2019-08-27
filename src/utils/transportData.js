@@ -1,3 +1,5 @@
+import React from 'react'
+import {Alert} from 'react-native'
 import { APIkey } from './APIKey'
 
 export const modes = {
@@ -39,67 +41,80 @@ export async function getTransportData(modes, oName, dName) {
    const url = `http://free.rome2rio.com/api/1.4/json/Search?key=${APIkey}&oName=${oName}&dName=${dName}`
    try {
       let response = await fetch(url)
-      let responseJson = await response.json()
-      const routes = await responseJson.routes
-      const places = await responseJson.places
-      const vehicles = await responseJson.vehicles
-     
-      let transpList = []
-      transpList = routes.map((route, index) => {
-         
-         //transpItem = { id, distance, modes, icons, totalTime, minPrice, maxPrice, price, currency, segments }
-         const transpItem = {}
-         // get transpItem.id
-         transpItem.id = index
-         // get transpItem.distance
-         transpItem.distance = `${route.distance} km`
-         // get transpItem.modes from route name (route name is e.g. "Fly to Berlin Tegel" or "Bus, night train")
-         const nameArr = route.name.split(/[ ,]+/)
-         const routeModes = []
-         nameArr.forEach(n => {
-            if (Object.keys(modes).includes(n.toLowerCase())) {
-               routeModes.push(n.toLowerCase())
-            }
-            return routeModes
-         })
-         transpItem.modes = routeModes
-         // get transpItem.icons
-         transpItem.icons = transpItem.modes.map(m => {
-            return modes[m].icon
-         })
-         // get transpItem.totalTime
-         transpItem.totalTime = getTime(route.totalDuration)
-         // get transpItem.minPrice, transpItem.maxPrice, transpItem.price and transpItem.currency for NON DRIVE routes:
-         if (!route.name.includes("Drive") && !route.name.includes("drive")) {
-            if (route.indicativePrices) {
-               route.indicativePrices[0].priceLow ? transpItem.minPrice = `${route.indicativePrices[0].priceLow}` : transpItem.minPrice =""
-               route.indicativePrices[0].priceHigh ? transpItem.maxPrice =`${route.indicativePrices[0].priceHigh}` : transpItem.maxPrice = ""
-               transpItem.price = route.indicativePrices[0].price
-               transpItem.currency = `${route.indicativePrices[0].currency}`
-            } else {
-               transpItem.minPrice = transpItem.maxPrice = transpItem.price = transpItem.currency = ""
-            }
-         // get transpItem.minPrice, transpItem.maxPrice and transpItem.currency for DRIVE routes:
-         } else {
-            if (route.indicativePrices) {
-               const prices = route.indicativePrices.map(el => el.price)
-               transpItem.minPrice = Math.min(...prices)
-               transpItem.maxPrice = Math.max(...prices)
-               transpItem.price = Math.floor((prices[0] + prices[1] + prices[2]) / 3)
-               transpItem.currency = route.indicativePrices[0].currency
-            }
-         }
-         
-         // get transpItem.segments
-         transpItem.segments = route.segments
 
-         return transpItem
-      })
-      console.log(transpList)
-      return [places, vehicles, transpList]
-      
+      switch(response.status) {
+         
+         case 200:
+            let responseJson = await response.json()
+            const routes = await responseJson.routes
+            const places = await responseJson.places
+            const vehicles = await responseJson.vehicles
+            let transpList = []
+            transpList = routes.map((route, index) => {
+               //transpItem = { id, distance, modes, icons, totalTime, minPrice, maxPrice, price, currency, segments }
+               const transpItem = {}
+               // get transpItem.id
+               transpItem.id = index
+               // get transpItem.distance
+               transpItem.distance = `${route.distance} km`
+               // get transpItem.modes from route name (route name is e.g. "Fly to Berlin Tegel" or "Bus, night train")
+               const nameArr = route.name.split(/[ ,]+/)
+               const routeModes = []
+               nameArr.forEach(n => {
+                  if (Object.keys(modes).includes(n.toLowerCase())) {
+                     routeModes.push(n.toLowerCase())
+                  }
+                  return routeModes
+               })
+               transpItem.modes = routeModes
+               // get transpItem.icons
+               transpItem.icons = transpItem.modes.map(m => {
+                  return modes[m].icon
+               })
+               // get transpItem.totalTime
+               transpItem.totalTime = getTime(route.totalDuration)
+               // get transpItem.minPrice, transpItem.maxPrice, transpItem.price and transpItem.currency for NON DRIVE routes:
+               if (!route.name.includes("Drive") && !route.name.includes("drive")) {
+                  if (route.indicativePrices) {
+                     route.indicativePrices[0].priceLow ? transpItem.minPrice = `${route.indicativePrices[0].priceLow}` : transpItem.minPrice =""
+                     route.indicativePrices[0].priceHigh ? transpItem.maxPrice =`${route.indicativePrices[0].priceHigh}` : transpItem.maxPrice = ""
+                     transpItem.price = route.indicativePrices[0].price
+                     transpItem.currency = `${route.indicativePrices[0].currency}`
+                  } else {
+                     transpItem.minPrice = transpItem.maxPrice = transpItem.price = transpItem.currency = ""
+                  }
+               // get transpItem.minPrice, transpItem.maxPrice and transpItem.currency for DRIVE routes:
+               } else {
+                  if (route.indicativePrices) {
+                     const prices = route.indicativePrices.map(el => el.price)
+                     transpItem.minPrice = Math.min(...prices)
+                     transpItem.maxPrice = Math.max(...prices)
+                     transpItem.price = Math.floor((prices[0] + prices[1] + prices[2]) / 3)
+                     transpItem.currency = route.indicativePrices[0].currency
+                  }
+               }
+               // get transpItem.segments
+               transpItem.segments = route.segments
+
+               return transpItem
+            })
+            return [places, vehicles, transpList]
+         
+            case 400:
+            case 444:
+               Alert.alert('Error','Please specify origin and destination cities properly.',[{text:'OK'}])
+               break
+            case 401:
+               Alert.alert('Error','API key is not correct, please refer to the app development team',[{text:'OK'}])
+               break
+            case 402:
+            case 429:
+            case 500:
+               Alert.alert('Error','Server is not available at the moment, please try later.',[{text:'OK'}])
+               break
+      }
    } catch(e) {
-      console.log(e)
+      Alert.alert('Error','An unknown error occurred, please try later.',[{text:'OK'}])
    }
 }
 

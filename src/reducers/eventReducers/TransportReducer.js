@@ -59,7 +59,9 @@ export default (state = INITIAL_STATE, action) => {
          }
       case SEARCH_TRANSPORT_SUCCESS:
          return {...state, transportLoading: false, transportOptions: [...state.transportOptions, ...action.payload]}
-      case TRANSPORT_CHOSEN:
+      case SEARCH_TRANSPORT_FAIL:
+         return {...state, transportLoading: false}
+         case TRANSPORT_CHOSEN:
          return {
             ...state, 
             chosenTransportOptionId: action.payload.id, 
@@ -68,9 +70,6 @@ export default (state = INITIAL_STATE, action) => {
          }
       case TRANSPORT_UNCHOSEN:
          return {...state, chosenTransportOptionId: "", transportCosts: 0, transpCurrency: ""}
-      case SEARCH_TRANSPORT_FAIL:
-         return {...state, transportLoading: false}
-         // add error handling
       default:
          return state
    }
