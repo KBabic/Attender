@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView, View, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native'
+import { NavigationEvents } from 'react-navigation'
 import { connect } from 'react-redux'
 import { accommodationChosen, accommodationUnchosen } from '../actions/AccommodationActions'
 import { updateEvent } from '../actions/EventActions'
@@ -54,6 +55,17 @@ class AccommodationDetails extends React.Component {
          Alert.alert('Error', 'No description is available for this option.',[{text: 'OK'}])
       }
    }
+   componentWillReceiveProps() {
+      this.props.updateEvent(this.props.currentEvent)
+   }
+   handleWillFocus() {
+      const { navigation, currentEvent } = this.props
+      navigation.setParams({ 
+         title:   currentEvent.general.eventName.length <= 16 ?
+                  currentEvent.general.eventName :
+                  currentEvent.general.eventName.slice(0,17) + "..."
+      })
+   }
    componentDidUpdate(prevProps, prevState) {
       const { navigation } = this.props
       const item = navigation.getParam('item')
@@ -78,6 +90,7 @@ class AccommodationDetails extends React.Component {
       if (this.state.loading) {
          return(
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+               <NavigationEvents onWillFocus={() => this.handleWillFocus()}/>
                <ActivityIndicator size="large" color={secondaryColor}/>
             </View>
          )
@@ -85,6 +98,7 @@ class AccommodationDetails extends React.Component {
          if (Object.entries(this.hotel).length !== 0) {
             return (
                <View style={[container, {flex:1}]}>
+                  <NavigationEvents onWillFocus={() => this.handleWillFocus()}/>
                   <CheckOption checkTitle="Choose this accommodation" checked={checked} onPress={this.handleCheck}/>
                   <Text style={[text, { fontWeight: 'bold', textAlign: 'center'}]}>{name}</Text>
                   <View style={detailsContainer}>

@@ -49,7 +49,6 @@ export default (state = INITIAL_STATE, action) => {
             return {
                ...state, 
                noTransport: !state.noTransport,
-               originCity: INITIAL_STATE.originCity, 
                transportOptions: INITIAL_STATE.transportOptions, 
                chosenTransportOptionId: INITIAL_STATE.chosenTransportOptionId,
                transportCosts: INITIAL_STATE.transportCosts,

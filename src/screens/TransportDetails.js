@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView, View, Text, StyleSheet } from 'react-native'
+import { NavigationEvents } from 'react-navigation'
 import { connect } from 'react-redux'
 import { transportChosen, transportUnchosen } from '../actions/TransportActions'
 import { transportCostsCalculated } from '../actions/CostsActions'
@@ -40,6 +41,14 @@ class TransportDetails extends React.Component {
          this.props.updateEvent(this.props.currentEvent)
       }
    }
+   handleOnWillFocus() {
+      const { navigation, currentEvent } = this.props
+      navigation.setParams({ 
+         title:   currentEvent.general.eventName.length <= 16 ?
+                  currentEvent.general.eventName :
+                  currentEvent.general.eventName.slice(0,17) + "..."
+      })
+   }
    renderItem = (item,index) => {
       const { navigation } = this.props
       const routeSegments = navigation.getParam('routeSegments')
@@ -73,6 +82,7 @@ class TransportDetails extends React.Component {
       const { container, text, detailsContainer } = transportDetailsStyles
       return (
          <View style={[container, {flex:1}]}>
+            <NavigationEvents onWillFocus={() => this.handleOnWillFocus()}/>
             <View style={detailsContainer}>
                <Text style={text}>Estimated total time</Text>
                <Text style={text}>{totalTime}</Text>

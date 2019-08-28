@@ -98,6 +98,7 @@ export default (state=INITIAL_STATE, action) => {
       case SEARCH_ACCOMMODATION_FAIL:
          return {...state, accommodationLoading: false}
       case ACCOMMODATION_CHOSEN:
+         console.log('Chosen id is ',action.payload.id)
          return {...state, 
                   chosenAccommOptionId: action.payload.id, 
                   accommodationCosts: action.payload.minPrice,

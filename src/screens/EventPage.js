@@ -19,6 +19,11 @@ class EventPage extends React.Component {
       }
       this.calendarModal = ""
    }
+   static navigationOptions = ({ navigation }) => {
+      return {
+         title: navigation.getParam('eventName')
+      }
+   }
    handleIconPress = (item) => {
       if (item.name === "startDate" || item.name === "endDate") {
          this.pickDate(item.name)
@@ -63,6 +68,11 @@ class EventPage extends React.Component {
    }
    handleChangeInput = (text, item) => {
       this.props[item.action](text)
+      if (this.props[item.action] === this.props.addEventName) {
+         this.props.navigation.setParams({ 
+            eventName: text.length <= 16 ? text : (text.slice(0,17) + "...")
+         })
+      }
    }
    onSubmitEdit = () => {
       this.props.updateEvent(this.props.currentEvent)

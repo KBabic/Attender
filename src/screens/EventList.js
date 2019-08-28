@@ -36,11 +36,11 @@ class EventList extends React.Component {
    }
    updateEvent = (event) => {
       this.props.existingEventOpened(event)
-      this.props.navigation.navigate('EventPage')
+      this.props.navigation.navigate('EventPage', {eventName: event.general.eventName})
    }
    newEventButtonPressed = () => {
       this.props.newEventButtonPressed()
-      this.props.navigation.navigate('EventPage')
+      this.props.navigation.navigate('EventPage', {eventName: ""})
    }
    render() {
       const { container, messageContainer, messageText, buttonContainer } = eventListStyles

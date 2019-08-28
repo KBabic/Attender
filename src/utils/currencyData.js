@@ -5,6 +5,7 @@ const allCurrenciesUrl = `https://free.currconv.com/api/v7/currencies?apiKey=${A
 export async function convertCurrency(cur1, cur2) {
    const url = `https://free.currconv.com/api/v7/convert?apiKey=${APIKey}&q=${cur1}_${cur2}&compact=ultra`
    let response = await fetch(url)
+   console.log(response)
    let responseJson = await response.json()
    return responseJson[`${cur1}_${cur2}`]
 }

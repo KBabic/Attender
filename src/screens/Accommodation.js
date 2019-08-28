@@ -36,12 +36,20 @@ class Accommodation extends React.Component {
       nextProps.updateEvent(nextProps.currentEvent)
    }
    handleOnWillFocus() {
-      const { startDate, endDate, addCheckinDate, addCheckoutDate, updateEvent, currentEvent } = this.props
-      if (startDate !== "" && endDate !== "") {
-         addCheckinDate(startDate)
-         addCheckoutDate(endDate)
-         updateEvent(currentEvent)
+      const { startDate, endDate, checkInDate, checkOutDate, addCheckinDate, addCheckoutDate, updateEvent, currentEvent } = this.props
+      if (checkInDate === "" && checkOutDate === "") {
+         if (startDate !== "" && endDate !== "") {
+            addCheckinDate(startDate)
+            addCheckoutDate(endDate)
+            updateEvent(currentEvent)
+         }
       }
+      const { navigation } = this.props
+      navigation.setParams({ 
+         title:   currentEvent.general.eventName.length <= 16 ?
+                  currentEvent.general.eventName :
+                  currentEvent.general.eventName.slice(0,17) + "..."
+      })
    }
    pickDate = (name) => {
       this.calendarModal = name
@@ -119,9 +127,11 @@ class Accommodation extends React.Component {
    renderAccommodationOption = ({ item }) => {
       const { id, name, minPrice, currency } = item
       let selected
-      if (id === this.props.chosenAccommOptionId) {
+      if (id.toString() === this.props.chosenAccommOptionId.toString()) {
+         console.log(name, 'true')
          selected = true
       } else {
+         console.log(name, 'false')
          selected = false
       }
       return (
@@ -176,7 +186,8 @@ class Accommodation extends React.Component {
             />
             <View style={datesContainer}>
                <InputOption
-                  iconDisabled={false}
+                  iconDisabled={this.state.paramsDisabled}
+                  editable={!this.state.paramsDisabled}
                   width={inputWidth/2}
                   value={this.props.checkInDate}
                   editable={false}
@@ -186,7 +197,8 @@ class Accommodation extends React.Component {
                   onPress={() => this.pickDate(checkIn)}
                />
                <InputOption 
-                  iconDisabled={false}
+                  iconDisabled={this.state.paramsDisabled}
+                  editable={!this.state.paramsDisabled}
                   width={inputWidth/2}
                   value={this.props.checkOutDate}
                   editable={false}
@@ -223,10 +235,10 @@ class Accommodation extends React.Component {
                      data={this.props.accommodationOptions}
                      keyExtractor={keyExtractor}
                      renderItem={this.renderAccommodationOption}
-                     style={flatListStyle}
+                     style={{marginTop: marginTopBottom, marginBottom: marginTopBottom}}
                   />              
             )}
-            {this.state.showList && (
+            {(this.state.showList && !this.state.paramsDisabled && this.props.accommodationOptions.length !== 0) && (
                <TouchableOpacity 
                   style={bottomButton}
                   onPress={this.handleSeeMoreResults.bind(this)}
@@ -240,10 +252,6 @@ class Accommodation extends React.Component {
 }
 const accommodationStyles = StyleSheet.create({
    container: {
-      marginTop: marginTopBottom,
-      marginBottom: marginTopBottom
-   },
-   flatListStyle: {
       marginTop: marginTopBottom,
       marginBottom: marginTopBottom
    },

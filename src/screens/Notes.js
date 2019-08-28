@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavigationEvents } from 'react-navigation'
 import { connect } from 'react-redux'
 import { updateEvent } from '../actions/EventActions'
 import { addNotes } from '../actions/NotesActions'
@@ -11,12 +12,20 @@ class Notes extends React.Component {
    }
    handleChangeText = txt => {
       this.props.addNotes(txt)
-      //this.props.updateEvent(this.props.currentEvent)
+   }
+   handleWillFocus() {
+      const { navigation, currentEvent } = this.props
+      navigation.setParams({ 
+         title:   currentEvent.general.eventName.length <= 16 ?
+                  currentEvent.general.eventName :
+                  currentEvent.general.eventName.slice(0,17) + "..."
+      })
    }
    render() {
       const { container, text } = notesStyles
       return (
          <View style={container}>
+            <NavigationEvents onWillFocus={() => this.handleWillFocus()}/>
             <ScrollView>
                <TextInput 
                   style={text} 

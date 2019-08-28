@@ -18,6 +18,12 @@ class Costs extends React.Component {
       if (this.props.chosenCurrency !== "") {
          await this.handleChooseCurrency(this.props.chosenCurrency)
       }
+      const { navigation, currentEvent } = this.props
+      navigation.setParams({ 
+         title:   currentEvent.general.eventName.length <= 16 ?
+                  currentEvent.general.eventName :
+                  currentEvent.general.eventName.slice(0,17) + "..."
+      })
    } 
    handleOK = () => {
       this.setState({ showCurrencies: false })
@@ -29,32 +35,32 @@ class Costs extends React.Component {
          func(0)
       } else {
          let factor 
-         try {
-            factor = await convertCurrency(cur1, cur2)
-            if (cur1 === accommCurrency) {
-               func(Math.round(a * factor / currentEvent.accommodation.numOfPersons))
-            } else {
-               func(Math.round(a * factor))
-            }
-         } catch(e) {
-            Alert.alert('Error','An error in coversion ocurred. Please try again later.',[{text: 'OK'}])
+         factor = await convertCurrency(cur1, cur2)
+         if (cur1 === accommCurrency) {
+            func(Math.round(a * factor / currentEvent.accommodation.numOfPersons))
+         } else {
+            func(Math.round(a * factor))
          }
       }
    }
    handleChooseCurrency = async (cur) => {
-      const { 
-         chooseCurrency, transpCurrency, transportCostsCalculated, accommCurrency, accommodationCostsCalculated,
-         eventCurrency, eventFeeCalculated, currentEvent } = this.props
-      chooseCurrency(cur)
-      // call function to convert transport costs
-      await this.handleRecalculation(transpCurrency, cur, transportCostsCalculated, currentEvent.transport.transportCosts )
-      // call function to convert accomm costs
-      await this.handleRecalculation(accommCurrency, cur, accommodationCostsCalculated, currentEvent.accommodation.accommodationCosts)
-       // call function to convert event fee
-      await this.handleRecalculation(eventCurrency, cur, eventFeeCalculated, currentEvent.general.eventFee)
-      // call function to convert additional costs
-
-      this.props.updateEvent(this.props.currentEvent)
+      try {
+         const { 
+            chooseCurrency, transpCurrency, transportCostsCalculated, accommCurrency, accommodationCostsCalculated,
+            eventCurrency, eventFeeCalculated, currentEvent } = this.props
+         await chooseCurrency(cur)
+         // call function to convert transport costs
+         await this.handleRecalculation(transpCurrency, cur, transportCostsCalculated, currentEvent.transport.transportCosts )
+         // call function to convert accomm costs
+         await this.handleRecalculation(accommCurrency, cur, accommodationCostsCalculated, currentEvent.accommodation.accommodationCosts)
+          // call function to convert event fee
+         await this.handleRecalculation(eventCurrency, cur, eventFeeCalculated, currentEvent.general.eventFee)
+         // call function to convert additional costs
+   
+         this.props.updateEvent(this.props.currentEvent)
+      } catch(e) {
+         Alert.alert('Error','An error in coversion ocurred. Please try again later.',[{text: 'OK'}])
+      }
    }
    render() {
       const { container } = costsStyles

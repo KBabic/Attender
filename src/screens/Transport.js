@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Dimensions, FlatList, ActivityIndicator, Alert } from 'react-native'
+import { NavigationEvents } from 'react-navigation'
 import { connect } from 'react-redux'
 import { addOriginCity, noNeedTransport, searchingTransport, searchTransportSuccess, searchTransportFail, changeDestinationCity} from '../actions/TransportActions'
 import { updateEvent } from '../actions/EventActions'
@@ -19,6 +20,14 @@ class Transport extends React.Component {
          buttonDisabled: this.props.noTransport,
          originDisabled: this.props.noTransport
       }
+   }
+   handleOnWillFocus() {
+      const { navigation, currentEvent } = this.props
+      navigation.setParams({ 
+         title:   currentEvent.general.eventName.length <= 16 ?
+                  currentEvent.general.eventName :
+                  currentEvent.general.eventName.slice(0,17) + "..."
+      })
    }
    componentWillReceiveProps(nextProps) {
       nextProps.updateEvent(nextProps.currentEvent)
@@ -84,6 +93,7 @@ class Transport extends React.Component {
       const { container } = transportStyles
       return (
          <View style={container}>
+            <NavigationEvents onWillFocus={() => this.handleOnWillFocus()} />
             <CheckOption 
                checkTitle="I don't need transport" 
                checked={this.props.noTransport} 

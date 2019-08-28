@@ -1,5 +1,4 @@
 import React from 'react'
-import { TouchableOpacity, Text } from 'react-native'
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { primaryColor, secondaryColor, currentTabColor, tabColor } from './utils/colorsAndMargins'
@@ -60,8 +59,24 @@ const EventStackNavigator = createStackNavigator(
 )
 const TransportStackNavigator = createStackNavigator(
   {
-    Transport,
-    TransportDetails
+    Transport: {
+      screen: Transport,
+      params: {
+        title: ""
+      },
+      navigationOptions: ({ navigation }) => {
+        return { title: navigation.state.params.title}
+      }
+    },
+    TransportDetails: {
+      screen: TransportDetails,
+      params: {
+        title: ""
+      },
+      navigationOptions: ({ navigation }) => {
+        return { title: navigation.state.params.title}
+      }
+    }
   },
   {
     initialRouteName: "Transport",
@@ -80,8 +95,24 @@ TransportStackNavigator.navigationOptions = ({ navigation }) => {
 }
 const AccommodationStackNavigator = createStackNavigator(
   {
-    Accommodation,
-    AccommodationDetails
+    Accommodation: {
+      screen: Accommodation,
+      params: {
+        title: ""
+      },
+      navigationOptions: ({navigation}) => {
+        return { title: navigation.state.params.title}
+      }
+    },
+    AccommodationDetails: {
+      screen: AccommodationDetails,
+      params: {
+        title: ""
+      },
+      navigationOptions: ({navigation}) => {
+        return {title: navigation.state.params.title}
+      }
+    }
   },
   {
     initialRouteName: "Accommodation",
@@ -99,14 +130,34 @@ AccommodationStackNavigator.navigationOptions = ({ navigation }) => {
   }
 }
 const CostsStackNavigator = createStackNavigator(
-  { Costs },
+  { 
+    Costs: {
+      screen: Costs,
+      params: {
+        title: ""
+      },
+      navigationOptions: ({navigation}) => {
+        return {title: navigation.state.params.title}
+      }
+    } 
+  },
   {
     initialRouteName: 'Costs',
     defaultNavigationOptions: {...commonHeader }
   }
 )
 const NotesStackNavigator = createStackNavigator(
-  { Notes },
+  { 
+    Notes: {
+      screen: Notes,
+      params: {
+        title: ""
+      },
+      navigationOptions: ({navigation}) => {
+        return {title: navigation.state.params.title}
+      }
+    } 
+  },
   {
     initialRouteName: 'Notes',
     defaultNavigationOptions: {...commonHeader }

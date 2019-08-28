@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, Modal, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
-import { primaryColor, inputWidth, inputHeight, marginTopBottom } from '../utils/colorsAndMargins'
+import { primaryColor, inputWidth, inputHeight, marginTopBottom, tabColor } from '../utils/colorsAndMargins'
 import currencies from '../utils/currencies'
 import monthsList from '../utils/months'
 
@@ -65,9 +65,11 @@ const currenciesMonthsStyles = StyleSheet.create({
       color: primaryColor
    },
    modalOkButton: {
-      height: 50,
+      backgroundColor: tabColor,
+      height: (inputHeight - 100)/10,
+      width: inputWidth,
       justifyContent: 'center',
-      marginBottom: 20 
+      //marginBottom: 20 
    },
    modalOkButtonText: {
       color: primaryColor,
