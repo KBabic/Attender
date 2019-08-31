@@ -4,6 +4,7 @@ export const generalActions = {
    ADD_END_DATE: 'add_end_date',
    ADD_EVENT_COUNTRY: 'add_event_country',
    ADD_EVENT_CITY: 'add_event_city',
+   NO_EVENT_FEE: 'no_event_fee',
    ADD_EVENT_CURRENCY: 'add_event_currency',
    ADD_EVENT_FEE: 'add_event_fee'
 }

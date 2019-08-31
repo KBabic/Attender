@@ -7,8 +7,13 @@ import { View, TextInput, StyleSheet, ScrollView } from 'react-native'
 import { primaryColor, secondaryColor } from '../utils/colorsAndMargins'
 
 class Notes extends React.Component {
-   componentWillReceiveProps(nextProps) {
+   /*componentWillReceiveProps(nextProps) {
       nextProps.updateEvent(nextProps.currentEvent)
+   }*/
+   componentDidUpdate(prevProps, prevState) {
+      if (this.props.currentEvent !== prevProps.currentEvent) {
+         this.props.updateEvent(this.props.currentEvent)
+      }
    }
    handleChangeText = txt => {
       this.props.addNotes(txt)

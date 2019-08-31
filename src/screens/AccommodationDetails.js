@@ -55,8 +55,13 @@ class AccommodationDetails extends React.Component {
          Alert.alert('Error', 'No description is available for this option.',[{text: 'OK'}])
       }
    }
-   componentWillReceiveProps() {
+   /*componentWillReceiveProps() {
       this.props.updateEvent(this.props.currentEvent)
+   }*/
+   componentDidUpdate(prevProps, prevState) {
+      if (this.props.currentEvent !== prevProps.currentEvent) {
+         this.props.updateEvent(this.props.currentEvent)
+      }
    }
    handleWillFocus() {
       const { navigation, currentEvent } = this.props

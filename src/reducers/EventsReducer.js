@@ -96,10 +96,20 @@ const INITIAL_STATE = {
 export default (state = {}, action) => {
    switch(action.type) {
       case SAVE_EVENT:
-         return {...state, [action.payload.general.id]: action.payload}
+         if (!state[action.payload.general.id]) {
+            return {...state, [action.payload.general.id]: action.payload}
+         } else {
+            return state
+         }
       case DELETE_EVENT:
          // delete event
-         return state
+         const newState = {}
+         for (let key of Object.keys(state)) {
+            if (key !== action.payload) {
+               newState[key] = state[key]
+            }
+         }
+         return newState
       case UPDATE_EVENT:
          if (state[action.payload.general.id]) {
             return {...state, [action.payload.general.id]: action.payload}

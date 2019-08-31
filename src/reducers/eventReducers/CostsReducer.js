@@ -1,8 +1,11 @@
 import {
    NEW_EVENT_BUTTON_PRESSED,
    EXISTING_EVENT_OPENED,
-   costsActions
+   costsActions,
+   transportActions,
+   accommodationActions
 } from '../../actions/types'
+import { calculateTotalCosts } from '../../utils/currencyData'
 const {
    CHOOSE_CURRENCY,
    TRANSPORT_COSTS_CALCULATED,
@@ -10,14 +13,16 @@ const {
    EVENT_FEE_CALCULATED,
    ADD_ADDITIONAL_COSTS
 } = costsActions
+const { NO_NEED_TRANSPORT } = transportActions
+const { NO_NEED_ACCOMMODATION } = accommodationActions
 
 const INITIAL_STATE = {
    chosenCurrency: "",
-   avgTransportCost: 0,
-   avgAccommCost: 0,
-   calculatedFee: 0,
-   additionalCosts: 0,
-   calculatedTotalCosts: 0
+   avgTransportCost: "",
+   avgAccommCost: "",
+   calculatedFee: "",
+   additionalCosts: "",
+   calculatedTotalCosts: ""
 }
 export default (state=INITIAL_STATE, action) => {
    switch(action.type) {
@@ -29,15 +34,34 @@ export default (state=INITIAL_STATE, action) => {
          avgAccommCost: action.payload.costs.avgAccommCost, calculatedFee: action.payload.costs.calculatedFee, additionalCosts: action.payload.costs.additionalCosts,
          calculatedTotalCosts: action.payload.costs.calculatedTotalCosts}
       case CHOOSE_CURRENCY:
-         return {...state, chosenCurrency: action.payload}
+         return {
+            ...state, 
+            chosenCurrency: action.payload
+         }
       case ADD_ADDITIONAL_COSTS:
-         return {...state, additionalCosts: action.payload, calculatedTotalCosts: state.avgTransportCost + state.avgAccommCost + state.calculatedFee + parseInt(action.payload)}
+         return {
+            ...state, 
+            additionalCosts: action.payload, 
+            calculatedTotalCosts: calculateTotalCosts([state.avgTransportCost,state.avgAccommCost,state.calculatedFee,action.payload])}
       case TRANSPORT_COSTS_CALCULATED:
-         return {...state, avgTransportCost: action.payload, calculatedTotalCosts: action.payload + state.avgAccommCost + state.calculatedFee + parseInt(state.additionalCosts)}
+         return {
+            ...state, 
+            avgTransportCost: action.payload, 
+            calculatedTotalCosts: calculateTotalCosts([action.payload,state.avgAccommCost,state.calculatedFee,state.additionalCosts])}
       case ACCOMMODATION_COSTS_CALCULATED:
-         return {...state, avgAccommCost: action.payload, calculatedTotalCosts: state.avgTransportCost + action.payload + state.calculatedFee + parseInt(state.additionalCosts)}
+         return {
+            ...state, 
+            avgAccommCost: action.payload, 
+            calculatedTotalCosts: calculateTotalCosts([state.avgTransportCost,action.payload,state.calculatedFee,state.additionalCosts])}
       case EVENT_FEE_CALCULATED:
-         return {...state, calculatedFee: action.payload, calculatedTotalCosts: state.avgTransportCost + state.avgAccommCost + action.payload + parseInt(state.additionalCosts)}
+         return {
+            ...state, 
+            calculatedFee: action.payload, 
+            calculatedTotalCosts: calculateTotalCosts([state.avgTransportCost,state.avgAccommCost,action.payload,state.additionalCosts])}
+      case NO_NEED_TRANSPORT:
+         return {...state, avgTransportCost: ""}
+      case NO_NEED_ACCOMMODATION:
+         return {...state, avgAccommCost: ""}
       default:
          return state
    }

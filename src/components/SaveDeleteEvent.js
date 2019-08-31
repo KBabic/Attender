@@ -1,21 +1,26 @@
 import React from 'react'
 import { TouchableOpacity, Text, StyleSheet, Alert } from 'react-native'
 import { connect } from 'react-redux'
-import { saveEvent, deleteEvent } from '../actions/EventActions'
+import { saveEvent, deleteEvent, updateEvent } from '../actions/EventActions'
 import { primaryColor } from '../utils/colorsAndMargins'
 
 class SaveDeleteEvent extends React.Component {
    constructor(props) {
       super(props)
-      const id = this.props.currentEvent.general.id
-      this.buttonText = Object.keys(this.props.events).includes(id.toString()) ? "DELETE EVENT" : "SAVE EVENT"
+      this.id = this.props.currentEvent.general.id
+      this.state = {
+         buttonText: Object.keys(this.props.events).includes(this.id.toString()) ? "DELETE EVENT" : "SAVE EVENT"
+      }
    }
    handleButtonPress() {
-      if (this.buttonText === "SAVE EVENT") {
+      if (this.state.buttonText === "SAVE EVENT") {
          this.props.saveEvent(this.props.currentEvent)
+         this.props.updateEvent(this.props.currentEvent)
+         this.setState({ buttonText: "DELETE EVENT"})
          Alert.alert('Save Event', 'Event is saved!', [{text: 'OK'}], {cancelable: true})
-      } else if (this.buttonText === 'DELETE EVENT') {
-         this.props.deleteEvent(this.props.currentEvent)
+
+      } else if (this.state.buttonText === 'DELETE EVENT') {
+         this.props.deleteEvent(this.props.currentEvent.general.id)
          Alert.alert('Delete Event', 'Event is deleted!', [{text: 'OK'}], {cancelable: true})
       }
    }
@@ -24,7 +29,7 @@ class SaveDeleteEvent extends React.Component {
          <TouchableOpacity onPress={() => this.handleButtonPress()}>
             <Text
                style={saveEventStyles.saveEvent}
-            >{this.buttonText}</Text>
+            >{this.state.buttonText}</Text>
         </TouchableOpacity> 
       )
    }
@@ -48,6 +53,9 @@ const mapDispatchToProps = dispatch => {
       },
       deleteEvent: (event) => {
          dispatch(deleteEvent(event))
+      },
+      updateEvent: (event) => {
+         dispatch(updateEvent(event))
       }
    }
 }

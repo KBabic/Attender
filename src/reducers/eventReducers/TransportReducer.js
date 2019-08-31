@@ -23,7 +23,7 @@ const INITIAL_STATE = {
    destinationCity: "",
    transportOptions: [],
    chosenTransportOptionId: "",
-   transportCosts: 0,
+   transportCosts: "",
    transpCurrency: ""
 }
 export default (state = INITIAL_STATE, action) => {
@@ -44,15 +44,15 @@ export default (state = INITIAL_STATE, action) => {
          return {...state, destinationCity: action.payload}
       case NO_NEED_TRANSPORT:
          if (state.noTransport) {
-            return {...state, noTransport: !state.noTransport}
+            return {...state, noTransport: !state.noTransport, transportCosts: ""}
          } else {
             return {
                ...state, 
                noTransport: !state.noTransport,
                transportOptions: INITIAL_STATE.transportOptions, 
-               chosenTransportOptionId: INITIAL_STATE.chosenTransportOptionId,
-               transportCosts: INITIAL_STATE.transportCosts,
-               transpCurrency: INITIAL_STATE.transpCurrency
+               chosenTransportOptionId: "",
+               transportCosts: 0,
+               transpCurrency: ""
             }
          }
       case SEARCHING_TRANSPORT:

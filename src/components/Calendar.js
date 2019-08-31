@@ -5,7 +5,7 @@ import { primaryColor, buttonColor, tabColor } from '../utils/colorsAndMargins'
 
 export default class Calendar extends React.Component {
    render() {
-      const { renderCalendar, showModal, onDateChange, handleOK } = this.props
+      const { renderCalendar, showModal, onDateChange, handleOK, minDate, initialDate } = this.props
       const { modal, calendar, modalOkButtonText } = calendarStyles
       return (
          <View style={{ flex: 1 }}>
@@ -22,6 +22,8 @@ export default class Calendar extends React.Component {
                         textStyle={{ color: primaryColor }}
                         previousTitle="<<"
                         nextTitle=">>"
+                        minDate={minDate}
+                        initialDate={initialDate}
                      />
                      <TouchableOpacity 
                         onPress={handleOK}

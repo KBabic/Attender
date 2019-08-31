@@ -34,10 +34,10 @@ export const costsDetails = [
    {
       id: 5,
       name: "Additional Costs",
-      placeholder: "100",
+      placeholder: "Enter additional costs",
       icon: "",
       editable: true,
-      value: "addCosts"
+      value: "additionalCosts"
    },
    {
       id: 6,

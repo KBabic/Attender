@@ -12,13 +12,32 @@ import { marginTopBottom } from '../utils/colorsAndMargins'
 
 class Costs extends React.Component {
    state = {
-      showCurrencies: false
+      showCurrencies: false,
+      currency: "",
+      addCostsEnabled: false
+   }
+   componentDidUpdate(prevProps, prevState) {
+      if (this.props.currentEvent !== prevProps.currentEvent) {
+         this.props.updateEvent(this.props.currentEvent)
+      }
    }
    async handleOnWillFocus() {
-      if (this.props.chosenCurrency !== "") {
-         await this.handleChooseCurrency(this.props.chosenCurrency)
+      const { transpCurrency, transportCostsCalculated, accommCurrency, accommodationCostsCalculated,
+         eventCurrency, eventFeeCalculated, currentEvent, chosenCurrency, updateEvent, navigation } = this.props
+      // if transport/accommodation costs/eventFee change in the meantime in other screens, recalculation needs to happen:
+      if (chosenCurrency !== "") {
+         this.setState({addCostsEnabled: true})
+         if (currentEvent.transport.transportCosts !== "") {
+            await this.handleRecalculation(transpCurrency, chosenCurrency, transportCostsCalculated, currentEvent.transport.transportCosts )
+         }
+         if (currentEvent.accommodation.accommodationCosts !== "") {
+            await this.handleRecalculation(accommCurrency, chosenCurrency, accommodationCostsCalculated, currentEvent.accommodation.accommodationCosts)
+         }
+         if (currentEvent.general.eventFee !== "") {
+            await this.handleRecalculation(eventCurrency, chosenCurrency, eventFeeCalculated, currentEvent.general.eventFee)
+         }
+         updateEvent(currentEvent)
       }
-      const { navigation, currentEvent } = this.props
       navigation.setParams({ 
          title:   currentEvent.general.eventName.length <= 16 ?
                   currentEvent.general.eventName :
@@ -47,19 +66,43 @@ class Costs extends React.Component {
       try {
          const { 
             chooseCurrency, transpCurrency, transportCostsCalculated, accommCurrency, accommodationCostsCalculated,
-            eventCurrency, eventFeeCalculated, currentEvent } = this.props
+            eventCurrency, eventFeeCalculated, currentEvent, addAdditionalCosts } = this.props
          await chooseCurrency(cur)
+         this.setState({ addCostsEnabled: true })
          // call function to convert transport costs
-         await this.handleRecalculation(transpCurrency, cur, transportCostsCalculated, currentEvent.transport.transportCosts )
+         if (currentEvent.transport.transportCosts !== "") {
+            await this.handleRecalculation(transpCurrency, cur, transportCostsCalculated, currentEvent.transport.transportCosts )
+         }
          // call function to convert accomm costs
-         await this.handleRecalculation(accommCurrency, cur, accommodationCostsCalculated, currentEvent.accommodation.accommodationCosts)
-          // call function to convert event fee
-         await this.handleRecalculation(eventCurrency, cur, eventFeeCalculated, currentEvent.general.eventFee)
-         // call function to convert additional costs
-   
-         this.props.updateEvent(this.props.currentEvent)
+         if (currentEvent.accommodation.accommodationCosts !== "") {
+            await this.handleRecalculation(accommCurrency, cur, accommodationCostsCalculated, currentEvent.accommodation.accommodationCosts)
+         }
+         // call function to convert event fee
+         if (currentEvent.general.eventFee !== "") {
+            await this.handleRecalculation(eventCurrency, cur, eventFeeCalculated, currentEvent.general.eventFee)
+         }
+         //call function to convert additional costs
+         if (currentEvent.costs.additionalCosts !== "") {
+            await this.handleRecalculation(this.state.currency, cur, addAdditionalCosts, currentEvent.costs.additionalCosts)
+         }
+         this.setState({ currency: cur})
       } catch(e) {
          Alert.alert('Error','An error in coversion ocurred. Please try again later.',[{text: 'OK'}])
+      }
+   }
+   onSubmitEdit = () => {
+      const { updateEvent, currentEvent, addAdditionalCosts } = this.props
+      // if additional costs are not a valid float or a valid integer:
+      if (
+         currentEvent.costs.additionalCosts !== "" &&
+         !currentEvent.costs.additionalCosts.match(/^\d+\.\d+$/) &&
+         !currentEvent.costs.additionalCosts.match(/^\+?(0|[1-9]\d*)$/)
+      ) {
+         addAdditionalCosts("")
+         updateEvent(currentEvent)
+         Alert.alert("Error", "Please enter Additional Costs as a number, using '.' for decimals.", [{text: 'OK'}])
+      } else {
+         updateEvent(currentEvent)
       }
    }
    render() {
@@ -82,10 +125,10 @@ class Costs extends React.Component {
                      text={item.name}
                      key={item.id}
                      onPress={() => this.setState({ showCurrencies: true })}
-                     editable={item.editable}
+                     editable={item.value !== "additionalCosts" ? item.editable : this.state.addCostsEnabled}
                      value={this.props[item.value].toString()}
                      onChangeText={(txt) => this.props.addAdditionalCosts(txt)}
-                     onSubmitEditing={() => this.props.updateEvent(this.props.currentEvent)}
+                     onSubmitEditing={this.onSubmitEdit.bind(this)}
                   />
                )
             })}
@@ -100,6 +143,7 @@ const costsStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
+   events: state.events,
    currentEvent: state.currentEvent,
    chosenCurrency: state.currentEvent.costs.chosenCurrency,
    transportCosts: state.currentEvent.costs.avgTransportCost,
@@ -108,7 +152,7 @@ const mapStateToProps = state => ({
    accommCurrency: state.currentEvent.accommodation.accommodationCurrency,
    eventFee: state.currentEvent.costs.calculatedFee,
    eventCurrency: state.currentEvent.general.eventCurrency,
-   addCosts: state.currentEvent.costs.additionalCosts,
+   additionalCosts: state.currentEvent.costs.additionalCosts,
    estTotalCosts: state.currentEvent.costs.calculatedTotalCosts
 })
 const mapDispatchToProps = dispatch => {

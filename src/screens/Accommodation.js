@@ -13,6 +13,7 @@ import Calendar from '../components/Calendar'
 import ListItem from '../components/ListItem'
 import { marginTopBottom, primaryColor, secondaryColor, inputWidth } from '../utils/colorsAndMargins'
 import { getLocations, getDestId, getPropertiesList, getHotelsList, getSearchId } from '../utils/accommodationData'
+import { getInitialDate } from '../utils/months'
 
 const keyExtractor = ({ id }) => id.toString()
 const checkIn = "checkIn"
@@ -31,9 +32,12 @@ class Accommodation extends React.Component {
       this.offset = 0
       this.search_id = ""
       this.calendarModal = ""
+      this.minDate = ""
    }
-   componentWillReceiveProps(nextProps) {
-      nextProps.updateEvent(nextProps.currentEvent)
+   componentDidUpdate(prevProps, prevState) {
+      if (this.props.currentEvent !== prevProps.currentEvent) {
+         this.props.updateEvent(this.props.currentEvent)
+      }
    }
    handleOnWillFocus() {
       const { startDate, endDate, checkInDate, checkOutDate, addCheckinDate, addCheckoutDate, updateEvent, currentEvent } = this.props
@@ -53,6 +57,7 @@ class Accommodation extends React.Component {
    }
    pickDate = (name) => {
       this.calendarModal = name
+      this.minDate = getInitialDate(this.calendarModal, this.props.startDate, this.props.checkInDate)
       this.setState((prevState) => ({ 
          renderCalendar: !prevState.renderCalendar,
          showModal: !prevState.showModal
@@ -128,10 +133,8 @@ class Accommodation extends React.Component {
       const { id, name, minPrice, currency } = item
       let selected
       if (id.toString() === this.props.chosenAccommOptionId.toString()) {
-         console.log(name, 'true')
          selected = true
       } else {
-         console.log(name, 'false')
          selected = false
       }
       return (
@@ -160,7 +163,7 @@ class Accommodation extends React.Component {
       this.props.decreaseNumOfPersons()
    }
    render() {
-      const { container, flatListStyle, spinnerStyle, datesContainer, bottomButton, bottomButtonText } = accommodationStyles
+      const { container, spinnerStyle, datesContainer, bottomButton, bottomButtonText } = accommodationStyles
       return (
          <ScrollView contentContainerStyle={container}>
             <NavigationEvents onWillFocus={() => this.handleOnWillFocus()} />
@@ -224,6 +227,8 @@ class Accommodation extends React.Component {
                showModal={this.state.showModal}
                onDateChange={this.onDateChange.bind(this)}
                handleOK={this.handleCloseCalendar.bind(this)}
+               minDate={this.minDate}
+               initialDate={this.props.checkInDate}
             />
             {this.props.accommodationLoading && (
                <View style={spinnerStyle}>

@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Modal, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import { primaryColor, inputWidth, inputHeight, marginTopBottom, tabColor } from '../utils/colorsAndMargins'
 import currencies from '../utils/currencies'
-import monthsList from '../utils/months'
+import { monthsList } from '../utils/months'
 
 export default class CurrenciesAndMonths extends React.Component {
    renderCurrencyOrMonth = (el, index) => {

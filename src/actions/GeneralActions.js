@@ -3,6 +3,7 @@ const {
    ADD_EVENT_NAME,
    ADD_EVENT_COUNTRY,
    ADD_EVENT_CITY,
+   NO_EVENT_FEE,
    ADD_EVENT_CURRENCY,
    ADD_EVENT_FEE,
    ADD_START_DATE,
@@ -25,6 +26,11 @@ export const addEventCity = text => {
    return {
       type: ADD_EVENT_CITY,
       payload: text
+   }
+}
+export const noEventFee = () => {
+   return {
+      type: NO_EVENT_FEE
    }
 }
 export const addEventCurrency = cur => {

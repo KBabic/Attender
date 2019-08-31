@@ -29,8 +29,13 @@ class Transport extends React.Component {
                   currentEvent.general.eventName.slice(0,17) + "..."
       })
    }
-   componentWillReceiveProps(nextProps) {
+   /*componentWillReceiveProps(nextProps) {
       nextProps.updateEvent(nextProps.currentEvent)
+   }*/
+   componentDidUpdate(prevProps, prevState) {
+      if (this.props.currentEvent !== prevProps.currentEvent) {
+         this.props.updateEvent(this.props.currentEvent)
+      }
    }
    searchTransport = async () => {
       this.props.searchingTransport()

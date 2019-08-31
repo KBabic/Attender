@@ -16,10 +16,10 @@ export const saveEvent = event => {
       payload: event
    }
 }
-export const deleteEvent = event => {
+export const deleteEvent = id => {
    return {
       type: DELETE_EVENT,
-      payload: event
+      payload: id
    }
 }
 export const newEventButtonPressed = () => {

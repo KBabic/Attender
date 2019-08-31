@@ -1,66 +1,72 @@
-/*export default getDotValues = (params, optionalParam) => {
-   // first dot shows that all general info is filled
-   // 'params' is an array of parameters that affect the true/false value of a dot
-   // optionalParam is for transport and accommodation and takes into account if the option 'no need transport/accommodation' is checked
-   if (optionalParam === undefined) {
-      if (!params.includes("") && !params.includes(0)) {
-         return true
-      } else {
-         return false
-      }
-   } else {
-      if (optionalParam) {
-         return true
-      } else if (!params.includes("") && !params.includes(0)) {
-            return true
-         } else {
-            return false
-         }
-      }
-   }
-   /*if (!params.includes("") && !optionalParam) {
-      return false
-   } else if (!params.includes("") && optionalParam) {
-      return true
-   } else if (!params.includes(0) && !optionalParam) {
-      return false
-   } else if (!params.includes(0) && optionalParam) {
-      return true
-   } else {
-      return false
-   }
-}*/
 export default getDotValues = event => {
    const { general, transport, accommodation, costs } = event
-   function getDotValue(arr) {
-      if (arr.includes("") || arr.includes(0) || arr.includes(false)) {
-         return false
-      } else {
-         return true
-      }
-   }
    function getDotValueParam(param) {
-      if (param === transport) {
-         if (param.transportCosts === 0 && param.noTransport) {
-            return true
-         } else if (param.transportCosts === 0 && !param.noTransport) {
-            return false
-         } else if (param.transportCosts !== 0) {
-            return true
-         }
-      } else if (param === accommodation) {
-         if (param.accommodationCosts === 0 && param.noAccommodation) {
-            return true
-         } else if (param.accommodationCosts === 0 && !param.noAccommodation) {
-            return false
-         } else if (param.accommodationCosts !== 0) {
-            return true
-         }
+      switch(param) {
+         case general:
+            if (param.eventName !== "" && param.startDate !== "" && param.endDate !== "" && param.eventCity !== "" && param.eventCountry !== "") {
+               if (param.noFee) {
+                  return true
+               } else {
+                  if (param.eventFee === 0) {
+                     return true
+                  }
+                  if (param.eventFee !== 0 && param.eventCurrency === "") {
+                     return false
+                  }
+                  if (param.eventFee !== 0 && param.eventFee !== "" && param.eventCurrency !== "") {
+                     return true
+                  } else {
+                     return false
+                  }
+               }
+            } else {
+               return false
+            } 
+         case transport:
+               if (param.noTransport) {
+                  return true
+               } else {
+                  if (param.transportCosts === 0) {
+                     return true
+                  }
+                  if (param.transportCosts !== 0 && param.transpCurrency === "") {
+                     return false
+                  }
+                  if (param.transportCosts !== 0 && param.transportCosts !== "" && param.transpCurrency !== "") {
+                     return true
+                  } else {
+                     return false
+                  }
+               }       
+         case accommodation:
+               if (param.noAccommodation) {
+                  return true
+               } else {
+                  if (param.accommodationCosts === 0) {
+                     return true
+                  }
+                  if (param.accommodationCosts !== 0 && param.accommodationCurrency === "") {
+                     return false
+                  }
+                  if (param.accommodationCosts !== 0 && param.accommodationCosts !== "" && param.accommodationCurrency !== "") {
+                     return true
+                  } else {
+                     return false
+                  }
+               } 
+         case costs:
+            const keys = (Object.keys(param).filter(el => el !== "additionalCosts"))
+            for (let k of keys) {
+               if (param[k] === "") {
+                  return false
+               }
+            }
+            return true            
       }
    }
-   const firstDot = getDotValue(Object.values(general))
-   const secondDot = getDotValueParam(transport, transport.transportCosts, transport.noTransport)
-   const thirdDot = getDotValueParam(accommodation, accommodation.accommodationCosts, accommodation.noAccommodation)
-   const fourthDot = getDotValue(Object.values(costs))
+   const firstDot = getDotValueParam(general)
+   const secondDot = getDotValueParam(transport)
+   const thirdDot = getDotValueParam(accommodation)
+   const fourthDot = getDotValueParam(costs)
    return [firstDot, secondDot, thirdDot, fourthDot]
 }

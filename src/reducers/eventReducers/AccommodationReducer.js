@@ -38,7 +38,7 @@ const INITIAL_STATE = {
       facilities: []
    },
    chosenAccommOptionId: "",
-   accommodationCosts: 0,
+   accommodationCosts: "",
    accommodationCurrency: ""
 }
 export default (state=INITIAL_STATE, action) => {
@@ -53,7 +53,7 @@ export default (state=INITIAL_STATE, action) => {
          chosenAccommOptionId: action.payload.accommodation.chosenAccommOptionId, accommodationCosts: action.payload.accommodation.accommodationCosts}
       case NO_NEED_ACCOMMODATION:
          if (state.noAccommodation) {
-            return {...state, noAccommodation: !state.noAccommodation}
+            return {...state, noAccommodation: !state.noAccommodation, accommodationCosts: ""}
          } else {
             return {
                ...state,
@@ -61,7 +61,7 @@ export default (state=INITIAL_STATE, action) => {
                accommProperties: INITIAL_STATE.accommProperties,
                accommodationOptions: INITIAL_STATE.accommodationOptions,
                chosenAccommOption: INITIAL_STATE.chosenAccommOption,
-               chosenAccommOptionId: INITIAL_STATE.chosenAccommOptionId,
+               chosenAccommOptionId: "",
                accommodationCosts: 0
             }
          }
@@ -98,7 +98,6 @@ export default (state=INITIAL_STATE, action) => {
       case SEARCH_ACCOMMODATION_FAIL:
          return {...state, accommodationLoading: false}
       case ACCOMMODATION_CHOSEN:
-         console.log('Chosen id is ',action.payload.id)
          return {...state, 
                   chosenAccommOptionId: action.payload.id, 
                   accommodationCosts: action.payload.minPrice,

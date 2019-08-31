@@ -9,6 +9,7 @@ const {
    ADD_END_DATE,
    ADD_EVENT_COUNTRY,
    ADD_EVENT_CITY,
+   NO_EVENT_FEE,
    ADD_EVENT_CURRENCY,
    ADD_EVENT_FEE
 } = generalActions
@@ -19,8 +20,9 @@ const INITIAL_STATE = {
    endDate: "",
    eventCountry: "",
    eventCity: "",
+   noFee: false,
    eventCurrency: "",
-   eventFee: 0,
+   eventFee: "",
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -42,6 +44,17 @@ export default (state = INITIAL_STATE, action) => {
          return {...state, eventCountry: action.payload}
       case ADD_EVENT_CITY:
          return {...state, eventCity: action.payload}
+      case NO_EVENT_FEE:
+         if (state.noFee) {
+            return {...state, noFee: !state.noFee, eventFee: ""}
+         } else {
+            return {
+               ...state,
+               noFee: !state.noFee,
+               eventCurrency: "",
+               eventFee: 0
+            }
+         }
       case ADD_EVENT_CURRENCY:
          return {...state, eventCurrency: action.payload}
       case ADD_EVENT_FEE:

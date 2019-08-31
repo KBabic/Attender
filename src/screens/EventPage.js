@@ -1,12 +1,14 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View, Alert } from 'react-native'
 import { connect } from 'react-redux'
-import { addEventName, addStartDate, addEndDate, addEventCountry, addEventCity, addEventCurrency, addEventFee } from '../actions/GeneralActions'
+import { addEventName, addStartDate, addEndDate, addEventCountry, addEventCity, addEventCurrency, addEventFee, noEventFee } from '../actions/GeneralActions'
 import { updateEvent } from '../actions/EventActions'
 import InputOption from '../components/InputOption'
+import CheckOption from '../components/CheckOption'
 import Calendar from '../components/Calendar'
 import { eventDetails } from '../utils/eventDetails'
 import { marginTopBottom, inputWidth } from '../utils/colorsAndMargins'
+import { getInitialDate } from '../utils/months'
 import CurrenciesAndMonths from '../components/CurrenciesAndMonths'
 
 class EventPage extends React.Component {
@@ -15,13 +17,22 @@ class EventPage extends React.Component {
       this.state = {
          renderCalendar: false,
          showModal: false,
-         showCurrencies: false
+         showCurrencies: false,
+         feeDisabled: this.props.noFee
       }
       this.calendarModal = ""
+      this.minDate = ""
    }
    static navigationOptions = ({ navigation }) => {
       return {
-         title: navigation.getParam('eventName')
+         title:   navigation.getParam('eventName').length <= 16 ?
+                  navigation.getParam('eventName') :
+                  (navigation.getParam('eventName').slice(0,17) + "...")
+      }
+   }
+   componentDidUpdate(prevProps, prevState) {
+      if (this.props.currentEvent !== prevProps.currentEvent) {
+         this.props.updateEvent(this.props.currentEvent)
       }
    }
    handleIconPress = (item) => {
@@ -33,6 +44,8 @@ class EventPage extends React.Component {
    }
    pickDate = (name) => {
       this.calendarModal = name
+      this.minDate = getInitialDate(this.calendarModal, this.props.startDate)
+      
       this.setState((prevState) => ({ 
          renderCalendar: !prevState.renderCalendar,
          showModal: !prevState.showModal
@@ -75,7 +88,24 @@ class EventPage extends React.Component {
       }
    }
    onSubmitEdit = () => {
-      this.props.updateEvent(this.props.currentEvent)
+      const { updateEvent, currentEvent, addEventFee } = this.props
+      updateEvent(currentEvent)
+      // if eventFee is not a valid positive float or not a valid positive integer
+      if (
+         currentEvent.general.eventFee !== "" &&
+         !currentEvent.general.eventFee.match(/^\d+\.\d+$/) &&
+         !currentEvent.general.eventFee.match(/^\+?(0|[1-9]\d*)$/)
+      ) {
+         addEventFee("")
+         updateEvent(currentEvent)
+         Alert.alert("Error", "Please enter Fee Amount as a number, using '.' for decimals.", [{text: 'OK'}])
+      }
+   }
+   handleCheck() {
+      this.props.noEventFee()
+      this.setState((prevState) => ({
+         feeDisabled: !prevState.feeDisabled
+      }))
    }
    render() {
       const { container, datesContainer } = eventPageStyles
@@ -125,7 +155,7 @@ class EventPage extends React.Component {
                   onPress={() => this.handleIconPress({name:"endDate"})}
                />
             </View>
-            {eventDetails.slice(3).map((item, index) => {
+            {eventDetails.slice(3,5).map((item, index) => {
                return (
                   <InputOption 
                      placeholder={item.placeholder}
@@ -140,11 +170,34 @@ class EventPage extends React.Component {
                   />
                )
             })}
+            <CheckOption
+               checkTitle="There is no fee for this event"
+               checked={this.props.noFee}
+               onPress={() => this.handleCheck()}
+            />
+            {eventDetails.slice(5).map((item, index) => {
+               return (
+                  <InputOption 
+                     iconDisabled={this.state.feeDisabled}
+                     editable={!this.state.feeDisabled}
+                     placeholder={item.placeholder}
+                     icon={item.icon}
+                     text={item.text}
+                     value={this.props.currentEvent.general[item.name].toString()}
+                     onChangeText={(txt) => this.handleChangeInput(txt, item)}
+                     onSubmitEditing={this.onSubmitEdit.bind(this)}
+                     key={index}
+                     onPress={() => this.handleIconPress(item)}
+                  />
+               )
+            })}
             <Calendar 
                renderCalendar={this.state.renderCalendar}
                showModal={this.state.showModal}
                onDateChange={this.onDateChange.bind(this)}
                handleOK={this.handleCloseCalendar.bind(this)}
+               minDate={this.minDate}
+               initialDate={this.minDate}
             />
          </ScrollView>
       )
@@ -163,7 +216,8 @@ const eventPageStyles = StyleSheet.create({
 const mapStateToProps = state => ({
    currentEvent: state.currentEvent,
    startDate: state.currentEvent.general.startDate,
-   endDate: state.currentEvent.general.endDate
+   endDate: state.currentEvent.general.endDate,
+   noFee: state.currentEvent.general.noFee
 })
 const mapDispatchToProps = dispatch => {
    return {
@@ -190,6 +244,9 @@ const mapDispatchToProps = dispatch => {
       },
       updateEvent: (event) => {
          dispatch(updateEvent(event))
+      },
+      noEventFee: () => {
+         dispatch(noEventFee())
       }
    }
 }

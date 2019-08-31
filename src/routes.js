@@ -46,14 +46,19 @@ const getTabIcon = (route) => {
   return tab.icon
 }
 const EventStackNavigator = createStackNavigator(
-  { EventPage },
+  { 
+    EventPage: {
+      screen: EventPage,
+      params: {
+        
+      }
+    }
+  },
   {
     initialRouteName: "EventPage",
     defaultNavigationOptions: {
       ...commonHeader,
-      headerRight: (
-        <SaveDeleteEvent />
-      ) 
+      headerRight: (<SaveDeleteEvent />)
     }
   }
 )

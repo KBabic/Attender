@@ -86,8 +86,6 @@ export const getHotelDetails = (item, response) => {
          break
       }
       return item
-   } else {
-      console.log("No hotelsList")
    }
 }     
 
