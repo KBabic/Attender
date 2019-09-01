@@ -4,12 +4,12 @@ const today = new Date()
 const currentYear = today.getFullYear()
 const previousYear = currentYear - 1
 const nextYear = currentYear + 1
-
+const All = ["All"]
 const currentYearMonths = months.map(month => month + " " + currentYear)
 const previousYearMonths = months.map(month => month + " " + previousYear)
 const nextYearMonths = months.map(month => month + " " + nextYear)
 
-export const monthsList = [...previousYearMonths, ...currentYearMonths, ...nextYearMonths]
+export const monthsList = [...All,...previousYearMonths, ...currentYearMonths, ...nextYearMonths]
 
 export function getInitialDate(param, startDate, checkIn = null) {
    let initialDate

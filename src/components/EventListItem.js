@@ -18,7 +18,7 @@ export default class EventListItem extends React.Component {
    }
    render() {
       const { eventContainer, label, dotsContainer } = eventItemStyles
-      const { name, date, price, checked, onCheck, handlePress, first, second, third, fourth } = this.props
+      const { name, date, price, handlePress, first, second, third, fourth } = this.props
       const displayName = name.length <= 16 ? name : (name.slice(0,17) + "...")
       return (
          <View style={{flexDirection: 'column'}}>
@@ -35,7 +35,11 @@ export default class EventListItem extends React.Component {
                   third={third}
                   fourth={fourth}
                />
-               <CheckOption checkTitle={price} checked={this.state.eventChecked} onPress={() => this.handleCheck()}/>
+               <CheckOption 
+                  checkTitle={price} 
+                  checked={this.state.eventChecked} 
+                  onPress={() => this.handleCheck()}
+               />
             </View>
          </View>
       )

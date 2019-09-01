@@ -9,8 +9,7 @@ import { primaryColor, secondaryColor, placeholderColor, inputHeight, marginLeft
 class CostOverview extends React.Component {
    state = {
       showMonths: false,
-      showCurrencies: false,
-      //currency: ""
+      showCurrencies: false
    }
    handleChooseCurrency = (cur) => {
       this.props.chooseOverviewCurrency(cur)
@@ -100,11 +99,11 @@ const costOverviewStyles = StyleSheet.create({
    },
    label: {
       color: primaryColor,
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: 'bold',
    },
    eurAmount: {
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: 'bold',
       color: placeholderColor
    }

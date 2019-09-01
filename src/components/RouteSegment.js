@@ -6,69 +6,67 @@ import { primaryColor, secondaryColor } from '../utils/colorsAndMargins'
 const segmentHeight = Dimensions.get('window').height / 3.5
 const connectorHeight = Dimensions.get('window').height / 8
 
-export default class RouteSegment extends React.Component {
-   getTransitTime() {
-      const { transitTime, vehicle } = this.props.segment
+const RouteSegment = props => {
+   const { segment, renderConnector } = props
+   getTransitTime = () => {
+      const { transitTime, vehicle } = segment
       if (transitTime) {
          return `${transitTime} by ${vehicle}`
       }
    }
-   getPriceRange() {
-      const { minPrice, maxPrice, currency } = this.props.segment
+   getPriceRange = () => {
+      const { minPrice, maxPrice, currency } = segment
       if (minPrice && maxPrice && currency) {
          return `${currency} ${minPrice}-${maxPrice}`
       }
    }
-   getLines() {
-      const { lines } = this.props.segment
+   getLines = () => {
+      const { lines } = segment
       if (lines) {
          return lines.join(" ")
       }
    }
-   render() {
-      //routeSegment: {id, depPlace, arrPlace, vehicle, icon, transitTime, transferTime, price, minPrice, maxPrice, currency, lines}
-      const { renderConnector, segment } = this.props
-      const { depPlace, arrPlace, icon } = segment
-      const { container, iconContainer, imageSegment, imageConnector, largeText, smallText, textContainer } = segmentStyles
-      return (
-         <View>
-            <View style={container}>
-               <View style={iconContainer}>
-               <Icon name={icon} size={40} color={secondaryColor}/>
+   //routeSegment: {id, depPlace, arrPlace, vehicle, icon, transitTime, transferTime, price, minPrice, maxPrice, currency, lines}
+   const { depPlace, arrPlace, icon } = segment
+   const { container, iconContainer, imageSegment, imageConnector, largeText, smallText, textContainer } = segmentStyles
+   return (
+      <View>
+         <View style={container}>
+            <View style={iconContainer}>
+            <Icon name={icon} size={40} color={secondaryColor}/>
+            </View>
+
+            <Image
+               source={require('../assets/segment.png')}
+               style={imageSegment}
+               resizeMode='contain'
+            />
+            
+            <View style={textContainer}>
+               <Text style={largeText}>{depPlace}</Text>
+
+               <View style={{justifyContent: 'space-around'}}>
+                  <Text style={smallText}>{getTransitTime()}</Text>
+                  <Text style={smallText}>{getLines()}</Text>
+                  <Text style={smallText}>{getPriceRange()}</Text>
                </View>
 
-               <Image
-                  source={require('../assets/segment.png')}
-                  style={imageSegment}
-                  resizeMode='contain'
-               />
-               
-               <View style={textContainer}>
-                  <Text style={largeText}>{depPlace}</Text>
-
-                  <View style={{justifyContent: 'space-around'}}>
-                     <Text style={smallText}>{this.getTransitTime()}</Text>
-                     <Text style={smallText}>{this.getLines()}</Text>
-                     <Text style={smallText}>{this.getPriceRange()}</Text>
-                  </View>
-
-                  <Text style={largeText}>{arrPlace}</Text>
-               </View>
+               <Text style={largeText}>{arrPlace}</Text>
             </View>
-            {renderConnector && (
-               <View style={[container,{height: connectorHeight, marginTop: 10, marginBottom: 10 }]}>
-               <View style={iconContainer} />
-               <Image 
-                  source={require('../assets/connector.png')}
-                  style={imageConnector}
-                  resizeMode='contain'
-               />
-               <View style={textContainer} />
-            </View>
-            )}
          </View>
-      )
-   }
+         {renderConnector && (
+            <View style={[container,{height: connectorHeight, marginTop: 10, marginBottom: 10 }]}>
+            <View style={iconContainer} />
+            <Image 
+               source={require('../assets/connector.png')}
+               style={imageConnector}
+               resizeMode='contain'
+            />
+            <View style={textContainer} />
+         </View>
+         )}
+      </View>
+   )
 }
 const segmentStyles = StyleSheet.create({
    container: {
@@ -106,3 +104,4 @@ const segmentStyles = StyleSheet.create({
       color: primaryColor
    }
 })
+export default RouteSegment

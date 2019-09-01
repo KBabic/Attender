@@ -79,7 +79,7 @@ class Costs extends React.Component {
          }
          // call function to convert event fee
          if (currentEvent.general.eventFee !== "") {
-            await this.handleRecalculation(eventCurrency, cur, eventFeeCalculated, currentEvent.general.eventFee)
+            await this.handleRecalculation(eventCurrency, cur, eventFeeCalculated, parseFloat(currentEvent.general.eventFee))
          }
          //call function to convert additional costs
          if (currentEvent.costs.additionalCosts !== "") {

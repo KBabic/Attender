@@ -52,12 +52,9 @@ class AccommodationDetails extends React.Component {
          this.setState({loading: false})
       } else {
          this.setState({loading: false})
-         Alert.alert('Error', 'No description is available for this option.',[{text: 'OK'}])
+         //Alert.alert('Error', 'No description is available for this option.',[{text: 'OK'}])
       }
    }
-   /*componentWillReceiveProps() {
-      this.props.updateEvent(this.props.currentEvent)
-   }*/
    componentDidUpdate(prevProps, prevState) {
       if (this.props.currentEvent !== prevProps.currentEvent) {
          this.props.updateEvent(this.props.currentEvent)

@@ -4,10 +4,10 @@ import { primaryColor, inputWidth, inputHeight, marginTopBottom, tabColor } from
 import currencies from '../utils/currencies'
 import { monthsList } from '../utils/months'
 
-export default class CurrenciesAndMonths extends React.Component {
+const CurrenciesAndMonths = props => {
+   const { currencyMonthStyle, currencyMonthText, modal, modalOkButton, modalOkButtonText } = currenciesMonthsStyles
+   const { chooseMonthOrCurrency, showCurrencies, showMonths, handleOK } = props
    renderCurrencyOrMonth = (el, index) => {
-      const { currencyMonthStyle, currencyMonthText } = currenciesMonthsStyles
-      const { chooseMonthOrCurrency } = this.props
       return (
          <TouchableOpacity 
             style={currencyMonthStyle} 
@@ -18,30 +18,26 @@ export default class CurrenciesAndMonths extends React.Component {
          </TouchableOpacity>
       )
    }
-   render() {
-      const { showCurrencies, showMonths, handleOK } = this.props
-      const { modal, modalOkButton, modalOkButtonText } = currenciesMonthsStyles
-      return (
-         <View style={{ flex: 1 }}>
-         {(showCurrencies || showMonths) && (
-            <Modal transparent={true}>
-               <View style={modal}>
-                  <ScrollView>
-                     {showCurrencies && currencies.map((cur, i) => this.renderCurrencyOrMonth(cur, i))}
-                     {showMonths && monthsList.map((month, i) => this.renderCurrencyOrMonth(month, i))}
-                  </ScrollView>
-                  <TouchableOpacity 
-                        onPress={handleOK}
-                        style={modalOkButton}
-                  >
-                     <Text style={modalOkButtonText}>OK</Text>
-                  </TouchableOpacity>
-               </View>
-            </Modal>
-         )}
-         </View>
-      )
-   }
+   return (
+      <View style={{ flex: 1 }}>
+      {(showCurrencies || showMonths) && (
+         <Modal transparent={true}>
+            <View style={modal}>
+               <ScrollView>
+                  {showCurrencies && currencies.map((cur, i) => renderCurrencyOrMonth(cur, i))}
+                  {showMonths && monthsList.map((month, i) => renderCurrencyOrMonth(month, i))}
+               </ScrollView>
+               <TouchableOpacity 
+                     onPress={handleOK}
+                     style={modalOkButton}
+               >
+                  <Text style={modalOkButtonText}>OK</Text>
+               </TouchableOpacity>
+            </View>
+         </Modal>
+      )}
+      </View>
+   )
 }
 const currenciesMonthsStyles = StyleSheet.create({
    modal: {
@@ -68,8 +64,7 @@ const currenciesMonthsStyles = StyleSheet.create({
       backgroundColor: tabColor,
       height: (inputHeight - 100)/10,
       width: inputWidth,
-      justifyContent: 'center',
-      //marginBottom: 20 
+      justifyContent: 'center'
    },
    modalOkButtonText: {
       color: primaryColor,
@@ -78,3 +73,4 @@ const currenciesMonthsStyles = StyleSheet.create({
       fontWeight: 'bold'
    }
 })
+export default CurrenciesAndMonths

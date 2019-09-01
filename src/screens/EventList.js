@@ -5,7 +5,7 @@ import { newEventButtonPressed, existingEventOpened } from '../actions/EventActi
 import CostOverview from '../components/CostOverview'
 import Button from '../components/Button'
 import EventListItem from '../components/EventListItem'
-import { primaryColor, marginTopBottom } from '../utils/colorsAndMargins'
+import { primaryColor } from '../utils/colorsAndMargins'
 import getDotValues from '../utils/getDotValues'
 
 const keyExtractor = ({ general: {id }}) => id.toString()
@@ -25,7 +25,7 @@ class EventList extends React.Component {
             name={eventName} 
             date={startDate}
             price={`${calculatedTotalCosts.toString()} ${chosenCurrency}`} 
-            checked={false}
+            checked={true}
             handlePress={() => this.updateEvent(item)}
             first={dots[0]}
             second={dots[1]}
@@ -43,7 +43,7 @@ class EventList extends React.Component {
       this.props.navigation.navigate('EventPage', {eventName: ""})
    }
    render() {
-      const { container, messageContainer, messageText, buttonContainer } = eventListStyles
+      const { container, messageText, buttonContainer } = eventListStyles
          return (
             <View style={container}>
                <StatusBar backgroundColor={primaryColor}/>
@@ -87,11 +87,6 @@ const eventListStyles = StyleSheet.create({
       justifyContent: 'space-between',
       position: 'relative',
       zIndex: 1,
-   },
-   messageContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      zIndex: 1
    },
    messageText: {
       color: primaryColor, 

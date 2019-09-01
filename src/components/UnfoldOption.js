@@ -3,43 +3,35 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { primaryColor, secondaryColor, marginLeftRight, marginTopBottom, inputWidth } from '../utils/colorsAndMargins'
 
-export default class UnfoldOption extends React.Component {
-  
-   render() {
-      const { 
-         unfoldContainerStyle,
-         unfoldLabelStyle,
-         unfoldTextStyle,
-         unfoldViewStyle
-      } = unfoldStyles
-      const { unfoldTitle, value, onIncrease, onDecrease, disabled } = this.props
-      const opacity = disabled ? 0.7 : 1
-      return (
-      <View style={[unfoldContainerStyle, {opacity}]}>
-         <Text style={unfoldLabelStyle}>{unfoldTitle}</Text>
-         <View style={unfoldViewStyle}>
-            <Text style={unfoldTextStyle}>{value}</Text>
-            <View>
-               <TouchableOpacity style={{flexDirection:'column'}} onPress={onIncrease} disabled={disabled}>
-                  <Icon 
-                     name="keyboard-arrow-up"
-                     size={25}
-                     color={primaryColor}
-                  />
-               </TouchableOpacity>
-               <TouchableOpacity onPress={onDecrease} disabled={disabled}>
-                  <Icon 
-                     name="keyboard-arrow-down"
-                     size={25}
-                     color={primaryColor}
-                  />
-               </TouchableOpacity>
-            </View>
-             
+const UnfoldOption = props => {
+   const { unfoldContainerStyle, unfoldLabelStyle, unfoldTextStyle, unfoldViewStyle } = unfoldStyles
+   const { unfoldTitle, value, onIncrease, onDecrease, disabled } = props
+   const opacity = disabled ? 0.7 : 1
+   return (
+   <View style={[unfoldContainerStyle, {opacity}]}>
+      <Text style={unfoldLabelStyle}>{unfoldTitle}</Text>
+      <View style={unfoldViewStyle}>
+         <Text style={unfoldTextStyle}>{value}</Text>
+         <View>
+            <TouchableOpacity style={{flexDirection:'column'}} onPress={onIncrease} disabled={disabled}>
+               <Icon 
+                  name="keyboard-arrow-up"
+                  size={25}
+                  color={primaryColor}
+               />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onDecrease} disabled={disabled}>
+               <Icon 
+                  name="keyboard-arrow-down"
+                  size={25}
+                  color={primaryColor}
+               />
+            </TouchableOpacity>
          </View>
       </View>
-      )
-   }
+   </View>
+   )
+
 }
 unfoldStyles = StyleSheet.create({
    unfoldContainerStyle : {
@@ -70,3 +62,4 @@ unfoldStyles = StyleSheet.create({
       marginLeft: 5
    }
 })
+export default UnfoldOption

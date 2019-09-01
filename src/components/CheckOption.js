@@ -3,9 +3,8 @@ import { StyleSheet } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import { primaryColor } from '../utils/colorsAndMargins'
 
-export default class CheckOption extends React.Component {
-   render() {
-      const { checkTitle, checked, onPress } = this.props
+const CheckOption = props => {
+   const { checkTitle, checked, onPress } = props
       return (
          <CheckBox
             iconRight
@@ -20,7 +19,6 @@ export default class CheckOption extends React.Component {
             containerStyle={checkStyles.checkContainerStyle}
          />
       )
-   }
 }
 const checkStyles = StyleSheet.create({
    checkContainerStyle: {
@@ -34,3 +32,4 @@ const checkStyles = StyleSheet.create({
       color: primaryColor
    }
 })
+export default CheckOption

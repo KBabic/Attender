@@ -3,42 +3,41 @@ import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native'
 import CalendarPicker from 'react-native-calendar-picker'
 import { primaryColor, buttonColor, tabColor } from '../utils/colorsAndMargins'
 
-export default class Calendar extends React.Component {
-   render() {
-      const { renderCalendar, showModal, onDateChange, handleOK, minDate, initialDate } = this.props
-      const { modal, calendar, modalOkButtonText } = calendarStyles
-      return (
-         <View style={{ flex: 1 }}>
-         {(renderCalendar && showModal) && (
-            <Modal transparent={true}>
-               <View style={modal}>
-                  <View style={calendar}>
-                     <CalendarPicker 
-                        onDateChange={onDateChange}
-                        startFromMonday={true}
-                        selectedDayColor={buttonColor}
-                        selectedDayTextColor={primaryColor}
-                        todayBackgroundColor={tabColor}
-                        textStyle={{ color: primaryColor }}
-                        previousTitle="<<"
-                        nextTitle=">>"
-                        minDate={minDate}
-                        initialDate={initialDate}
-                     />
-                     <TouchableOpacity 
-                        onPress={handleOK}
-                        style={{ marginBottom: 5 }}
-                     >
-                        <Text style={modalOkButtonText}>OK</Text>
-                     </TouchableOpacity>
-                  </View>
+const Calendar = props => {
+   const { renderCalendar, showModal, onDateChange, handleOK, minDate, initialDate } = props
+   const { modal, calendar, modalOkButtonText } = calendarStyles
+   return (
+      <View style={{ flex: 1 }}>
+      {(renderCalendar && showModal) && (
+         <Modal transparent={true}>
+            <View style={modal}>
+               <View style={calendar}>
+                  <CalendarPicker 
+                     onDateChange={onDateChange}
+                     startFromMonday={true}
+                     selectedDayColor={buttonColor}
+                     selectedDayTextColor={primaryColor}
+                     todayBackgroundColor={tabColor}
+                     textStyle={{ color: primaryColor }}
+                     previousTitle="<<"
+                     nextTitle=">>"
+                     minDate={minDate}
+                     initialDate={initialDate}
+                  />
+                  <TouchableOpacity 
+                     onPress={handleOK}
+                     style={{ marginBottom: 5 }}
+                  >
+                     <Text style={modalOkButtonText}>OK</Text>
+                  </TouchableOpacity>
                </View>
-            </Modal>
-         )}
-         </View>
-      )
-   }
+            </View>
+         </Modal>
+      )}
+      </View>
+   )
 }
+
 const calendarStyles = StyleSheet.create({
    modal: {
       flex: 1,
@@ -57,3 +56,5 @@ const calendarStyles = StyleSheet.create({
       fontWeight: 'bold'
    }
 })
+
+export default Calendar
