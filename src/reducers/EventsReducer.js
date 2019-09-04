@@ -8,7 +8,7 @@ const INITIAL_STATE = {
       general: {
          id: 1,
          eventName: "event1",
-         startDate: "",
+         startDate: "2019-09-05",
          endDate: "",
          eventCountry: "Serbia",
          eventCity: "Belgrade",
@@ -37,12 +37,12 @@ const INITIAL_STATE = {
          accommodationCurrency: ""
       },
       costs: {
-         chosenCurrency: "",
+         chosenCurrency: "CHF",
          avgTransportCost: 0,
          avgAccommCost: 0,
          calculatedFee: 0,
          additionalCosts: 0,
-         calculatedTotalCosts: 0
+         calculatedTotalCosts: 100
       },
       notes: {
          notes: "Notes for the first event"
@@ -52,7 +52,7 @@ const INITIAL_STATE = {
       general: {
          id: 2,
          eventName: "event2",
-         startDate: "2019-08-26",
+         startDate: "2019-09-26",
          endDate: "2019-08-28",
          eventCountry: "",
          eventCity: "",
@@ -81,12 +81,56 @@ const INITIAL_STATE = {
          accommodationCurrency: ""
       },
       costs: {
-         chosenCurrency: "",
+         chosenCurrency: "CHF",
          avgTransportCost: 0,
          avgAccommCost: 0,
          calculatedFee: 0,
          additionalCosts: 0,
-         calculatedTotalCosts: 0
+         calculatedTotalCosts: 60
+      },
+      notes: {
+         notes: ""
+      }
+   },
+   3: {
+      general: {
+         id: 3,
+         eventName: "event3",
+         startDate: "2019-10-26",
+         endDate: "2019-10-28",
+         eventCountry: "",
+         eventCity: "",
+         eventCurrency: "",
+         eventFee: 0,
+      },
+      transport: {
+         transportLoading: false,
+         noTransport: false,
+         originCity: "",
+         destinationCity: "",
+         transportOptions: [],
+         chosenTransportOptionId: "",
+         transportCosts: 0,
+         transpCurrency: ""
+      },
+      accommodation: {
+         accommodationLoading: false,
+         noAccommodation: false,
+         numOfPersons: 1,
+         checkInDate: "",
+         checkOutDate: "",
+         accommodationOptions: [],
+         chosenAccommOptionId: "",
+         accommodationCosts: 0,
+         accommodationCurrency: ""
+      },
+      costs: {
+         chosenCurrency: "CHF",
+         avgTransportCost: 0,
+         avgAccommCost: 0,
+         calculatedFee: 0,
+         additionalCosts: 0,
+         calculatedTotalCosts: 60
       },
       notes: {
          notes: ""

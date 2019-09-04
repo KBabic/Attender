@@ -3,7 +3,8 @@ import {
    EXISTING_EVENT_OPENED,
    costsActions,
    transportActions,
-   accommodationActions
+   accommodationActions,
+   generalActions
 } from '../../actions/types'
 import { calculateTotalCosts } from '../../utils/currencyData'
 const {
@@ -15,6 +16,7 @@ const {
 } = costsActions
 const { NO_NEED_TRANSPORT } = transportActions
 const { NO_NEED_ACCOMMODATION } = accommodationActions
+const { NO_EVENT_FEE } = generalActions
 
 const INITIAL_STATE = {
    chosenCurrency: "",
@@ -62,6 +64,8 @@ export default (state=INITIAL_STATE, action) => {
          return {...state, avgTransportCost: ""}
       case NO_NEED_ACCOMMODATION:
          return {...state, avgAccommCost: ""}
+      case NO_EVENT_FEE:
+         return {...state, calculatedFee: ""}
       default:
          return state
    }

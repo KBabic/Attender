@@ -47,6 +47,8 @@ export const EXISTING_EVENT_OPENED = 'existing_event_edited'
 export const SAVE_EVENT = 'save_event'
 export const DELETE_EVENT = 'delete_event'
 export const UPDATE_EVENT = 'update_event'
+export const EVENT_CHECKED = 'event_checked'
+export const EVENT_UNCHECKED = 'event_unchecked'
 // Overview actions:
 export const CHOOSE_MONTH = 'choose_month'
 export const CHOOSE_OVERVIEW_CURRENCY = 'choose_overview_currency'

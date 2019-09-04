@@ -1,10 +1,10 @@
 import React from 'react'
 import { Text, View, StyleSheet, Dimensions } from 'react-native'
 import { connect } from 'react-redux'
-import { chooseMonth, chooseOverviewCurrency } from '../actions/OverviewActions'
+import { chooseMonth, chooseOverviewCurrency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } from '../actions/OverviewActions'
 import InputOption from './InputOption'
 import CurrenciesAndMonths from './CurrenciesAndMonths'
-import { primaryColor, secondaryColor, placeholderColor, inputHeight, marginLeftRight, marginTopBottom } from '../utils/colorsAndMargins'
+import { primaryColor, secondaryColor, inputHeight, marginLeftRight, marginTopBottom } from '../utils/colorsAndMargins'
 
 class CostOverview extends React.Component {
    state = {
@@ -12,16 +12,26 @@ class CostOverview extends React.Component {
       showCurrencies: false
    }
    handleChooseCurrency = (cur) => {
-      this.props.chooseOverviewCurrency(cur)
+      const { events, overviewMonth, chooseOverviewCurrency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
+      chooseOverviewCurrency(cur)
+      avgMonthlyCostsCalculated(events, cur)
+      if (overviewMonth) {
+         totalMonthlyCostsCalculated(events, overviewMonth, cur)
+      }
    }
    handleChooseMonth = (month) => {
-      this.props.chooseMonth(month)
+      const { events, overviewCurrency, chooseMonth, totalMonthlyCostsCalculated } = this.props
+      chooseMonth(month)
+      if (overviewCurrency) {
+         totalMonthlyCostsCalculated(events, month, overviewCurrency)
+      }
    }
    handleOK = () => {
       this.setState({ showCurrencies: false, showMonths: false })
    }
    render() {
-      const { container, innerContainer, label, eurAmount, bottomLine, middleLine } = costOverviewStyles
+      const { container, innerContainer, label, bottomLine, middleLine } = costOverviewStyles
+      const { total, cur, avg } = this.props
       return (
          <View style={container}>
             {this.state.showCurrencies && 
@@ -57,12 +67,12 @@ class CostOverview extends React.Component {
             />
             <View style={innerContainer}>
                <Text style={label}>Total costs for a chosen month</Text>
-               <Text style={eurAmount}>0 EUR</Text>
+               <Text style={label}>{`${total.toString()} ${cur}`}</Text>
             </View>
             <View style={middleLine}></View>
             <View style={innerContainer}>
                <Text style={label}>Average monthly costs</Text>
-               <Text style={eurAmount}>0 EUR</Text>
+               <Text style={label}>{`${avg.toString()} ${cur}`}</Text>
             </View>
             <View style={bottomLine}></View>
          </View>
@@ -101,14 +111,10 @@ const costOverviewStyles = StyleSheet.create({
       color: primaryColor,
       fontSize: 16,
       fontWeight: 'bold',
-   },
-   eurAmount: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: placeholderColor
    }
 })
 const mapStateToProps = state => ({
+   events: state.events,
    overviewMonth: state.overview.month,
    overviewCurrency: state.overview.currency
 })
@@ -119,6 +125,12 @@ const mapDispatchToProps = dispatch => {
       },
       chooseOverviewCurrency: (cur) => {
          dispatch(chooseOverviewCurrency(cur))
+      },
+      totalMonthlyCostsCalculated: (events, month, currency) => {
+         dispatch(totalMonthlyCostsCalculated(events, month, currency))
+      },
+      avgMonthlyCostsCalculated: (events, currency) => {
+         dispatch(avgMonthlyCostsCalculated(events, currency))
       }
    }
 }

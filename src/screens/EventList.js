@@ -1,7 +1,9 @@
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView, StatusBar, Dimensions, FlatList } from 'react-native'
+import { withNavigationFocus } from 'react-navigation'
 import { connect } from 'react-redux'
 import { newEventButtonPressed, existingEventOpened } from '../actions/EventActions'
+import { totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } from '../actions/OverviewActions'
 import CostOverview from '../components/CostOverview'
 import Button from '../components/Button'
 import EventListItem from '../components/EventListItem'
@@ -15,6 +17,17 @@ class EventList extends React.Component {
       return {
          header: () => null
       }
+   }
+   componentDidUpdate(prevProps) {
+      const { isFocused, events, month, currency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
+      if (!prevProps.isFocused && isFocused) {
+         if (currency) {
+            avgMonthlyCostsCalculated(events, currency)
+            if (month) {
+               totalMonthlyCostsCalculated(events, month, currency)
+            }
+         }
+      }   
    }
    renderEvent = ({item}) => {
       const { general: {eventName, startDate }} = item
@@ -59,7 +72,11 @@ class EventList extends React.Component {
                   />
                </View>
                <View style={{flex: 1}}>
-                  <CostOverview />
+                  <CostOverview 
+                     total={this.props.total}
+                     cur={this.props.currency}
+                     avg={this.props.avg}
+                  />
                </View>
                <ScrollView style={{flex: 1}}>
                   {Object.values(this.props.events).length !== 0 && (
@@ -103,7 +120,11 @@ const eventListStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
-   events: state.events
+   events: state.events,
+   month: state.overview.month,
+   currency: state.overview.currency,
+   total: state.overview.costs,
+   avg: state.avgMonthlyCosts.avg
 })
 const mapDispatchToProps = dispatch => {
    return {
@@ -112,7 +133,13 @@ const mapDispatchToProps = dispatch => {
       },
       existingEventOpened: (event) => {
          dispatch(existingEventOpened(event))
+      },
+      totalMonthlyCostsCalculated: (events, month, currency) => {
+         dispatch(totalMonthlyCostsCalculated(events, month, currency))
+      },
+      avgMonthlyCostsCalculated: (events, currency) => {
+         dispatch(avgMonthlyCostsCalculated(events, currency))
       }
    }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(EventList)
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigationFocus(EventList))

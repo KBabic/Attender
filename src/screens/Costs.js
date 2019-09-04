@@ -16,11 +16,6 @@ class Costs extends React.Component {
       currency: "",
       addCostsEnabled: false
    }
-   componentDidUpdate(prevProps, prevState) {
-      if (this.props.currentEvent !== prevProps.currentEvent) {
-         this.props.updateEvent(this.props.currentEvent)
-      }
-   }
    async handleOnWillFocus() {
       const { transpCurrency, transportCostsCalculated, accommCurrency, accommodationCostsCalculated,
          eventCurrency, eventFeeCalculated, currentEvent, chosenCurrency, updateEvent, navigation } = this.props
@@ -36,6 +31,8 @@ class Costs extends React.Component {
          if (currentEvent.general.eventFee !== "") {
             await this.handleRecalculation(eventCurrency, chosenCurrency, eventFeeCalculated, currentEvent.general.eventFee)
          }
+         updateEvent(currentEvent)
+      } else {
          updateEvent(currentEvent)
       }
       navigation.setParams({ 

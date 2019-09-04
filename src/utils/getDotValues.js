@@ -3,7 +3,7 @@ export default getDotValues = event => {
    function getDotValueParam(param) {
       switch(param) {
          case general:
-            if (param.eventName !== "" && param.startDate !== "" && param.endDate !== "" && param.eventCity !== "" && param.eventCountry !== "") {
+            if (param.eventName && param.startDate && param.endDate && param.eventCity && param.eventCountry) {
                if (param.noFee) {
                   return true
                } else {
@@ -13,7 +13,7 @@ export default getDotValues = event => {
                   if (param.eventFee !== 0 && param.eventCurrency === "") {
                      return false
                   }
-                  if (param.eventFee !== 0 && param.eventFee !== "" && param.eventCurrency !== "") {
+                  if (param.eventFee !== 0 && param.eventFee && param.eventCurrency) {
                      return true
                   } else {
                      return false
@@ -32,7 +32,7 @@ export default getDotValues = event => {
                   if (param.transportCosts !== 0 && param.transpCurrency === "") {
                      return false
                   }
-                  if (param.transportCosts !== 0 && param.transportCosts !== "" && param.transpCurrency !== "") {
+                  if (param.transportCosts !== 0 && param.transportCosts && param.transpCurrency) {
                      return true
                   } else {
                      return false
@@ -48,7 +48,7 @@ export default getDotValues = event => {
                   if (param.accommodationCosts !== 0 && param.accommodationCurrency === "") {
                      return false
                   }
-                  if (param.accommodationCosts !== 0 && param.accommodationCosts !== "" && param.accommodationCurrency !== "") {
+                  if (param.accommodationCosts !== 0 && param.accommodationCosts && param.accommodationCurrency) {
                      return true
                   } else {
                      return false

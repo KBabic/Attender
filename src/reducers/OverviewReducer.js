@@ -6,7 +6,7 @@ import {
 const INITIAL_STATE = {
    month: "",
    currency: "",
-   costs: 0
+   costs: ""
 }
 export default (state = INITIAL_STATE, action) => {
    switch(action.type) {

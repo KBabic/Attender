@@ -4,7 +4,7 @@ import CheckOption from './CheckOption'
 import Dots from './Dots'
 import { primaryColor, secondaryColor } from '../utils/colorsAndMargins'
 
-export default class EventListItem extends React.Component {
+class EventListItem extends React.Component {
    constructor(props) {
       super(props)
       this.state = {
@@ -68,3 +68,5 @@ const eventItemStyles = StyleSheet.create({
       alignItems: 'center',
    }
 })
+
+export default EventListItem

@@ -4,7 +4,9 @@ import {
    DELETE_EVENT,
    UPDATE_EVENT,
    NEW_EVENT_BUTTON_PRESSED,
-   EXISTING_EVENT_OPENED
+   EXISTING_EVENT_OPENED,
+   EVENT_CHECKED,
+   EVENT_UNCHECKED
 } from './types'
 
 // event: { id, name, startDate, endDate, country, city, ... }
@@ -36,6 +38,18 @@ export const existingEventOpened = event => {
 export const updateEvent = event => {
    return {
       type: UPDATE_EVENT,
+      payload: event
+   }
+}
+export const eventChecked = event => {
+   return {
+      type: EVENT_CHECKED,
+      payload: event
+   }
+}
+export const eventUnchecked = event => {
+   return {
+      type: EVENT_UNCHECKED,
       payload: event
    }
 }

@@ -1,5 +1,5 @@
 import moment from 'moment'
-const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+export const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 const today = new Date()
 const currentYear = today.getFullYear()
 const previousYear = currentYear - 1

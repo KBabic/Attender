@@ -88,8 +88,11 @@ class EventPage extends React.Component {
       }
    }
    onSubmitEdit = () => {
-      const { updateEvent, currentEvent, addEventFee } = this.props
+      const { updateEvent, currentEvent } = this.props
       updateEvent(currentEvent)
+   }
+   onSubmitFee = () => {
+      const { updateEvent, currentEvent, addEventFee } = this.props
       // if eventFee is not a valid positive float or not a valid positive integer
       if (
          currentEvent.general.eventFee !== "" &&
@@ -185,7 +188,7 @@ class EventPage extends React.Component {
                      text={item.text}
                      value={this.props.currentEvent.general[item.name].toString()}
                      onChangeText={(txt) => this.handleChangeInput(txt, item)}
-                     onSubmitEditing={this.onSubmitEdit.bind(this)}
+                     onSubmitEditing={this.onSubmitFee.bind(this)}
                      key={index}
                      onPress={() => this.handleIconPress(item)}
                   />
