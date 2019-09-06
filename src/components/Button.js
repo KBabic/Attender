@@ -2,7 +2,7 @@ import React from 'react'
 import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { primaryColor, buttonColor, buttonMarginLeftRight, buttonMarginTopBottom } from '../utils/colorsAndMargins'
 
-const Button = (props) => {
+const Button = React.memo((props) => {
    const { buttonStyle, buttonTextStyle } = buttonStyles
    const { width, height, radius, fontSize, onPress, label, disabled } = props
    const customButtonStyle = {
@@ -23,7 +23,7 @@ const Button = (props) => {
          <Text style={[buttonTextStyle, customTextStyle]}>{label}</Text>
       </TouchableOpacity>
    )
-}
+})
 
 buttonStyles = StyleSheet.create({
    buttonStyle: {

@@ -6,24 +6,24 @@ import InputOption from './InputOption'
 import CurrenciesAndMonths from './CurrenciesAndMonths'
 import { primaryColor, secondaryColor, inputHeight, marginLeftRight, marginTopBottom } from '../utils/colorsAndMargins'
 
-class CostOverview extends React.Component {
+class CostOverview extends React.PureComponent {
    state = {
       showMonths: false,
       showCurrencies: false
    }
    handleChooseCurrency = (cur) => {
-      const { events, overviewMonth, chooseOverviewCurrency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
+      const { events, selected, overviewMonth, chooseOverviewCurrency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
       chooseOverviewCurrency(cur)
-      avgMonthlyCostsCalculated(events, cur)
+      avgMonthlyCostsCalculated(events, selected, cur)
       if (overviewMonth) {
-         totalMonthlyCostsCalculated(events, overviewMonth, cur)
+         totalMonthlyCostsCalculated(events, selected, overviewMonth, cur)
       }
    }
    handleChooseMonth = (month) => {
-      const { events, overviewCurrency, chooseMonth, totalMonthlyCostsCalculated } = this.props
+      const { events, selected, overviewCurrency, chooseMonth, totalMonthlyCostsCalculated } = this.props
       chooseMonth(month)
       if (overviewCurrency) {
-         totalMonthlyCostsCalculated(events, month, overviewCurrency)
+         totalMonthlyCostsCalculated(events, selected, month, overviewCurrency)
       }
    }
    handleOK = () => {
@@ -115,6 +115,7 @@ const costOverviewStyles = StyleSheet.create({
 })
 const mapStateToProps = state => ({
    events: state.events,
+   selected: state.selected,
    overviewMonth: state.overview.month,
    overviewCurrency: state.overview.currency
 })
@@ -126,11 +127,11 @@ const mapDispatchToProps = dispatch => {
       chooseOverviewCurrency: (cur) => {
          dispatch(chooseOverviewCurrency(cur))
       },
-      totalMonthlyCostsCalculated: (events, month, currency) => {
-         dispatch(totalMonthlyCostsCalculated(events, month, currency))
+      totalMonthlyCostsCalculated: (events, selected, month, currency) => {
+         dispatch(totalMonthlyCostsCalculated(events, selected, month, currency))
       },
-      avgMonthlyCostsCalculated: (events, currency) => {
-         dispatch(avgMonthlyCostsCalculated(events, currency))
+      avgMonthlyCostsCalculated: (events, selected,  currency) => {
+         dispatch(avgMonthlyCostsCalculated(events, selected, currency))
       }
    }
 }

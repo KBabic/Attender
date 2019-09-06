@@ -7,7 +7,7 @@ import { primaryColor } from '../utils/colorsAndMargins'
 const windowWidth = Dimensions.get('window').width
 const imagesPerRow = 3
 
-export default class ImageGrid extends React.Component {
+export default class ImageGrid extends React.PureComponent {
    state = {
       showGallery: false
    }

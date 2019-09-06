@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { primaryColor, secondaryColor, marginLeftRight, marginTopBottom, inputWidth } from '../utils/colorsAndMargins'
 
-const UnfoldOption = props => {
+const UnfoldOption = React.memo(props => {
    const { unfoldContainerStyle, unfoldLabelStyle, unfoldTextStyle, unfoldViewStyle } = unfoldStyles
    const { unfoldTitle, value, onIncrease, onDecrease, disabled } = props
    const opacity = disabled ? 0.7 : 1
@@ -31,8 +31,7 @@ const UnfoldOption = props => {
       </View>
    </View>
    )
-
-}
+})
 unfoldStyles = StyleSheet.create({
    unfoldContainerStyle : {
       marginLeft: marginLeftRight,

@@ -19,22 +19,28 @@ export const chooseOverviewCurrency = cur => {
       payload: cur
    }
 }
-export const totalMonthlyCostsCalculated = (events, month, currency) => {
+export const totalMonthlyCostsCalculated = (events, selected, month, currency) => {
    return async dispatch => {
+      let selectedEvents = []
       let filteredEvents = []
       let totalCosts = 0
-      if (month === "All") {
-         filteredEvents = Object.values(events)
-      } else {
-         // 1. pick only those events that start within the chosen month and that have chosenCurrency and totalCosts specified!
-         for (let val of Object.values(events)) {
-            const index = parseInt(val.general.startDate.slice(5,7)) - 1 // 0 for Jan, 1 for Feb,...
-            const year = val.general.startDate.slice(0,4)
-            if ((months[index] + " " + year === month) && val.costs.chosenCurrency && val.costs.calculatedTotalCosts) {
-               filteredEvents.push(val)
-            }
-         }  
+      // grab only events whose IDs are among selected:
+      for (let i = 0; i < selected.length; i++) {
+         selectedEvents.push(events[selected[i]])
       }
+      if (month !== "All") {
+         // pick only those events that start within the chosen month and that have chosenCurrency and totalCosts specified!
+         for (let event of selectedEvents) {
+            const index = parseInt(event.general.startDate.slice(5,7)) - 1 // 0 for Jan, 1 for Feb,...
+            const year = event.general.startDate.slice(0,4)
+            if ((months[index] + " " + year === month) && event.costs.chosenCurrency && event.costs.calculatedTotalCosts) {
+               filteredEvents.push(event)
+            }
+         }
+      } else {
+         filteredEvents = [...selectedEvents]
+      }
+
       if (filteredEvents.length === 0) {
          Alert.alert("Error", "There are no events in the chosen month.", [{text: "OK"}])
          dispatch({type: TOTAL_MONTHLY_COSTS_CALCULATED, payload: "" })
@@ -60,7 +66,7 @@ export const totalMonthlyCostsCalculated = (events, month, currency) => {
       }
    }
 }
-export const avgMonthlyCostsCalculated = (events, currency) => {
+export const avgMonthlyCostsCalculated = (events, selected, currency) => {
    // calculate average amount of all events total costs
    // count how many different months appear
    // convert all currencies and sum all total costs
@@ -68,17 +74,21 @@ export const avgMonthlyCostsCalculated = (events, currency) => {
    return async dispatch => {
       let totalCosts = 0
       let monthCount = []
-      if (events.length === 0) {
+      let selectedEvents = []
+      for (let i = 0; i < selected.length; i++) {
+         selectedEvents.push(events[selected[i]])
+      }
+      if (selectedEvents.length === 0) {
          dispatch({type: AVERAGE_MONTHLY_COSTS_CALCULATED, payload: "" })
       } else {
-         for (let ev of Object.values(events)) {
+         for (let event of selectedEvents) {
             // evMonth is for example "Sep 2019"
-            const evMonth = months[parseInt(ev.general.startDate.slice(5,7)) - 1] + " " + ev.general.startDate.slice(0,4)
+            const evMonth = months[parseInt(event.general.startDate.slice(5,7)) - 1] + " " + event.general.startDate.slice(0,4)
             if (!monthCount.includes(evMonth)) {
                monthCount.push(evMonth)
             }
-            const cur = ev.costs.chosenCurrency
-            const cost = ev.costs.calculatedTotalCosts
+            const cur = event.costs.chosenCurrency
+            const cost = event.costs.calculatedTotalCosts
             const factor = await convertCurrency(cur, currency)
             if (factor) {
                const newCost = await cost * factor

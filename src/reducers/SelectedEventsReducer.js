@@ -8,16 +8,21 @@ const INITIAL_STATE = []
 export default (state = INITIAL_STATE, action) => {
    switch(action.type) {
       case SAVE_EVENT:
-      case EVENT_CHECKED:
          if (!state.includes(action.payload.general.id)) {
             return [...state, action.payload.general.id]
          } else {
             return state
          }         
       case DELETE_EVENT:
+         return state.filter(el => el !== action.payload)
+      case EVENT_CHECKED:
+         if (!state.includes(action.payload)) {
+            return [...state, action.payload]
+         } else {
+            return state
+         }
       case EVENT_UNCHECKED:
-         const newState = state.filter(el => el !== action.payload.id)
-         return newState
+         return state.filter(el => el !== action.payload)
       default:
          return state
    }

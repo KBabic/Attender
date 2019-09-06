@@ -10,7 +10,7 @@ import RouteSegment from '../components/RouteSegment'
 import CheckOption from '../components/CheckOption'
 import { inputWidth, marginTopBottom } from '../utils/colorsAndMargins'
 
-class TransportDetails extends React.Component {
+class TransportDetails extends React.PureComponent {
    constructor(props) {
       super(props)
       const { navigation } = this.props
@@ -18,9 +18,6 @@ class TransportDetails extends React.Component {
       this.renderConnector = true
       this.state = { checked: this.props.chosenTransportOptionId === id ? true : false }
    }
-   /*componentWillReceiveProps(nextProps) {
-      nextProps.updateEvent(nextProps.currentEvent)
-   }*/
    componentDidUpdate(prevProps, prevState) {
       if (this.props.currentEvent !== prevProps.currentEvent) {
          this.props.updateEvent(this.props.currentEvent)
@@ -132,20 +129,10 @@ const mapStateToProps = state => ({
    transportCosts: state.currentEvent.transport.transportCosts,
    chosenCurrency: state.currentEvent.costs.chosenCurrency
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      transportChosen: (id, cost, cur) => {
-         dispatch(transportChosen(id, cost, cur))
-      },
-      transportUnchosen: () => {
-         dispatch(transportUnchosen())
-      },
-      updateEvent: (event) => {
-         dispatch(updateEvent(event))
-      },
-      transportCostsCalculated: (cost) => {
-         dispatch(transportCostsCalculated(cost))
-      }
-   }
+const mapDispatchToProps = {
+   transportChosen,
+   transportUnchosen,
+   updateEvent,
+   transportCostsCalculated
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TransportDetails)

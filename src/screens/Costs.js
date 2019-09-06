@@ -10,7 +10,7 @@ import { costsDetails } from '../utils/costsDetails'
 import { convertCurrency } from '../utils/currencyData'
 import { marginTopBottom } from '../utils/colorsAndMargins'
 
-class Costs extends React.Component {
+class Costs extends React.PureComponent {
    state = {
       showCurrencies: false,
       currency: "",
@@ -152,26 +152,12 @@ const mapStateToProps = state => ({
    additionalCosts: state.currentEvent.costs.additionalCosts,
    estTotalCosts: state.currentEvent.costs.calculatedTotalCosts
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      chooseCurrency: (cur) => {
-         dispatch(chooseCurrency(cur))
-      },
-      updateEvent: (event) => {
-         dispatch(updateEvent(event))
-      },
-      transportCostsCalculated: (cost) => {
-         dispatch(transportCostsCalculated(cost))
-      },
-      accommodationCostsCalculated: (cost) => {
-         dispatch(accommodationCostsCalculated(cost))
-      },
-      addAdditionalCosts: (cost) => {
-         dispatch(addAdditionalCosts(cost))
-      },
-      eventFeeCalculated: (cost) => {
-         dispatch(eventFeeCalculated(cost))
-      }
-   }
+const mapDispatchToProps = {
+   chooseCurrency,
+   updateEvent,
+   transportCostsCalculated,
+   accommodationCostsCalculated,
+   addAdditionalCosts,
+   eventFeeCalculated
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Costs)

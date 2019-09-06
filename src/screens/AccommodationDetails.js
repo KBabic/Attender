@@ -9,7 +9,7 @@ import ImageGrid from '../components/ImageGrid'
 import { primaryColor, marginTopBottom, inputWidth, marginLeftRight, secondaryColor } from '../utils/colorsAndMargins'
 import { getHotelDetails, getHotelDescription, getPhotoData, getPhotosList, getFacilities} from '../utils/accommodationData'
 
-class AccommodationDetails extends React.Component {
+class AccommodationDetails extends React.PureComponent {
    constructor(props) {
       super(props)
       this.id = this.props.navigation.getParam('item').id
@@ -163,17 +163,9 @@ const mapStateToProps = state => ({
    chosenAccommOptionId: state.currentEvent.accommodation.chosenAccommOptionId,
    accommodationCosts: state.currentEvent.accommodation.accommodationCosts
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      accommodationChosen: (accommOption) => {
-         dispatch(accommodationChosen(accommOption))
-      },
-      accommodationUnchosen: () => {
-         dispatch(accommodationUnchosen())
-      },
-      updateEvent: (event) => {
-         dispatch(updateEvent(event))
-      }
-   }
+const mapDispatchToProps = {
+   accommodationChosen,
+   accommodationUnchosen,
+   updateEvent
 }
 export default connect(mapStateToProps, mapDispatchToProps)(AccommodationDetails)

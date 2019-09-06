@@ -13,16 +13,13 @@ import { primaryColor, buttonColor } from '../utils/colorsAndMargins'
 const inputWidth = Dimensions.get('window').width - 90
 const inputHeight = Dimensions.get('window').height - 150
 
-export default class Start extends React.Component {
+export default class Start extends React.PureComponent {
    
    static navigationOptions = ({ navigation }) => {
       return {
          header: () => null
       }
    }
-   /*handlePress = () => {
-      this.props.navigation.navigate('EventList')
-   }*/
    render() {
       return (
          <View style={startStyles.container}>

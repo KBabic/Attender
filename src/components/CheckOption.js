@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { CheckBox } from 'react-native-elements'
 import { primaryColor } from '../utils/colorsAndMargins'
 
-const CheckOption = props => {
+const CheckOption = React.memo(props => {
    const { checkTitle, checked, onPress } = props
       return (
          <CheckBox
@@ -19,7 +19,7 @@ const CheckOption = props => {
             containerStyle={checkStyles.checkContainerStyle}
          />
       )
-}
+})
 const checkStyles = StyleSheet.create({
    checkContainerStyle: {
       borderWidth: 0,

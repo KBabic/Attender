@@ -6,7 +6,7 @@ import { primaryColor, secondaryColor } from '../utils/colorsAndMargins'
 const segmentHeight = Dimensions.get('window').height / 3.5
 const connectorHeight = Dimensions.get('window').height / 8
 
-const RouteSegment = props => {
+const RouteSegment = React.memo(props => {
    const { segment, renderConnector } = props
    getTransitTime = () => {
       const { transitTime, vehicle } = segment
@@ -67,7 +67,7 @@ const RouteSegment = props => {
          )}
       </View>
    )
-}
+})
 const segmentStyles = StyleSheet.create({
    container: {
       flexDirection: 'row',

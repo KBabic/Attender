@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { primaryColor, secondaryColor } from '../utils/colorsAndMargins'
 
-const Dot = props => {
+const Dot = React.memo(props => {
    const { first, second, third, fourth } = props
    const dots = [first, second, third, fourth ]
    return (
@@ -18,7 +18,7 @@ const Dot = props => {
          })}
       </View>
    )
-}
+})
 
 const dotStyles = StyleSheet.create({
    container: {

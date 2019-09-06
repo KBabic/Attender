@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { primaryColor, secondaryColor, tabColor, inputWidth, marginLeftRight } from '../utils/colorsAndMargins'
 import { modes, getRouteSegments } from '../utils/transportData'
 
-export default class ListItem extends React.Component {
+export default class ListItem extends React.PureComponent {
    constructor(props) {
       super(props)
       this.routeSegments = []

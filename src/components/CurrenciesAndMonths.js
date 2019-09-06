@@ -4,7 +4,7 @@ import { primaryColor, inputWidth, inputHeight, marginTopBottom, tabColor } from
 import currencies from '../utils/currencies'
 import { monthsList } from '../utils/months'
 
-const CurrenciesAndMonths = props => {
+const CurrenciesAndMonths = React.memo(props => {
    const { currencyMonthStyle, currencyMonthText, modal, modalOkButton, modalOkButtonText } = currenciesMonthsStyles
    const { chooseMonthOrCurrency, showCurrencies, showMonths, handleOK } = props
    renderCurrencyOrMonth = (el, index) => {
@@ -38,7 +38,7 @@ const CurrenciesAndMonths = props => {
       )}
       </View>
    )
-}
+})
 const currenciesMonthsStyles = StyleSheet.create({
    modal: {
       justifyContent: 'center',

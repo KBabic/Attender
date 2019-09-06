@@ -3,7 +3,7 @@ import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native'
 import CalendarPicker from 'react-native-calendar-picker'
 import { primaryColor, buttonColor, tabColor } from '../utils/colorsAndMargins'
 
-const Calendar = props => {
+const Calendar = React.memo(props => {
    const { renderCalendar, showModal, onDateChange, handleOK, minDate, initialDate } = props
    const { modal, calendar, modalOkButtonText } = calendarStyles
    return (
@@ -36,7 +36,7 @@ const Calendar = props => {
       )}
       </View>
    )
-}
+})
 
 const calendarStyles = StyleSheet.create({
    modal: {

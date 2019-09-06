@@ -6,10 +6,7 @@ import { addNotes } from '../actions/NotesActions'
 import { View, TextInput, StyleSheet, ScrollView } from 'react-native'
 import { primaryColor, secondaryColor } from '../utils/colorsAndMargins'
 
-class Notes extends React.Component {
-   /*componentWillReceiveProps(nextProps) {
-      nextProps.updateEvent(nextProps.currentEvent)
-   }*/
+class Notes extends React.PureComponent {
    componentDidUpdate(prevProps, prevState) {
       if (this.props.currentEvent !== prevProps.currentEvent) {
          this.props.updateEvent(this.props.currentEvent)
@@ -63,14 +60,8 @@ const mapStateToProps = state => ({
    currentEvent: state.currentEvent,
    notes: state.currentEvent.notes.notes
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      addNotes: (txt) => {
-         dispatch(addNotes(txt))
-      },
-      updateEvent: (event) => {
-         dispatch(updateEvent(event))
-      }
-   }
+const mapDispatchToProps =  {
+   addNotes,
+   updateEvent
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Notes)

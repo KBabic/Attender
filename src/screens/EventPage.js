@@ -11,7 +11,7 @@ import { marginTopBottom, inputWidth } from '../utils/colorsAndMargins'
 import { getInitialDate } from '../utils/months'
 import CurrenciesAndMonths from '../components/CurrenciesAndMonths'
 
-class EventPage extends React.Component {
+class EventPage extends React.PureComponent {
    constructor(props) {
       super(props)
       this.state = {
@@ -222,35 +222,15 @@ const mapStateToProps = state => ({
    endDate: state.currentEvent.general.endDate,
    noFee: state.currentEvent.general.noFee
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      addEventName: (txt) => {
-         dispatch(addEventName(txt))
-      },
-      addStartDate: (date) => {
-         dispatch(addStartDate(date))
-      },
-      addEndDate: (date) => {
-         dispatch(addEndDate(date))
-      },
-      addEventCountry: (txt) => {
-         dispatch(addEventCountry(txt))
-      },
-      addEventCity: (txt) => {
-         dispatch(addEventCity(txt))
-      },
-      addEventCurrency: (txt) => {
-         dispatch(addEventCurrency(txt))
-      },
-      addEventFee: (amount) => {
-         dispatch(addEventFee(amount))
-      },
-      updateEvent: (event) => {
-         dispatch(updateEvent(event))
-      },
-      noEventFee: () => {
-         dispatch(noEventFee())
-      }
-   }
+const mapDispatchToProps = {
+   addEventName,
+   addStartDate,
+   addEndDate,
+   addEventCountry,
+   addEventCity,
+   addEventCurrency,
+   addEventFee,
+   updateEvent,
+   noEventFee
 }
 export default connect(mapStateToProps, mapDispatchToProps)(EventPage)

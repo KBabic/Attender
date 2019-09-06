@@ -13,7 +13,7 @@ import { marginTopBottom, secondaryColor } from '../utils/colorsAndMargins'
 
 const keyExtractor = ({ id }) => id.toString()
 
-class Transport extends React.Component {
+class Transport extends React.PureComponent {
    constructor(props) {
       super(props)
       this.state = {
@@ -29,9 +29,6 @@ class Transport extends React.Component {
                   currentEvent.general.eventName.slice(0,17) + "..."
       })
    }
-   /*componentWillReceiveProps(nextProps) {
-      nextProps.updateEvent(nextProps.currentEvent)
-   }*/
    componentDidUpdate(prevProps, prevState) {
       if (this.props.currentEvent !== prevProps.currentEvent) {
          this.props.updateEvent(this.props.currentEvent)
@@ -165,29 +162,13 @@ const mapStateToProps = state => ({
    chosenTransportOptionId: state.currentEvent.transport.chosenTransportOptionId,
    transportCosts: state.currentEvent.transport.transportCosts
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      addOriginCity: (city) => {
-         dispatch(addOriginCity(city))
-      },
-      noNeedTransport: () => {
-         dispatch(noNeedTransport())
-      },
-      searchingTransport: () => {
-         dispatch(searchingTransport())
-      },
-      searchTransportSuccess: (listOfOptions) => {
-         dispatch(searchTransportSuccess(listOfOptions))
-      },
-      searchTransportFail: () => {
-         dispatch(searchTransportFail())
-      },
-      updateEvent: (event) => {
-         dispatch(updateEvent(event))
-      },
-      changeDestinationCity: (city) => {
-         dispatch(changeDestinationCity(city))
-      }
-   }
+const mapDispatchToProps =  {
+   addOriginCity,
+   noNeedTransport,
+   searchingTransport,
+   searchTransportSuccess,
+   searchTransportFail,
+   updateEvent,
+   changeDestinationCity
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Transport)

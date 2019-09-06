@@ -10,5 +10,5 @@ export default combineReducers({
    avgMonthlyCosts: AvgMonthlyReducer,
    events: EventsReducer,
    currentEvent: eventReducers,
-   selectedEvents: SelectedEventsReducer
+   selected: SelectedEventsReducer
 })

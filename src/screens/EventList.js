@@ -12,29 +12,30 @@ import getDotValues from '../utils/getDotValues'
 
 const keyExtractor = ({ general: {id }}) => id.toString()
 
-class EventList extends React.Component {
+class EventList extends React.PureComponent {
    static navigationOptions = ({ navigation }) => {
       return {
          header: () => null
       }
    }
    componentDidUpdate(prevProps) {
-      const { isFocused, events, month, currency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
+      const { isFocused, events, selected, month, currency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
       if (!prevProps.isFocused && isFocused) {
          if (currency) {
-            avgMonthlyCostsCalculated(events, currency)
+            avgMonthlyCostsCalculated(events, selected, currency)
             if (month) {
-               totalMonthlyCostsCalculated(events, month, currency)
+               totalMonthlyCostsCalculated(events, selected, month, currency)
             }
          }
       }   
    }
    renderEvent = ({item}) => {
-      const { general: {eventName, startDate }} = item
+      const { general: {id, eventName, startDate }} = item
       const {costs: {chosenCurrency, calculatedTotalCosts}} = item
       const dots = getDotValues(item)
       return (
          <EventListItem 
+            id={id}
             name={eventName} 
             date={startDate}
             price={`${calculatedTotalCosts.toString()} ${chosenCurrency}`} 
@@ -121,25 +122,16 @@ const eventListStyles = StyleSheet.create({
 })
 const mapStateToProps = state => ({
    events: state.events,
+   selected: state.selected,
    month: state.overview.month,
    currency: state.overview.currency,
    total: state.overview.costs,
    avg: state.avgMonthlyCosts.avg
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      newEventButtonPressed: () => {
-         dispatch(newEventButtonPressed())
-      },
-      existingEventOpened: (event) => {
-         dispatch(existingEventOpened(event))
-      },
-      totalMonthlyCostsCalculated: (events, month, currency) => {
-         dispatch(totalMonthlyCostsCalculated(events, month, currency))
-      },
-      avgMonthlyCostsCalculated: (events, currency) => {
-         dispatch(avgMonthlyCostsCalculated(events, currency))
-      }
-   }
+const mapDispatchToProps = {
+   newEventButtonPressed,
+   existingEventOpened,
+   totalMonthlyCostsCalculated,
+   avgMonthlyCostsCalculated
 }
 export default connect(mapStateToProps, mapDispatchToProps)(withNavigationFocus(EventList))

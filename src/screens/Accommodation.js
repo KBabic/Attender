@@ -19,7 +19,7 @@ const keyExtractor = ({ id }) => id.toString()
 const checkIn = "checkIn"
 const checkOut = "checkOut"
 
-class Accommodation extends React.Component {
+class Accommodation extends React.PureComponent {
    constructor(props) {
       super(props)
       this.state = {
@@ -295,47 +295,19 @@ const mapStateToProps = state => ({
    chosenAccommOptionId: state.currentEvent.accommodation.chosenAccommOptionId,
    accommodationCosts: state.currentEvent.accommodation.accommodationCosts
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      noNeedAccommodation: () => {
-         dispatch(noNeedAccommodation())
-      },
-      changeAccommDestination: (txt) => {
-         dispatch(changeAccommDestination(txt))
-      },
-      increaseNumOfPersons: () => {
-         dispatch(increaseNumOfPersons())
-      },
-      decreaseNumOfPersons: () => {
-         dispatch(decreaseNumOfPersons())
-      },
-      addCheckinDate: (date) => {
-         dispatch(addCheckinDate(date))
-      },
-      addCheckoutDate: (date) => {
-         dispatch(addCheckoutDate(date))
-      },
-      searchingAccommodation: () => {
-         dispatch(searchingAccommodation())
-      },
-      searchingMoreResults: () => {
-         dispatch(searchingMoreResults())
-      },
-      searchAccommodationSuccess: (arr) => {
-         dispatch(searchAccommodationSuccess(arr))
-      },
-      searchAccommodationFail: () => {
-         dispatch(searchAccommodationFail())
-      },
-      accommodationChosen: (id, cost) => {
-         dispatch(accommodationChosen(id, cost))
-      },
-      accommodationUnchosen: () => {
-         dispatch(accommodationUnchosen())
-      },
-      updateEvent: (event) => {
-         dispatch(updateEvent(event))
-      }
-   }
+const mapDispatchToProps = {
+   noNeedAccommodation,
+   changeAccommDestination,
+   increaseNumOfPersons,
+   decreaseNumOfPersons,
+   addCheckinDate,
+   addCheckoutDate,
+   searchingAccommodation,
+   searchingMoreResults,
+   searchAccommodationSuccess,
+   searchAccommodationFail,
+   accommodationChosen,
+   accommodationUnchosen,
+   updateEvent 
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Accommodation)

@@ -41,15 +41,15 @@ export const updateEvent = event => {
       payload: event
    }
 }
-export const eventChecked = event => {
+export const eventChecked = id => {
    return {
       type: EVENT_CHECKED,
-      payload: event
+      payload: id
    }
 }
-export const eventUnchecked = event => {
+export const eventUnchecked = id => {
    return {
       type: EVENT_UNCHECKED,
-      payload: event
+      payload: id
    }
 }

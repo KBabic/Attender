@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { saveEvent, deleteEvent, updateEvent } from '../actions/EventActions'
 import { primaryColor } from '../utils/colorsAndMargins'
 
-class SaveDeleteEvent extends React.Component {
+class SaveDeleteEvent extends React.PureComponent {
    constructor(props) {
       super(props)
       this.id = this.props.currentEvent.general.id
@@ -46,17 +46,9 @@ const mapStateToProps = state => ({
    events: state.events,
    currentEvent: state.currentEvent
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      saveEvent: (event) => {
-         dispatch(saveEvent(event))
-      },
-      deleteEvent: (event) => {
-         dispatch(deleteEvent(event))
-      },
-      updateEvent: (event) => {
-         dispatch(updateEvent(event))
-      }
-   }
+const mapDispatchToProps = {
+   saveEvent,
+   deleteEvent,
+   updateEvent
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SaveDeleteEvent)
