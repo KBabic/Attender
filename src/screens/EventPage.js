@@ -1,8 +1,9 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View, Alert } from 'react-native'
 import { connect } from 'react-redux'
+import { withNavigationFocus } from 'react-navigation'
 import { addEventName, addStartDate, addEndDate, addEventCountry, addEventCity, addEventCurrency, addEventFee, noEventFee } from '../actions/GeneralActions'
-import { updateEvent } from '../actions/EventActions'
+import { updateEvent, saveEvent } from '../actions/EventActions'
 import InputOption from '../components/InputOption'
 import CheckOption from '../components/CheckOption'
 import Calendar from '../components/Calendar'
@@ -30,9 +31,16 @@ class EventPage extends React.PureComponent {
                   (navigation.getParam('eventName').slice(0,17) + "...")
       }
    }
-   componentDidUpdate(prevProps, prevState) {
-      if (this.props.currentEvent !== prevProps.currentEvent) {
-         this.props.updateEvent(this.props.currentEvent)
+   componentDidUpdate(prevProps) {
+      const { events, currentEvent, isFocused, updateEvent } = this.props
+      if (isFocused && !prevProps.isFocused) {
+         // if we made changes in other tabs but didn't save the event
+         if (!events[currentEvent.general.id]) {
+            Alert.alert('Warning', 'This event is not saved. If you go back without saving, you will loose all the changes.', [{text: 'OK'}], {cancelable: false})
+         }
+      }
+      if (prevProps.currentEvent !== currentEvent) {
+         updateEvent(currentEvent)
       }
    }
    handleIconPress = (item) => {
@@ -217,6 +225,7 @@ const eventPageStyles = StyleSheet.create({
    }
 })
 const mapStateToProps = state => ({
+   events: state.events,
    currentEvent: state.currentEvent,
    startDate: state.currentEvent.general.startDate,
    endDate: state.currentEvent.general.endDate,
@@ -231,6 +240,7 @@ const mapDispatchToProps = {
    addEventCurrency,
    addEventFee,
    updateEvent,
-   noEventFee
+   noEventFee,
+   saveEvent
 }
-export default connect(mapStateToProps, mapDispatchToProps)(EventPage)
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigationFocus(EventPage))

@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
+import { createStackNavigator, createBottomTabNavigator, NavigationActions } from 'react-navigation'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { primaryColor, secondaryColor, currentTabColor, tabColor } from './utils/colorsAndMargins'
 import SaveDeleteEvent from './components/SaveDeleteEvent'
@@ -45,7 +45,7 @@ const getTabIcon = (route) => {
   const tab = tabs.filter(el => el.name === route)[0]
   return tab.icon
 }
-const EventStackNavigator = createStackNavigator(
+export const EventStackNavigator = createStackNavigator(
   { 
     EventPage: {
       screen: EventPage,
@@ -195,6 +195,7 @@ const TabNavigator = createBottomTabNavigator(
     }),
   }
 )
+
 export const AppNavigator = createStackNavigator(
    {
      Start,
@@ -202,9 +203,9 @@ export const AppNavigator = createStackNavigator(
      Event: { screen: TabNavigator }
    },
    {
-     initialRouteName: "Start",
-     defaultNavigationOptions: {
+    initialRouteName: "Start",
+    defaultNavigationOptions: {
       header: null
-   }
+    }
   }
 )

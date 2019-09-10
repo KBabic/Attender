@@ -11,6 +11,15 @@ class CostOverview extends React.PureComponent {
       showMonths: false,
       showCurrencies: false
    }
+   /*componentDidUpdate(prevProps) {
+      const { events, selected, overviewMonth, overviewCurrency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
+      if (overviewCurrency) {
+         avgMonthlyCostsCalculated(events, selected, overviewCurrency)
+         if (overviewMonth) {
+            totalMonthlyCostsCalculated(events, selected, overviewMonth, overviewCurrency)
+         }
+      } 
+   }*/
    handleChooseCurrency = (cur) => {
       const { events, selected, overviewMonth, chooseOverviewCurrency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
       chooseOverviewCurrency(cur)
@@ -119,20 +128,10 @@ const mapStateToProps = state => ({
    overviewMonth: state.overview.month,
    overviewCurrency: state.overview.currency
 })
-const mapDispatchToProps = dispatch => {
-   return {
-      chooseMonth: (month) => {
-         dispatch(chooseMonth(month))
-      },
-      chooseOverviewCurrency: (cur) => {
-         dispatch(chooseOverviewCurrency(cur))
-      },
-      totalMonthlyCostsCalculated: (events, selected, month, currency) => {
-         dispatch(totalMonthlyCostsCalculated(events, selected, month, currency))
-      },
-      avgMonthlyCostsCalculated: (events, selected,  currency) => {
-         dispatch(avgMonthlyCostsCalculated(events, selected, currency))
-      }
-   }
+const mapDispatchToProps = {
+   chooseMonth,
+   chooseOverviewCurrency,
+   totalMonthlyCostsCalculated,
+   avgMonthlyCostsCalculated
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CostOverview)

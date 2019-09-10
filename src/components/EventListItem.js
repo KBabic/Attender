@@ -12,39 +12,43 @@ class EventListItem extends React.Component {
    constructor(props) {
       super(props)
       this.state = {
-         eventChecked: this.props.checked
+         checked: this.props.checked
       }
    }
    shouldComponentUpdate(nextProps, nextState) {
+      // when user is on EventList screen, event item should only update if user checks/unchecks it or 
+      // if selected array changes
       if (this.props.isFocused && nextProps.isFocused) {
-         return this.state.eventChecked !== nextState.eventChecked
+         return (this.state.checked !== nextState.checked || this.props.selected.length !== nextProps.selected.length)
       } else {
          return true
       }
    }
-   componentDidUpdate(prevProps) {
-      const { isFocused, events, selected, month, currency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated, id } = this.props
-      if (isFocused) {
-         if (currency) {
-            console.log('id is ', id)
-            console.log('avg will be called now')
-            avgMonthlyCostsCalculated(events, selected, currency)
-            if (month) {
-               console.log('total will be called now')
-               totalMonthlyCostsCalculated(events, selected, month, currency)
+   componentDidUpdate(prevProps, prevState) {
+      
+      const { isFocused, events, selected, month, currency, totalMonthlyCostsCalculated, avgMonthlyCostsCalculated } = this.props
+      console.log('selected prop are now ', selected)
+      console.log('prevprops selected are ', prevProps.selected)
+      if (selected.length !== prevProps.selected.length) {
+         if (isFocused) {
+            if (currency) {
+               avgMonthlyCostsCalculated(events, selected, currency)
+               if (month) {
+                  totalMonthlyCostsCalculated(events, selected, month, currency)
+               }
             }
          }
-      }   
+      } 
    }
    handleCheck = () => {
       const { id, eventChecked, eventUnchecked } = this.props
-      this.setState(prevState => {
-         if (prevState.eventChecked) {
-            eventUnchecked(id)
-         } else {
+      this.setState(prevState => ({checked: !prevState.checked}), () => {
+         if (this.state.checked) {
             eventChecked(id)
+
+         } else {
+            eventUnchecked(id)
          }
-         return {eventChecked: !prevState.eventChecked}
       })
    }
    render() {
@@ -68,7 +72,7 @@ class EventListItem extends React.Component {
                />
                <CheckOption 
                   checkTitle={price} 
-                  checked={this.state.eventChecked} 
+                  checked={this.state.checked} 
                   onPress={() => this.handleCheck()}
                />
             </View>

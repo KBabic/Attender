@@ -21,6 +21,10 @@ export const chooseOverviewCurrency = cur => {
 }
 export const totalMonthlyCostsCalculated = (events, selected, month, currency) => {
    return async dispatch => {
+      console.log('total is now being called')
+      console.log('selected are ', selected)
+      console.log('month is ', month)
+      console.log('currency is ', currency)
       let selectedEvents = []
       let filteredEvents = []
       let totalCosts = 0
@@ -28,6 +32,7 @@ export const totalMonthlyCostsCalculated = (events, selected, month, currency) =
       for (let i = 0; i < selected.length; i++) {
          selectedEvents.push(events[selected[i]])
       }
+      console.log('selected events are ', selectedEvents)
       if (month !== "All") {
          // pick only those events that start within the chosen month and that have chosenCurrency and totalCosts specified!
          for (let event of selectedEvents) {
@@ -40,6 +45,7 @@ export const totalMonthlyCostsCalculated = (events, selected, month, currency) =
       } else {
          filteredEvents = [...selectedEvents]
       }
+      console.log('filtered events are ', filteredEvents)
 
       if (filteredEvents.length === 0) {
          Alert.alert("Error", "There are no events in the chosen month.", [{text: "OK"}])
@@ -60,6 +66,7 @@ export const totalMonthlyCostsCalculated = (events, selected, month, currency) =
                break
             }
          }
+         console.log('total costs are ', totalCosts)
          totalCosts > 0 ? 
          dispatch({type: TOTAL_MONTHLY_COSTS_CALCULATED, payload: Math.round(totalCosts) }) :
          dispatch({type: TOTAL_MONTHLY_COSTS_CALCULATED, payload: "" })

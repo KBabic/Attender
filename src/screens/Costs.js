@@ -26,7 +26,7 @@ class Costs extends React.PureComponent {
             await this.handleRecalculation(transpCurrency, chosenCurrency, transportCostsCalculated, currentEvent.transport.transportCosts )
          }
          if (currentEvent.accommodation.accommodationCosts !== "") {
-            await this.handleRecalculation(accommCurrency, chosenCurrency, accommodationCostsCalculated, currentEvent.accommodation.accommodationCosts)
+            await this.handleRecalculation(accommCurrency, chosenCurrency, accommodationCostsCalculated, (currentEvent.accommodation.accommodationCosts / currentEvent.accommodation.numOfPersons))
          }
          if (currentEvent.general.eventFee !== "") {
             await this.handleRecalculation(eventCurrency, chosenCurrency, eventFeeCalculated, currentEvent.general.eventFee)
@@ -45,18 +45,14 @@ class Costs extends React.PureComponent {
       this.setState({ showCurrencies: false })
       this.props.updateEvent(this.props.currentEvent)
    }
-   handleRecalculation = async (cur1, cur2, func, a) => {
+   handleRecalculation = async (cur1, cur2, func, cost) => {
       const { currentEvent, accommCurrency } = this.props
       if (cur1 === "") {
          func(0)
       } else {
          let factor 
          factor = await convertCurrency(cur1, cur2)
-         if (cur1 === accommCurrency) {
-            func(Math.round(a * factor / currentEvent.accommodation.numOfPersons))
-         } else {
-            func(Math.round(a * factor))
-         }
+         func(Math.round(cost * factor))
       }
    }
    handleChooseCurrency = async (cur) => {
@@ -72,7 +68,7 @@ class Costs extends React.PureComponent {
          }
          // call function to convert accomm costs
          if (currentEvent.accommodation.accommodationCosts !== "") {
-            await this.handleRecalculation(accommCurrency, cur, accommodationCostsCalculated, currentEvent.accommodation.accommodationCosts)
+            await this.handleRecalculation(accommCurrency, cur, accommodationCostsCalculated, (currentEvent.accommodation.accommodationCosts / currentEvent.accommodation.numOfPersons))
          }
          // call function to convert event fee
          if (currentEvent.general.eventFee !== "") {
